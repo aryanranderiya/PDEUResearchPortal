@@ -11,7 +11,7 @@ export default function SelectComponent() {
       <Select
         label="Role"
         placeholder="Select Role"
-        className="max-w-xs"
+        className="max-w-xs select-input"
         value="Faculty"
         isRequired={"true"}
         defaultSelectedKeys={["Faculty"]}

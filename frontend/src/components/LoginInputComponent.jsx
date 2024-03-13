@@ -18,6 +18,7 @@ export default function LoginInputs() {
         className="max-w-xs"
         isClearable="true"
       />
+
       <Input
         variant="faded"
         label="Password"
