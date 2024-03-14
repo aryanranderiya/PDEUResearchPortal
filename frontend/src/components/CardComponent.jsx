@@ -7,8 +7,14 @@ import {
   Image,
   Button,
 } from "@nextui-org/react";
+import { Link } from "react-router-dom";
 
-export default function CardComponent({ heading, subheading, imagelink }) {
+export default function CardComponent({
+  heading,
+  subheading,
+  imagelink,
+  page,
+}) {
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -28,7 +34,9 @@ export default function CardComponent({ heading, subheading, imagelink }) {
       </CardBody>
       <Divider></Divider>
       <CardFooter className="flex justify-center">
-        <Button color="primary">View {heading}</Button>
+        <Link to={page}>
+          <Button color="primary">View {heading}</Button>
+        </Link>
       </CardFooter>
     </Card>
   );

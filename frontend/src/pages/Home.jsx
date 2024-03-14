@@ -15,6 +15,7 @@ export default function Home() {
             heading={"Journal Papers"}
             subheading={10}
             imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
+            page="./JournalPapers"
           />
 
           <CardComponent
