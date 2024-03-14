@@ -2,6 +2,7 @@ import * as React from "react";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { EyeSlashFilledIcon, EyeFilledIcon } from "../icons";
+import { Link } from "react-router-dom";
 
 export default function LoginInputs() {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -40,9 +41,11 @@ export default function LoginInputs() {
         className="max-w-xs"
       />
 
-      <Button color="primary" variant="shadow">
-        Login
-      </Button>
+      <Link to="/home">
+        <Button color="primary" variant="shadow">
+          Login
+        </Button>
+      </Link>
     </>
   );
 }

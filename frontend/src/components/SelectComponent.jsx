@@ -1,4 +1,5 @@
 import { Select, SelectItem } from "@nextui-org/react";
+
 export default function SelectComponent() {
   const loginTypes = [
     { label: "Faculty", value: "Faculty" },
@@ -13,7 +14,7 @@ export default function SelectComponent() {
         placeholder="Select Role"
         className="max-w-xs select-input"
         value="Faculty"
-        isRequired={"true"}
+        isRequired={true}
         defaultSelectedKeys={["Faculty"]}
         variant="faded"
       >
