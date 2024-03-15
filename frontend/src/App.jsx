@@ -4,24 +4,17 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SideBar from "./components/SideBar";
 
-export function AddFormPage({ type }) {
-  return (
-    <>
-      <h1 className="font-bold text-lg">{type}</h1>
-    </>
-  );
-}
-
 export default function App() {
+  let pathName = window.location.pathname;
+  let arr = pathName.toString().split("/");
+  let currentPath = arr[arr.length - 1];
+
   return (
     <main className="dark text-foreground bg-background h-screen w-screen flex">
-      <SideBar />
-
+      {currentPath.length > 0 && <SideBar />}
       <Routes>
-        <Route path="login" element={<Login />} />
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/journalpapers" element={<AddFormPage />} />
-        <Route path="/conferencepapers" element={<AddFormPage />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </main>
   );
