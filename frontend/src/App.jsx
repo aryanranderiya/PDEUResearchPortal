@@ -1,20 +1,27 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import SideBar from "./components/SideBar";
 
-// import { Input } from "@nextui-org/react";
-// import { NextUIProvider } from "@nextui-org/react";
+export function AddFormPage({ type }) {
+  return (
+    <>
+      <h1 className="font-bold text-lg">{type}</h1>
+    </>
+  );
+}
 
 export default function App() {
-  // return <Login />;
-  // return <Home />;
-
   return (
-    <main className="dark text-foreground bg-background h-screen w-screen">
+    <main className="dark text-foreground bg-background h-screen w-screen flex">
+      <SideBar />
+
       <Routes>
-        <Route path="home" element={<Home />} />
-        <Route path="login" index element={<Login />} />
+        <Route path="login" element={<Login />} />
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/journalpapers" element={<AddFormPage />} />
+        <Route path="/conferencepapers" element={<AddFormPage />} />
       </Routes>
     </main>
   );

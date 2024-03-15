@@ -1,43 +1,37 @@
 import * as React from "react";
-import SideBar from "../components/SideBar";
 import CardComponent from "../components/CardComponent";
+import JournalPapers from "./JournalPapers";
+import ConferencePapers from "./ConferencePapers";
 
 export default function Home() {
   return (
     <>
-      <div className="flex h-screen w-screen">
-        <SideBar />
+      <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4">
+        <CardComponent
+          heading={"Journal Papers"}
+          subheading={10}
+          imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
+          page="./journalpapers"
+        />
 
-        {/* 0082ff */}
+        <CardComponent
+          heading={"Conference Papers"}
+          subheading={20}
+          imagelink={"https://i.ibb.co/6WhQFpD/Seminar-pana.png"}
+          page="./conferencepapers"
+        />
 
-        <div className="self-center justify-self-center w-screen flex flex-row justify-center gap-4">
-          <CardComponent
-            heading={"Journal Papers"}
-            subheading={10}
-            imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
-            page="./JournalPapers"
-          />
+        <CardComponent
+          heading={"Patents"}
+          subheading={30}
+          imagelink={"https://i.ibb.co/KVxTyyD/Visionary-technology-rafiki.png"}
+        />
 
-          <CardComponent
-            heading={"Conference Papers"}
-            subheading={20}
-            imagelink={"https://i.ibb.co/6WhQFpD/Seminar-pana.png"}
-          />
-
-          <CardComponent
-            heading={"Patents"}
-            subheading={30}
-            imagelink={
-              "https://i.ibb.co/KVxTyyD/Visionary-technology-rafiki.png"
-            }
-          />
-
-          <CardComponent
-            heading={"Projects"}
-            subheading={40}
-            imagelink={"https://i.ibb.co/NVct2Fh/Online-tech-talks-amico.png"}
-          />
-        </div>
+        <CardComponent
+          heading={"Projects"}
+          subheading={40}
+          imagelink={"https://i.ibb.co/NVct2Fh/Online-tech-talks-amico.png"}
+        />
       </div>
     </>
   );
