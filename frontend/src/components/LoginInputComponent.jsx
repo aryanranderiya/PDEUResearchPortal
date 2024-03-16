@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon } from "../icons";
+import { EyeSlashFilledIcon, EyeFilledIcon } from "./icons";
 import { Link } from "react-router-dom";
 
 export default function LoginInputs() {
