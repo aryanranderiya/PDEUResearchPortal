@@ -22,16 +22,24 @@ code {
 }
 
 .form_add {
-  margin: 5%;
+  padding: 5%;
   box-sizing: content-box;
   display: flex;
   width: 100%;
   flex-direction: column;
   gap: 1em;
+  height: 100vh;
+  overflow: scroll;
 }
 
 .main_form {
   display: flex;
   gap: 1em;
   flex-direction: column;
+}
+
+.author_listbox {
+  overflow-y: scroll;
+  height: 100px;
+  width: auto;
 }

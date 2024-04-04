@@ -6,7 +6,7 @@ import Form from "../components/FormAdd";
 
 export function DefaultCards() {
   return (
-    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4">
+    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4 overflow-scroll h-auto">
       <CardComponent
         heading={"Journal Papers"}
         subheading={10}

@@ -23,7 +23,7 @@ export default function App() {
   }, []);
 
   return (
-    <main className="dark text-foreground bg-background h-screen w-screen flex">
+    <main className="dark text-foreground bg-background h-screen w-screen flex overflow-hidden">
       {authenticated && currentPath != "login" && <SideBar />}
       <Routes>
         <Route path="/home" element={<DefaultCards />} />
@@ -32,7 +32,7 @@ export default function App() {
 
         <Route
           path="/home/addJournal"
-          element={<AddFormPage title="Add Journal Paper" />}
+          element={<AddFormPage title="Add Journal Papers" />}
         />
       </Routes>
     </main>
