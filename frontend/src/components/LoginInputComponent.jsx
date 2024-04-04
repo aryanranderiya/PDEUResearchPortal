@@ -2,31 +2,25 @@ import * as React from "react";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { EyeSlashFilledIcon, EyeFilledIcon } from "./icons";
-import { Link } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
-async function signInWithEmail(user_email, user_password) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: user_email,
-    password: user_password,
-  });
-
-  if (!error) alert("Logged in!");
-}
-
-function validateInput(email, password) {
-  signInWithEmail(email, password);
-}
+import { signInWithEmail, supabase } from "../pages/Login";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginInputs() {
+  const navigate = useNavigate();
+  
   const [isVisible, setIsVisible] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  function validateInput(email, password) {
+    if (signInWithEmail(email, password)) {
+      supabase.auth.onAuthStateChange((event) => {
+        if (event == "SIGNED_IN") {
+          navigate("/home");
+        }
+      });
+    }
+  }
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 

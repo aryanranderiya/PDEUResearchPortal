@@ -1,6 +1,8 @@
 import * as React from "react";
 import CardComponent from "../components/CardComponent";
+import FormAdd from "../components/FormAdd";
 import { Routes, Route } from "react-router-dom";
+import Form from "../components/FormAdd";
 
 export function DefaultCards() {
   return (
@@ -34,10 +36,11 @@ export function DefaultCards() {
   );
 }
 
-export function AddFormPage({ type }) {
+export function AddFormPage({ title }) {
   return (
-    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4">
-      <h1 className="font-bold text-lg text-white">{type} LOREM</h1>
+    <div className="form_add">
+      <h1 className="title"> {title}</h1>
+      <FormAdd />
     </div>
   );
 }

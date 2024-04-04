@@ -15,3 +15,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.form_add {
+  margin: 5%;
+  box-sizing: content-box;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.main_form {
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+}

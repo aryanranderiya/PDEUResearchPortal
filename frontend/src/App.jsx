@@ -4,29 +4,35 @@ import Login from "./pages/Login";
 import { DefaultCards, AddFormPage } from "./pages/Home";
 import SideBar from "./components/SideBar";
 import CardComponent from "./components/CardComponent";
+import { useNavigate } from "react-router-dom";
 
 export default function App() {
+  const navigate = useNavigate();
+
   let pathName = window.location.pathname;
   let arr = pathName.toString().split("/");
   let currentPath = arr[arr.length - 1];
 
-  console.log(currentPath);
+  const [authenticated, setAuthenticated] = React.useState(
+    localStorage.getItem("authenticated") || false
+  );
+
+  React.useEffect(() => {
+    if (authenticated) navigate("/home");
+    else navigate("/login");
+  }, []);
+
   return (
     <main className="dark text-foreground bg-background h-screen w-screen flex">
-      {currentPath !== "login" && <SideBar />}
+      {authenticated && currentPath != "login" && <SideBar />}
       <Routes>
         <Route path="/home" element={<DefaultCards />} />
 
         <Route path="/login" element={<Login />} />
 
         <Route
-          path="/home/journalpapers"
-          element={<AddFormPage type="Journal Papers" />}
-        />
-
-        <Route
-          path="/home/conferencepapers"
-          element={<AddFormPage type="Conference Papers" />}
+          path="/home/addJournal"
+          element={<AddFormPage title="Add Journal Paper" />}
         />
       </Routes>
     </main>
