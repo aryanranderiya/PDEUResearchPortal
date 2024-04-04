@@ -5,23 +5,23 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ListBoxPagesComponent() {
   const items = [
     {
-      key: "/",
+      key: "/home/",
       label: "Home",
     },
     {
-      key: "addJournal",
+      key: "/home/addJournal",
       label: "Add Journal Paper",
     },
     {
-      key: "addConference",
+      key: "/home/addConference",
       label: "Add Conference Paper",
     },
     {
-      key: "addPatent",
+      key: "/home/addPatent",
       label: "Add Patent",
     },
     {
-      key: "addProject",
+      key: "/home/addProject",
       label: "Add Project",
     },
   ];

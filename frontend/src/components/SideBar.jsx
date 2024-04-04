@@ -1,6 +1,7 @@
 import * as React from "react";
 import ListBoxPagesComponent from "./ListBoxPagesComponent";
 import { User, Button } from "@nextui-org/react";
+
 export default function SideBar() {
   return (
     <div className=" border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between">

@@ -1,7 +1,5 @@
 import * as React from "react";
 import CardComponent from "../components/CardComponent";
-import JournalPapers from "./JournalPapers";
-import ConferencePapers from "./ConferencePapers";
 import { Routes, Route } from "react-router-dom";
 
 export function DefaultCards() {
@@ -38,28 +36,8 @@ export function DefaultCards() {
 
 export function AddFormPage({ type }) {
   return (
-    <>
-      <h1 className="font-bold text-lg">{type}</h1>
-    </>
-  );
-}
-
-export default function Home() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<DefaultCards />} />
-
-        <Route
-          path="journalpapers"
-          element={<AddFormPage type="Journal Papers" />}
-        />
-
-        <Route
-          path="conferencepapers"
-          element={<AddFormPage type="Conference Papers" />}
-        />
-      </Routes>
-    </>
+    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4">
+      <h1 className="font-bold text-lg text-white">{type} LOREM</h1>
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function LoginInputs() {
         className="max-w-xs"
       />
 
-      <Link to="home">
+      <Link to="/home">
         <Button color="primary" variant="shadow">
           Login
         </Button>
