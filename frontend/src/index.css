@@ -17,29 +17,30 @@ code {
 }
 
 .title {
-  font-size: 1.5em;
+  font-size: 2em;
   font-weight: bold;
 }
 
 .form_add {
   padding: 5%;
-  box-sizing: content-box;
   display: flex;
   width: 100%;
   flex-direction: column;
   gap: 1em;
   height: 100vh;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .main_form {
   display: flex;
-  gap: 1em;
+  gap: 1.3em;
   flex-direction: column;
 }
 
 .author_listbox {
+  border: 1px solid grey;
+  border-radius: 10px;
   overflow-y: scroll;
-  height: 100px;
-  width: auto;
+  height: 200px;
+  width: min-content;
 }

@@ -3,12 +3,10 @@ import {
   Select,
   SelectItem,
   Checkbox,
-  CheckboxGroup,
-  Listbox,
-  ListboxItem,
-  Chip,
-  ScrollShadow,
-  Avatar,
+  AutocompleteItem,
+  Button,
+  Textarea,
+  Autocomplete,
 } from "@nextui-org/react";
 
 export default function Form() {
@@ -95,13 +93,7 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-      <Input
-        size="sm"
-        type="text"
-        label="Abstract"
-        variant="faded"
-        className="max-w-5xl"
-      />
+      <Textarea label="Abstract" className="max-w-5xl" variant="faded" />
       <Input
         size="sm"
         type="text"
@@ -109,7 +101,6 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-
       <Select label="Quartile" className="max-w-5xl" size="sm">
         {quartiles.map((quartile) => (
           <SelectItem key={quartile} value={quartile}>
@@ -117,7 +108,6 @@ export default function Form() {
           </SelectItem>
         ))}
       </Select>
-
       <Select label="Journal" className="max-w-5xl" size="sm">
         {journals.map((journal) => (
           <SelectItem key={journal} value={journal}>
@@ -125,7 +115,6 @@ export default function Form() {
           </SelectItem>
         ))}
       </Select>
-
       <Input
         size="sm"
         type="text"
@@ -133,7 +122,6 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-
       <div className="flex max-w-5xl gap-2">
         <Input
           size="sm"
@@ -150,7 +138,6 @@ export default function Form() {
           className="max-w-5xl"
         />
       </div>
-
       <div className="flex max-w-5xl gap-2">
         <Input
           size="sm"
@@ -167,7 +154,6 @@ export default function Form() {
           className="max-w-5xl"
         />
       </div>
-
       <div className="flex max-w-5xl gap-2">
         <Select label="Month" className="max-w-5xl" size="sm">
           {months.map((map) => (
@@ -185,7 +171,6 @@ export default function Form() {
           ))}
         </Select>
       </div>
-
       <Input
         size="sm"
         type="text"
@@ -193,7 +178,6 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-
       <Input
         size="sm"
         type="text"
@@ -201,7 +185,6 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-
       <Select label="Year" className="max-w-5xl" size="sm">
         {years.map((year) => (
           <SelectItem key={year} value={year}>
@@ -209,41 +192,45 @@ export default function Form() {
           </SelectItem>
         ))}
       </Select>
-      {/* 
-      <CheckboxGroup
-        label="Select cities"
-        defaultValue={["buenos-aires", "london"]}
-      >
-        <Checkbox value="sydney">Sydney</Checkbox>
-        <Checkbox value="san-francisco">San Francisco</Checkbox>
-        <Checkbox value="london">London</Checkbox>
-        <Checkbox value="tokyo">Tokyo</Checkbox>
-      </CheckboxGroup> */}
-      <Listbox
-        classNames="author_listbox"
-        items={users}
-        label="Authors"
-        selectionMode="multiple"
-        variant="flat"
-        size="sm"
-      >
-        {(item) => (
-          <ListboxItem key={item.id} textValue={item.name}>
-            <div className="flex gap-2 items-center ">
-              <Avatar
-                alt={item.name}
-                className="flex-shrink-0"
-                size="sm"
-                src={item.avatar}
-              />
-              <div className="flex flex-col">
-                <span className="text-small">{item.name}</span>
-                <span className="text-tiny text-default-400">{item.email}</span>
-              </div>
-            </div>
-          </ListboxItem>
-        )}
-      </Listbox>
+
+      <div className="flex max-w-5xl gap-2 items-center">
+        <Autocomplete
+          label="Author from PDEU"
+          className="max-w-5xl"
+          size="sm"
+          variant="faded"
+        >
+          {users.map((user) => (
+            <AutocompleteItem key={user.id} value={user.name}>
+              {user.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
+        <Button color="primary">Add</Button>
+        <Checkbox>First</Checkbox>
+        <Checkbox>Corresponding</Checkbox>
+      </div>
+
+      <div className="flex max-w-5xl gap-2 items-center">
+        <Input
+          size="sm"
+          type="text"
+          label="Author outside of PDEU"
+          variant="faded"
+          className="max-w-5xl"
+        />
+        <Button color="primary">Add</Button>
+        <Checkbox>First</Checkbox>
+        <Checkbox>Corresponding</Checkbox>
+      </div>
+      <div className="flex max-w-5xl gap-2 items-center justify-center">
+        <Button color="success" size="md">
+          Submit
+        </Button>
+        <Button color="default" size="md" variant="ghost">
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 }
