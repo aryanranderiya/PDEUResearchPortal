@@ -18,23 +18,31 @@ export default function App() {
   );
 
   React.useEffect(() => {
-    if (authenticated) navigate("/home");
-    else navigate("/login");
-  }, []);
+    // if (authenticated) navigate("/home");
+    // else navigate("/login");
+
+    console.log(authenticated);
+  }, [authenticated, window.location]);
 
   return (
     <main className="dark text-foreground bg-background h-screen w-screen flex overflow-hidden">
-      {authenticated && currentPath != "login" && <SideBar />}
-      <Routes>
-        <Route path="/home" element={<DefaultCards />} />
-
-        <Route path="/login" element={<Login />} />
-
-        <Route
-          path="/home/addJournal"
-          element={<AddFormPage title="Add Journal Papers" />}
-        />
-      </Routes>
+      {authenticated ? (
+        <>
+          <Routes>
+            <Route path="/" element={<SideBar />}>
+              <Route path="home/" element={<DefaultCards />} />
+              <Route
+                path="/home/addJournal"
+                element={<AddFormPage title="Add Journal Papers" />}
+              />
+            </Route>
+          </Routes>
+        </>
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      )}
     </main>
   );
 }

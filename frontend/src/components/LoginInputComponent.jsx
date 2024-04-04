@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginInputs() {
   const navigate = useNavigate();
-  
+
   const [isVisible, setIsVisible] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -59,8 +59,6 @@ export default function LoginInputs() {
           </button>
         }
       />
-
-      {/* <Link to="/home"></Link> */}
 
       <Button
         color="primary"
