@@ -75,9 +75,15 @@ export default function Form1({ is_conference = false }) {
         label="Paper Title"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
-      
-      <Textarea label="Abstract" className="max-w-5xl" variant="faded" />
+
+      <Textarea
+        label="Abstract"
+        className="max-w-5xl"
+        variant="faded"
+        isRequired
+      />
 
       <Input
         size="sm"
@@ -85,9 +91,10 @@ export default function Form1({ is_conference = false }) {
         label="Journal Name"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
-      <Select label="Quartile" className="max-w-5xl" size="sm">
+      <Select label="Quartile" className="max-w-5xl" size="sm" isRequired>
         {quartiles.map((quartile) => (
           <SelectItem key={quartile} value={quartile}>
             {quartile}
@@ -95,7 +102,7 @@ export default function Form1({ is_conference = false }) {
         ))}
       </Select>
 
-      <Select label="Journal" className="max-w-5xl" size="sm">
+      <Select label="Journal" className="max-w-5xl" size="sm" isRequired>
         {journals.map((journal) => (
           <SelectItem key={journal} value={journal}>
             {journal}
@@ -108,6 +115,7 @@ export default function Form1({ is_conference = false }) {
         label="Publisher Name"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
       <div className="flex max-w-5xl gap-2">
         <Input
@@ -116,6 +124,7 @@ export default function Form1({ is_conference = false }) {
           label="Volume"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
         <Input
           size="sm"
@@ -123,6 +132,7 @@ export default function Form1({ is_conference = false }) {
           label="Issue"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
       </div>
       <div className="flex max-w-5xl gap-2">
@@ -132,6 +142,7 @@ export default function Form1({ is_conference = false }) {
           label="Page Start"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
         <Input
           size="sm"
@@ -139,6 +150,7 @@ export default function Form1({ is_conference = false }) {
           label="Page End"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
       </div>
 
@@ -148,6 +160,7 @@ export default function Form1({ is_conference = false }) {
         label="Paper Publish Date"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -156,6 +169,7 @@ export default function Form1({ is_conference = false }) {
         label="ISSN No./ISBN No."
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
       <Input
         size="sm"
@@ -163,6 +177,7 @@ export default function Form1({ is_conference = false }) {
         label="DOI (i.e https://doi.org/10...)"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <div className="flex max-w-5xl gap-2 items-center">
@@ -171,6 +186,7 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           variant="faded"
+          isRequired
         >
           {users.map((user) => (
             <AutocompleteItem key={user.id} value={user.name}>
@@ -204,6 +220,7 @@ export default function Form1({ is_conference = false }) {
             label="Conference Name"
             variant="faded"
             className="max-w-5xl"
+            isRequired
           />
           <Input
             size="sm"
@@ -211,6 +228,7 @@ export default function Form1({ is_conference = false }) {
             label="Conference Date"
             variant="faded"
             className="max-w-5xl"
+            isRequired
           />
           <Input
             size="sm"
@@ -218,8 +236,14 @@ export default function Form1({ is_conference = false }) {
             label="Conference City"
             variant="faded"
             className="max-w-5xl"
+            isRequired
           />
-          <Select label="Conference Level" className="max-w-5xl" size="sm">
+          <Select
+            label="Conference Level"
+            className="max-w-5xl"
+            size="sm"
+            isRequired
+          >
             {levels.map((level) => (
               <SelectItem key={level} value={level}>
                 {level}

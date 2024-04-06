@@ -74,6 +74,7 @@ export default function Form1() {
         label="Patent Title"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -82,9 +83,10 @@ export default function Form1() {
         label="File/Application No"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
-      <Select label="Category" className="max-w-5xl" size="sm">
+      <Select label="Category" className="max-w-5xl" size="sm" isRequired>
         {categories.map((category) => (
           <SelectItem key={category} value={category}>
             {category}
@@ -92,7 +94,7 @@ export default function Form1() {
         ))}
       </Select>
 
-      <Select label="Status" className="max-w-5xl" size="sm">
+      <Select label="Status" className="max-w-5xl" size="sm" isRequired>
         {statuses.map((status) => (
           <SelectItem key={status} value={status}>
             {status}
@@ -106,6 +108,7 @@ export default function Form1() {
         label="Application Date"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -114,6 +117,7 @@ export default function Form1() {
         label="Published Date"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -122,6 +126,7 @@ export default function Form1() {
         label="Grant Date"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <div className="flex max-w-5xl gap-2 items-center">
@@ -130,6 +135,7 @@ export default function Form1() {
           className="max-w-5xl"
           size="sm"
           variant="faded"
+          isRequired
         >
           {users.map((user) => (
             <AutocompleteItem key={user.id} value={user.name}>

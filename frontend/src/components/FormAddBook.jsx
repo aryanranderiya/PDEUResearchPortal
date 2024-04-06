@@ -74,11 +74,17 @@ export default function Form2() {
         label="Book Title"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
-      <Textarea label="Abstract" className="max-w-5xl" variant="faded" />
+      <Textarea
+        label="Abstract"
+        className="max-w-5xl"
+        variant="faded"
+        isRequired
+      />
 
-      <Select label="Book Type" className="max-w-5xl" size="sm">
+      <Select label="Book Type" className="max-w-5xl" size="sm" isRequired>
         {book_type.map((type) => (
           <SelectItem key={type} value={type}>
             {type}
@@ -92,9 +98,10 @@ export default function Form2() {
         label="Publisher Name"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
-      <Select label="Book Type" className="max-w-5xl" size="sm">
+      <Select label="Book Type" className="max-w-5xl" size="sm" isRequired>
         {publisher_type.map((publisher) => (
           <SelectItem key={publisher} value={publisher}>
             {publisher}
@@ -109,6 +116,7 @@ export default function Form2() {
           label="Volume"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
         <Input
           size="sm"
@@ -116,6 +124,7 @@ export default function Form2() {
           label="Edition"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
       </div>
 
@@ -125,6 +134,7 @@ export default function Form2() {
         label="Total Pages"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -133,6 +143,7 @@ export default function Form2() {
         label="Publish Date"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -141,6 +152,7 @@ export default function Form2() {
         label="ISBN No."
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <Input
@@ -149,6 +161,7 @@ export default function Form2() {
         label="DOI (i.e https://doi.org/19...)"
         variant="faded"
         className="max-w-5xl"
+        isRequired
       />
 
       <div className="flex max-w-5xl gap-2 items-center">
@@ -157,6 +170,7 @@ export default function Form2() {
           className="max-w-5xl"
           size="sm"
           variant="faded"
+          isRequired
         >
           {users.map((user) => (
             <AutocompleteItem key={user.id} value={user.name}>
