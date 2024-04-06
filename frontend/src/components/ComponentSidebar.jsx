@@ -1,5 +1,5 @@
 import * as React from "react";
-import ListBoxPagesComponent from "./ListBoxPagesComponent";
+import ListBoxPagesComponent from "./ComponentSidebarListbox";
 import { User, Button, Switch } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import ThemeContext from "../contexts/ThemeContext";

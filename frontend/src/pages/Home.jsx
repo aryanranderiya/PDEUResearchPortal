@@ -1,6 +1,7 @@
 import * as React from "react";
-import CardComponent from "../components/CardComponent";
-import FormAdd from "../components/FormAdd";
+import CardComponent from "../components/ComponentCard";
+import Form1 from "../components/FormAddResearch";
+import Form2 from "../components/FormAddBook";
 
 export function DefaultCards() {
   return (
@@ -34,11 +35,22 @@ export function DefaultCards() {
   );
 }
 
-export function AddFormPage({ title, is_conference = false }) {
+export function ResearchForm({ title, is_conference = false }) {
   return (
     <div className="form_add">
       <h1 className="title"> {title}</h1>
-      <FormAdd is_conference={is_conference} />
+      <Form1 is_conference={is_conference} />
+    </div>
+  );
+}
+
+export function BookForm() {
+  return (
+    <div className="form_add">
+      <h1 className="title">
+        Add Research Based Books, Textbooks or Literary Books
+      </h1>
+      <Form2 />
     </div>
   );
 }

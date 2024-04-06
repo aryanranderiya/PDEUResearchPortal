@@ -1,6 +1,6 @@
 import * as React from "react";
-import LoginInputs from "../components/LoginInputComponent";
-import SelectComponent from "../components/SelectComponent";
+import LoginInputs from "../components/ComponentLoginInputs";
+import SelectComponent from "../components/ComponentLoginSelect";
 import { createClient } from "@supabase/supabase-js";
 import ThemeContext from "../contexts/ThemeContext";
 

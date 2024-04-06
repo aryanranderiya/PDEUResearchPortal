@@ -9,9 +9,10 @@ import {
   Autocomplete,
 } from "@nextui-org/react";
 
-export default function Form({ is_conference = false }) {
-  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
-  const journals = ["Scopus", "Web of Science (WOS)"];
+export default function Form2() {
+  const book_type = ["Research based books or monographs"];
+  const publisher_type = ["International", "National"];
+
   const users = [
     {
       id: 1,
@@ -65,39 +66,26 @@ export default function Form({ is_conference = false }) {
     },
   ];
 
-  const levels = ["International", "National"];
-
   return (
-    <div className="main_form">
+    <>
       <Input
         size="sm"
         type="text"
-        label="Paper Title"
+        label="Book Title"
         variant="faded"
         className="max-w-5xl"
       />
+
       <Textarea label="Abstract" className="max-w-5xl" variant="faded" />
-      <Input
-        size="sm"
-        type="text"
-        label="Journal Name"
-        variant="faded"
-        className="max-w-5xl"
-      />
-      <Select label="Quartile" className="max-w-5xl" size="sm">
-        {quartiles.map((quartile) => (
-          <SelectItem key={quartile} value={quartile}>
-            {quartile}
+
+      <Select label="Book Type" className="max-w-5xl" size="sm">
+        {book_type.map((type) => (
+          <SelectItem key={type} value={type}>
+            {type}
           </SelectItem>
         ))}
       </Select>
-      <Select label="Journal" className="max-w-5xl" size="sm">
-        {journals.map((journal) => (
-          <SelectItem key={journal} value={journal}>
-            {journal}
-          </SelectItem>
-        ))}
-      </Select>
+
       <Input
         size="sm"
         type="text"
@@ -105,7 +93,16 @@ export default function Form({ is_conference = false }) {
         variant="faded"
         className="max-w-5xl"
       />
-      <div className="flex max-w-5xl gap-2">
+
+      <Select label="Book Type" className="max-w-5xl" size="sm">
+        {publisher_type.map((publisher) => (
+          <SelectItem key={publisher} value={publisher}>
+            {publisher}
+          </SelectItem>
+        ))}
+      </Select>
+
+      <div className="flex max-w-5xl gap-2 items-center">
         <Input
           size="sm"
           type="text"
@@ -116,32 +113,24 @@ export default function Form({ is_conference = false }) {
         <Input
           size="sm"
           type="text"
-          label="Issue"
+          label="Edition"
           variant="faded"
           className="max-w-5xl"
         />
       </div>
-      <div className="flex max-w-5xl gap-2">
-        <Input
-          size="sm"
-          type="number"
-          label="Page Start"
-          variant="faded"
-          className="max-w-5xl"
-        />
-        <Input
-          size="sm"
-          type="number"
-          label="Page End"
-          variant="faded"
-          className="max-w-5xl"
-        />
-      </div>
+
+      <Input
+        size="sm"
+        type="number"
+        label="Total Pages"
+        variant="faded"
+        className="max-w-5xl"
+      />
 
       <Input
         size="sm"
         type="date"
-        label="Paper Publish Date"
+        label="Publish Date"
         variant="faded"
         className="max-w-5xl"
       />
@@ -149,14 +138,15 @@ export default function Form({ is_conference = false }) {
       <Input
         size="sm"
         type="text"
-        label="ISSN No./ISBN No."
+        label="ISBN No."
         variant="faded"
         className="max-w-5xl"
       />
+
       <Input
         size="sm"
         type="text"
-        label="DOI (i.e https://doi.org/10...)"
+        label="DOI (i.e https://doi.org/19...)"
         variant="faded"
         className="max-w-5xl"
       />
@@ -192,41 +182,6 @@ export default function Form({ is_conference = false }) {
         <Checkbox>Corresponding</Checkbox>
       </div>
 
-      {is_conference ? (
-        <>
-          <Input
-            size="sm"
-            type="text"
-            label="Conference Name"
-            variant="faded"
-            className="max-w-5xl"
-          />
-          <Input
-            size="sm"
-            type="date"
-            label="Conference Date"
-            variant="faded"
-            className="max-w-5xl"
-          />
-          <Input
-            size="sm"
-            type="text"
-            label="Conference City"
-            variant="faded"
-            className="max-w-5xl"
-          />
-          <Select label="Conference Level" className="max-w-5xl" size="sm">
-            {levels.map((level) => (
-              <SelectItem key={level} value={level}>
-                {level}
-              </SelectItem>
-            ))}
-          </Select>
-        </>
-      ) : (
-        <></>
-      )}
-
       <div className="flex max-w-5xl gap-2 items-center justify-center">
         <Button color="primary" size="md">
           Submit
@@ -235,6 +190,6 @@ export default function Form({ is_conference = false }) {
           Cancel
         </Button>
       </div>
-    </div>
+    </>
   );
 }

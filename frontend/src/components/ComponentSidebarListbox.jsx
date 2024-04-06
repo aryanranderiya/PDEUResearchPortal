@@ -24,6 +24,10 @@ export default function ListBoxPagesComponent() {
       key: "/home/addProject",
       label: "Add Project",
     },
+    {
+      key: "/home/addBook",
+      label: "Add Book",
+    },
   ];
 
   const navigate = useNavigate();

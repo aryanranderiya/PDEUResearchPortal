@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import { DefaultCards, AddFormPage } from "./pages/Home";
-import SideBar from "./components/SideBar";
+import { DefaultCards, ResearchForm, BookForm } from "./pages/Home";
+import SideBar from "./components/ComponentSidebar";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./contexts/AuthContext";
 import ThemeContext from "./contexts/ThemeContext";
@@ -27,18 +27,18 @@ export default function App() {
           <Route index element={<DefaultCards />} />
           <Route
             path="addJournal"
-            element={<AddFormPage title="Add Journal Papers" />}
+            element={<ResearchForm title="Add Journal Papers" />}
           />
           <Route
             path="addConferenceProceedings"
             element={
-              <AddFormPage
+              <ResearchForm
                 title="Add Conference Proceedings"
                 is_conference={true}
               />
             }
           />
-          <Route path="addPatent" />
+          <Route path="addBook" element={<BookForm />} />
         </Route>
         <Route path="login" element={<Login />} />
       </Routes>

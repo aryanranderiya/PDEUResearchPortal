@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { EyeSlashFilledIcon, EyeFilledIcon } from "./icons";
+import { EyeSlashFilledIcon, EyeFilledIcon } from "./Icons";
 import { supabase } from "../pages/Login";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
