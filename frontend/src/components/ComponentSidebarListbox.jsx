@@ -8,7 +8,7 @@ import {
   AccordionItem,
 } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-import { SunIcon, MoonIcon } from "./Icons";
+import { SunIcon, MoonIcon } from "./icons";
 import ThemeContext from "../contexts/ThemeContext";
 
 const addItems = [
@@ -42,27 +42,27 @@ const addItems = [
 const viewItems = [
   {
     key: "/home/viewJournals",
-    label: "View Journal Paper",
+    label: "View Journal Papers",
     icon: <span class="material-symbols-rounded">description</span>,
   },
   {
     key: "/home/viewConferencePaper",
-    label: "View Conference Paper",
+    label: "View Conference Papers",
     icon: <span class="material-symbols-rounded">podium</span>,
   },
   {
     key: "/home/viewPatents",
-    label: "View Patent",
+    label: "View Patents",
     icon: <span class="material-symbols-rounded">workspace_premium</span>,
   },
   {
     key: "/home/viewBooks",
-    label: "View Book",
+    label: "View Books",
     icon: <span class="material-symbols-rounded">menu_book</span>,
   },
   {
     key: "/home/viewProjects",
-    label: "View Project",
+    label: "View Projects",
     icon: <span class="material-symbols-rounded">task</span>,
   },
 ];
