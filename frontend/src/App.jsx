@@ -4,6 +4,14 @@ import Login from "./pages/Login";
 import { DefaultCards, AddFormPage } from "./pages/Home";
 import SideBar from "./components/SideBar";
 import { useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+const SidebarLayout = () => (
+  <>
+    <SideBar />
+    <Outlet />
+  </>
+);
 
 export default function App() {
   const navigate = useNavigate();
@@ -13,26 +21,15 @@ export default function App() {
   React.useEffect(() => {
     const isAuthenticated = localStorage.getItem("authenticated") === "true";
     setAuthenticated(isAuthenticated);
+    if (authenticated) navigate("home");
+    else navigate("login");
   }, []);
-
-  React.useEffect(() => {
-    if (authenticated) navigate("/home");
-    else navigate("/login");
-  }, [authenticated]);
-
-  if (!authenticated) {
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    );
-  }
 
   return (
     <main className="dark text-foreground bg-background h-screen w-screen flex overflow-hidden">
-      <SideBar />
+      {authenticated && <SideBar />}
       <Routes>
-        <Route path="/home">
+        <Route path="home" element={<SidebarLayout />}>
           <Route index element={<DefaultCards />} />
           <Route
             path="addJournal"
@@ -49,6 +46,7 @@ export default function App() {
           />
           <Route path="addPatent" />
         </Route>
+        <Route path="login" element={<Login />} />
       </Routes>
     </main>
   );
