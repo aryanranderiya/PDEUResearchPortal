@@ -2,8 +2,9 @@ import * as React from "react";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { EyeSlashFilledIcon, EyeFilledIcon } from "./icons";
-import { signInWithEmail, supabase } from "../pages/Login";
+import { supabase } from "../pages/Login";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../contexts/AuthContext";
 
 export default function LoginInputs() {
   const navigate = useNavigate();
@@ -12,13 +13,19 @@ export default function LoginInputs() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  function validateInput(email, password) {
-    if (signInWithEmail(email, password)) {
-      navigate("/home");
+  const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
+
+  async function signInWithEmail(user_email, user_password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: user_email,
+      password: user_password,
+    });
+
+    if (!error) {
+      setAuthenticated(true);
+      if (isAuthenticated === true) navigate("/home");
     }
   }
-
-  const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <>
@@ -45,7 +52,7 @@ export default function LoginInputs() {
           <button
             className="focus:outline-none"
             type="button"
-            onClick={toggleVisibility}
+            onClick={() => setIsVisible(!isVisible)}
           >
             {isVisible ? (
               <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
@@ -60,7 +67,7 @@ export default function LoginInputs() {
         color="primary"
         variant="shadow"
         type="submit"
-        onClick={() => validateInput(email, password)}
+        onClick={() => signInWithEmail(email, password)}
       >
         Login
       </Button>

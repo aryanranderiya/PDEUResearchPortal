@@ -3,32 +3,12 @@ import LoginInputs from "../components/LoginInputComponent";
 import SelectComponent from "../components/SelectComponent";
 import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../contexts/AuthContext";
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
-
-export async function signInWithEmail(user_email, user_password) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: user_email,
-    password: user_password,
-  });
-
-  if (!error) {
-    localStorage.setItem("authenticated", true);
-    return true;
-  } else return false;
-}
-
-export async function signOut(navigate) {
-  const { error } = await supabase.auth.signOut();
-  if (!error) {
-    localStorage.removeItem("authenticated");
-    navigate("/login");
-  }
-  return error;
-}
 
 export default function Login() {
   return (

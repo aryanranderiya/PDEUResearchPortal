@@ -4,32 +4,22 @@ import Login from "./pages/Login";
 import { DefaultCards, AddFormPage } from "./pages/Home";
 import SideBar from "./components/SideBar";
 import { useNavigate } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-
-const SidebarLayout = () => (
-  <>
-    <SideBar />
-    <Outlet />
-  </>
-);
+import AuthContext from "./contexts/AuthContext";
 
 export default function App() {
   const navigate = useNavigate();
-
-  const [authenticated, setAuthenticated] = React.useState(false);
+  const { isAuthenticated } = React.useContext(AuthContext);
 
   React.useEffect(() => {
-    const isAuthenticated = localStorage.getItem("authenticated") === "true";
-    setAuthenticated(isAuthenticated);
-    if (authenticated) navigate("home");
+    if (isAuthenticated) navigate("home");
     else navigate("login");
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <main className="dark text-foreground bg-background h-screen w-screen flex overflow-hidden">
-      {authenticated && <SideBar />}
+      {isAuthenticated && <SideBar />}
       <Routes>
-        <Route path="home" element={<SidebarLayout />}>
+        <Route path="home">
           <Route index element={<DefaultCards />} />
           <Route
             path="addJournal"
