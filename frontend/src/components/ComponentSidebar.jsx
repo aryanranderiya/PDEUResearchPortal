@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ThemeContext from "../contexts/ThemeContext";
 import AuthContext from "../contexts/AuthContext";
 import { supabase } from "../pages/Login";
+import { SunIcon, MoonIcon } from "./Icons";
 
 export default function SideBar() {
   const navigate = useNavigate();
@@ -33,32 +34,35 @@ export default function SideBar() {
 
   return (
     <div className=" border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between">
-      <br></br>
-
-      <Switch isSelected={isSelected} onValueChange={(e) => setIsSelected(e)}>
-        Theme
-      </Switch>
+      <User
+        name="Test User"
+        description={"Head of Department"}
+        avatarProps={{
+          src: "https://avatars.githubusercontent.com/u/64796509?v=4",
+        }}
+        className="flex justify-start"
+      />
 
       <ListBoxPagesComponent />
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 justify-end items-end">
+        <Switch
+          isSelected={isSelected}
+          onValueChange={(e) => setIsSelected(e)}
+          size="md"
+          startContent={<SunIcon />}
+          endContent={<MoonIcon />}
+        ></Switch>
+
         <Button
           color="danger"
           variant="ghost"
           size="sm"
           onClick={() => signOut()}
+          className="w-full"
         >
           Log Out
         </Button>
-
-        <User
-          name="Test User"
-          description={"Head of Department"}
-          avatarProps={{
-            src: "https://avatars.githubusercontent.com/u/64796509?v=4",
-          }}
-          className="self-end"
-        />
       </div>
     </div>
   );
