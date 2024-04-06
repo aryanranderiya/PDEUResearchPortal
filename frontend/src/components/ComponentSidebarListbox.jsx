@@ -149,15 +149,33 @@ export function ListBoxPagesComponentAdd() {
         >
           <AccordionItemsList navigate={navigate} items={settingsItems} />
 
-          <div className="flex flex-col items-end">
+          {/* <div className="flex flex-col items-end">
             <Switch
               isSelected={isSelected}
               onValueChange={(e) => setIsSelected(e)}
               size="md"
               startContent={<SunIcon />}
               endContent={<MoonIcon />}
-            ></Switch>
-          </div>
+            />
+          </div> */}
+
+          <Listbox aria-label="Dynamic Actions">
+            <ListboxItem
+              className={"px-5"}
+              onClick={() => setIsSelected(!isSelected)}
+              startContent={
+                <Switch
+                  isSelected={isSelected}
+                  onValueChange={(e) => setIsSelected(e)}
+                  size="md"
+                  startContent={<SunIcon />}
+                  endContent={<MoonIcon />}
+                />
+              }
+            >
+              Theme
+            </ListboxItem>
+          </Listbox>
         </AccordionItem>
       </Accordion>
     </div>
