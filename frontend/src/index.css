@@ -52,3 +52,16 @@ code {
 .sidebar {
   background-color: rgba(216, 216, 216, 0.1);
 }
+
+.listbox1 li,
+.listbox1 {
+  padding: 0;
+}
+
+.listbox1 li {
+  padding: 2.5% 2%;
+}
+
+.accordion_1 {
+  padding: 0% 2%;
+}

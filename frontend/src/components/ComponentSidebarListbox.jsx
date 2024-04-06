@@ -100,6 +100,7 @@ export function ListBoxPagesComponentAdd() {
           navigate(item);
         }}
         selectionMode="single"
+        className="listbox1"
       >
         <ListboxItem
           key={"/home"}
@@ -110,14 +111,19 @@ export function ListBoxPagesComponentAdd() {
         </ListboxItem>
       </Listbox>
 
-      <Accordion variant="bordered" isCompact defaultExpandedKeys={["1"]}>
+      <Accordion
+        variant="light"
+        isCompact
+        defaultExpandedKeys={["1"]}
+        className="accordion_1"
+      >
         <AccordionItem
           key="1"
           aria-label="Accordion 1"
           title="Add"
           startContent={
             <div className="flex">
-              <span class="material-symbols-rounded">add</span>
+              <span class="material-symbols-rounded">upload</span>
             </div>
           }
         >
@@ -126,11 +132,11 @@ export function ListBoxPagesComponentAdd() {
 
         <AccordionItem
           key="2"
-          aria-label="Accordion 1"
+          aria-label="Accordion 2"
           title="View"
           startContent={
             <div className="flex">
-              <span class="material-symbols-rounded">visibility</span>
+              <span class="material-symbols-rounded">search</span>
             </div>
           }
         >
@@ -139,7 +145,7 @@ export function ListBoxPagesComponentAdd() {
 
         <AccordionItem
           key="3"
-          aria-label="Accordion 1"
+          aria-label="Accordion 3"
           title="Settings"
           startContent={
             <div className="flex">
