@@ -10,16 +10,18 @@ export default function SideBar() {
   const navigate = useNavigate();
 
   const { setAuthenticated } = React.useContext(AuthContext);
+  const { darkTheme, setDarkTheme } = React.useContext(ThemeContext);
   const [isSelected, setIsSelected] = React.useState(false);
-  const { setDarkTheme } = React.useContext(ThemeContext);
 
   React.useEffect(() => {
-    if (isSelected === true) {
-      setDarkTheme("dark");
-    } else {
-      setDarkTheme("light");
-    }
+    if (isSelected === true) setDarkTheme("dark");
+    else setDarkTheme("light");
   }, [isSelected]);
+
+  React.useEffect(() => {
+    if (darkTheme === "dark") setIsSelected(true);
+    else setIsSelected(false);
+  }, []);
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -30,7 +32,6 @@ export default function SideBar() {
   }
 
   return (
-    
     <div className=" border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between">
       <br></br>
 

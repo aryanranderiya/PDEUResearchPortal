@@ -17,10 +17,6 @@ export default function App() {
     else navigate("login");
   }, [isAuthenticated]);
 
-  React.useEffect(() => {
-    console.log(darkTheme);
-  }, [darkTheme]);
-
   return (
     <main
       className={`${darkTheme} text-foreground bg-background h-screen w-screen flex overflow-hidden`}
