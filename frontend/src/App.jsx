@@ -5,18 +5,26 @@ import { DefaultCards, AddFormPage } from "./pages/Home";
 import SideBar from "./components/SideBar";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "./contexts/AuthContext";
+import ThemeContext from "./contexts/ThemeContext";
 
 export default function App() {
   const navigate = useNavigate();
   const { isAuthenticated } = React.useContext(AuthContext);
+  const { darkTheme } = React.useContext(ThemeContext);
 
   React.useEffect(() => {
     if (isAuthenticated) navigate("home");
     else navigate("login");
   }, [isAuthenticated]);
 
+  React.useEffect(() => {
+    console.log(darkTheme);
+  }, [darkTheme]);
+
   return (
-    <main className="dark text-foreground bg-background h-screen w-screen flex overflow-hidden">
+    <main
+      className={`${darkTheme} text-foreground bg-background h-screen w-screen flex overflow-hidden`}
+    >
       {isAuthenticated && <SideBar />}
       <Routes>
         <Route path="home">

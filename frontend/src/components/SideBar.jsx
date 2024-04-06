@@ -9,15 +9,17 @@ import { supabase } from "../pages/Login";
 export default function SideBar() {
   const navigate = useNavigate();
 
-  const [isSelected, setIsSelected] = React.useState(
-    localStorage.getItem("dark_mode") || true
-  );
+  const { setAuthenticated } = React.useContext(AuthContext);
+  const [isSelected, setIsSelected] = React.useState(false);
+  const { setDarkTheme } = React.useContext(ThemeContext);
 
-  // React.useEffect(() => {
-  //   localStorage.setItem("dark_mode", isSelected);
-  // }, [isSelected]);
-
-  const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
+  React.useEffect(() => {
+    if (isSelected === true) {
+      setDarkTheme("dark");
+    } else {
+      setDarkTheme("light");
+    }
+  }, [isSelected]);
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();
@@ -28,6 +30,7 @@ export default function SideBar() {
   }
 
   return (
+    
     <div className=" border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between">
       <br></br>
 
