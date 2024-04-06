@@ -1,8 +1,6 @@
 import * as React from "react";
 import CardComponent from "../components/CardComponent";
 import FormAdd from "../components/FormAdd";
-import { Routes, Route } from "react-router-dom";
-import Form from "../components/FormAdd";
 
 export function DefaultCards() {
   return (
@@ -36,11 +34,11 @@ export function DefaultCards() {
   );
 }
 
-export function AddFormPage({ title }) {
+export function AddFormPage({ title, is_conference = false }) {
   return (
     <div className="form_add">
       <h1 className="title"> {title}</h1>
-      <FormAdd />
+      <FormAdd is_conference={is_conference} />
     </div>
   );
 }

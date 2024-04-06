@@ -15,11 +15,18 @@ export async function signInWithEmail(user_email, user_password) {
     password: user_password,
   });
 
-  if (!error) localStorage.setItem("authenticated", true);
+  if (!error) {
+    localStorage.setItem("authenticated", true);
+    return true;
+  } else return false;
 }
 
-export async function signOut() {
+export async function signOut(navigate) {
   const { error } = await supabase.auth.signOut();
+  if (!error) {
+    localStorage.removeItem("authenticated");
+    navigate("/login");
+  }
   return error;
 }
 

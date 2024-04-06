@@ -1,22 +1,23 @@
 import * as React from "react";
 import ListBoxPagesComponent from "./ListBoxPagesComponent";
-import { User, Button } from "@nextui-org/react";
+import { User, Button, Switch } from "@nextui-org/react";
 import { signOut } from "../pages/Login";
 import { useNavigate } from "react-router-dom";
+import ThemeContext from "../contexts/ThemeContext";
 
 export default function SideBar() {
   const navigate = useNavigate();
-
-  const SignOutUser = () => {
-    signOut().then((response) => {
-      navigate("/login");
-      localStorage.removeItem("authenticated");
-    });
-  };
+  const [isSelected, setIsSelected] = React.useState(
+    localStorage.getItem("theme") || true
+  );
 
   return (
     <div className=" border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between">
       <br></br>
+
+      <Switch isSelected={isSelected} onValueChange={setIsSelected}>
+        Theme
+      </Switch>
 
       <ListBoxPagesComponent />
 
@@ -25,7 +26,7 @@ export default function SideBar() {
           color="danger"
           variant="ghost"
           size="sm"
-          onClick={() => SignOutUser()}
+          onClick={() => signOut(navigate)}
         >
           Log Out
         </Button>

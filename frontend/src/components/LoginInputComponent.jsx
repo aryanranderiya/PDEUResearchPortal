@@ -14,11 +14,7 @@ export default function LoginInputs() {
 
   function validateInput(email, password) {
     if (signInWithEmail(email, password)) {
-      supabase.auth.onAuthStateChange((event) => {
-        if (event == "SIGNED_IN") {
-          navigate("/home");
-        }
-      });
+      navigate("/home");
     }
   }
 

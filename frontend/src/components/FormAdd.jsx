@@ -9,7 +9,7 @@ import {
   Autocomplete,
 } from "@nextui-org/react";
 
-export default function Form() {
+export default function Form({ is_conference = false }) {
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journals = ["Scopus", "Web of Science (WOS)"];
   const users = [
@@ -64,25 +64,8 @@ export default function Form() {
       email: "kristen.cooper@example.com",
     },
   ];
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
-  const years = Array.from(
-    { length: 100 },
-    (_, i) => new Date().getFullYear() - i
-  );
+  const levels = ["International", "National"];
 
   return (
     <div className="main_form">
@@ -154,23 +137,15 @@ export default function Form() {
           className="max-w-5xl"
         />
       </div>
-      <div className="flex max-w-5xl gap-2">
-        <Select label="Month" className="max-w-5xl" size="sm">
-          {months.map((map) => (
-            <SelectItem key={map} value={map}>
-              {map}
-            </SelectItem>
-          ))}
-        </Select>
 
-        <Select label="Year" className="max-w-5xl" size="sm">
-          {years.map((year) => (
-            <SelectItem key={year} value={year}>
-              {year}
-            </SelectItem>
-          ))}
-        </Select>
-      </div>
+      <Input
+        size="sm"
+        type="date"
+        label="Paper Publish Date"
+        variant="faded"
+        className="max-w-5xl"
+      />
+
       <Input
         size="sm"
         type="text"
@@ -185,13 +160,6 @@ export default function Form() {
         variant="faded"
         className="max-w-5xl"
       />
-      <Select label="Year" className="max-w-5xl" size="sm">
-        {years.map((year) => (
-          <SelectItem key={year} value={year}>
-            <Checkbox value={year}> {year}</Checkbox>
-          </SelectItem>
-        ))}
-      </Select>
 
       <div className="flex max-w-5xl gap-2 items-center">
         <Autocomplete
@@ -223,8 +191,44 @@ export default function Form() {
         <Checkbox>First</Checkbox>
         <Checkbox>Corresponding</Checkbox>
       </div>
+
+      {is_conference ? (
+        <>
+          <Input
+            size="sm"
+            type="text"
+            label="Conference Name"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Input
+            size="sm"
+            type="date"
+            label="Conference Date"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Input
+            size="sm"
+            type="text"
+            label="Conference City"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Select label="Conference Level" className="max-w-5xl" size="sm">
+            {levels.map((level) => (
+              <SelectItem key={level} value={level}>
+                {level}
+              </SelectItem>
+            ))}
+          </Select>
+        </>
+      ) : (
+        <></>
+      )}
+
       <div className="flex max-w-5xl gap-2 items-center justify-center">
-        <Button color="success" size="md">
+        <Button color="primary" size="md">
           Submit
         </Button>
         <Button color="default" size="md" variant="ghost">

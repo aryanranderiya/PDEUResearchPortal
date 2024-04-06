@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Listbox, ListboxSection, ListboxItem } from "@nextui-org/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Listbox, ListboxItem } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export default function ListBoxPagesComponent() {
   const items = [
@@ -13,8 +13,8 @@ export default function ListBoxPagesComponent() {
       label: "Add Journal Paper",
     },
     {
-      key: "/home/addConference",
-      label: "Add Conference Paper",
+      key: "/home/addConferenceProceedings",
+      label: "Add Conference Proceedings",
     },
     {
       key: "/home/addPatent",
