@@ -6,12 +6,13 @@ import Form3 from "../components/FormAddPatent";
 
 export function DefaultCards() {
   return (
-    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4 overflow-scroll h-auto">
+    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4 overflow-scroll h-auto flex-wrap px-7">
       <CardComponent
         heading={"Journal Papers"}
         subheading={10}
         imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
         page="./journalpapers"
+        size="sm"
       />
 
       <CardComponent

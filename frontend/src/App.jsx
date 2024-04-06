@@ -29,7 +29,7 @@ export default function App() {
             element={<ResearchForm title="Add Journal Papers" />}
           />
           <Route
-            path="addConferenceProceedings"
+            path="addConferencePaper"
             element={
               <ResearchForm
                 title="Add Conference Proceedings"

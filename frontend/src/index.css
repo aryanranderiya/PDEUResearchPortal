@@ -44,3 +44,11 @@ code {
   height: 200px;
   width: min-content;
 }
+
+.sidebar_div {
+  width: 285px;
+}
+
+.sidebar {
+  background-color: rgba(216, 216, 216, 0.1);
+}

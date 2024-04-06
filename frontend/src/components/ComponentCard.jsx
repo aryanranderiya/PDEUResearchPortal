@@ -28,11 +28,10 @@ export default function CardComponent({
           alt="Card background"
           className="object-cover rounded-xl"
           src={imagelink}
-          width={260}
+          width={220}
         />
         <Image />
       </CardBody>
-      <Divider></Divider>
       <CardFooter className="flex justify-center">
         <Link to={page}>
           <Button color="primary">View {heading}</Button>
