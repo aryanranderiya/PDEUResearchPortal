@@ -2,6 +2,7 @@ import * as React from "react";
 import CardComponent from "../components/ComponentCard";
 import Form1 from "../components/FormAddResearch";
 import Form2 from "../components/FormAddBook";
+import Form3 from "../components/FormAddPatent";
 
 export function DefaultCards() {
   return (
@@ -51,6 +52,17 @@ export function BookForm() {
         Add Research Based Books, Textbooks or Literary Books
       </h1>
       <Form2 />
+    </div>
+  );
+}
+
+export function PatentForm() {
+  return (
+    <div className="form_add">
+      <h1 className="title">
+        Add Details for Patent Applied / Filed / Published
+      </h1>
+      <Form3 />
     </div>
   );
 }

@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import { DefaultCards, ResearchForm, BookForm } from "./pages/Home";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import SideBar from "./components/ComponentSidebar";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "./contexts/AuthContext";
 import ThemeContext from "./contexts/ThemeContext";
+import Login from "./pages/Login";
+import { DefaultCards, ResearchForm, BookForm, PatentForm } from "./pages/Home";
 
 export default function App() {
   const navigate = useNavigate();
@@ -39,6 +38,7 @@ export default function App() {
             }
           />
           <Route path="addBook" element={<BookForm />} />
+          <Route path="addPatent" element={<PatentForm />} />
         </Route>
         <Route path="login" element={<Login />} />
       </Routes>
