@@ -11,11 +11,29 @@ import {
 } from "@nextui-org/react";
 
 export default function Form1({ is_conference = false }) {
-  const [inputFields, setInputFields] = React.useState([[0], [0]]);
+  const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
+
+  const [formData, setformData] = React.useState({
+    title: "",
+    abstract: "",
+    journal_name: "",
+    quartile: "",
+    journal_indexed: "",
+    publisher_name: "",
+    volume: "",
+    issue: "",
+    page_start: "",
+    page_end: "",
+    publish_date: "",
+    ISSN: "",
+    DOI: "",
+    pdeu_authors: [],
+    outside_authors: [],
+  });
 
   React.useEffect(() => {
-    console.log(inputFields);
-  }, [inputFields]);
+    console.log(formData);
+  }, [formData]);
 
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
@@ -26,19 +44,19 @@ export default function Form1({ is_conference = false }) {
   };
 
   const handleInputFieldAdd = () => {
-    setInputFields([...inputFields, { input: "" }]);
+    setAuthorInputFields([...authorInputFields, []]);
   };
 
   const handleInputFieldRemove = (index) => {
-    const list = [...inputFields];
+    const list = [...authorInputFields];
     list.splice(index, 1);
-    setInputFields(list);
+    setAuthorInputFields(list);
   };
 
   const handleInputFieldsChange = (value, index) => {
-    const list = [...inputFields];
+    const list = [...authorInputFields];
     list[index] = value;
-    setInputFields(list);
+    setAuthorInputFields(list);
   };
 
   const users = [
@@ -73,12 +91,11 @@ export default function Form1({ is_conference = false }) {
       email: "jane.fisher@example.com",
     },
   ];
-  const [value, setValue] = React.useState(new Set([]));
 
   function PDEUAuthors() {
     return (
       <>
-        {inputFields.map((field, index) => (
+        {authorInputFields.map((index) => (
           <div key={index} className="flex max-w-5xl gap-2 items-center">
             <Autocomplete
               label="Author from PDEU"
@@ -87,7 +104,7 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               isRequired
               onSelectionChange={(e) => handleInputFieldsChange(e, index)}
-              defaultSelectedKey={inputFields[index]}
+              defaultSelectedKey={authorInputFields[index]}
             >
               {users.map((user) => (
                 <AutocompleteItem key={user.id} value={user.id}>
@@ -98,7 +115,7 @@ export default function Form1({ is_conference = false }) {
             <Checkbox>First</Checkbox>
             <Checkbox>Corresponding</Checkbox>
 
-            {inputFields.length - 1 === index && (
+            {authorInputFields.length - 1 === index && (
               <Button
                 color="primary"
                 id="addAuthor"
@@ -108,7 +125,7 @@ export default function Form1({ is_conference = false }) {
               </Button>
             )}
 
-            {inputFields.length !== 1 && (
+            {authorInputFields.length !== 1 && (
               <Button
                 isIconOnly
                 color="danger"
@@ -134,6 +151,8 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.title}
+          onValueChange={(value) => setformData({ ...formData, title: value })}
         />
 
         <Textarea
@@ -141,6 +160,10 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           variant="faded"
           isRequired
+          value={formData.abstract}
+          onValueChange={(value) =>
+            setformData({ ...formData, abstract: value })
+          }
         />
 
         <Input
@@ -150,9 +173,20 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.journal_name}
+          onValueChange={(value) =>
+            setformData({ ...formData, journal_name: value })
+          }
         />
 
-        <Select label="Quartile" className="max-w-5xl" size="sm" isRequired>
+        <Select
+          label="Quartile"
+          className="max-w-5xl"
+          size="sm"
+          isRequired
+          selectedKeys={formData.quartile}
+          onSelectionChange={(e) => setformData({ ...formData, quartile: e })}
+        >
           {quartiles.map((quartile) => (
             <SelectItem key={quartile} value={quartile}>
               {quartile}
@@ -165,6 +199,10 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           isRequired
+          selectedKeys={formData.journal_indexed}
+          onSelectionChange={(e) =>
+            setformData({ ...formData, journal_indexed: e })
+          }
         >
           {journal_indexed.map((journal) => (
             <SelectItem key={journal} value={journal}>
@@ -172,6 +210,7 @@ export default function Form1({ is_conference = false }) {
             </SelectItem>
           ))}
         </Select>
+
         <Input
           size="sm"
           type="text"
@@ -179,6 +218,10 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.publisher_name}
+          onValueChange={(value) =>
+            setformData({ ...formData, publisher_name: value })
+          }
         />
         <div className="flex max-w-5xl gap-2">
           <Input
@@ -187,6 +230,10 @@ export default function Form1({ is_conference = false }) {
             label="Volume"
             variant="faded"
             className="max-w-5xl"
+            value={formData.volume}
+            onValueChange={(value) =>
+              setformData({ ...formData, volume: value })
+            }
           />
           <Input
             size="sm"
@@ -194,6 +241,10 @@ export default function Form1({ is_conference = false }) {
             label="Issue"
             variant="faded"
             className="max-w-5xl"
+            value={formData.issue}
+            onValueChange={(value) =>
+              setformData({ ...formData, issue: value })
+            }
           />
         </div>
 
@@ -204,6 +255,10 @@ export default function Form1({ is_conference = false }) {
             label="Page Start"
             variant="faded"
             className="max-w-5xl"
+            value={formData.page_start}
+            onValueChange={(value) =>
+              setformData({ ...formData, page_start: value })
+            }
           />
           <Input
             size="sm"
@@ -211,6 +266,10 @@ export default function Form1({ is_conference = false }) {
             label="Page End"
             variant="faded"
             className="max-w-5xl"
+            value={formData.page_end}
+            onValueChange={(value) =>
+              setformData({ ...formData, page_end: value })
+            }
           />
         </div>
 
@@ -221,6 +280,10 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.publish_date}
+          onValueChange={(value) =>
+            setformData({ ...formData, publish_date: value })
+          }
         />
 
         <Input
@@ -230,6 +293,8 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.ISSN}
+          onValueChange={(value) => setformData({ ...formData, ISSN: value })}
         />
         <Input
           size="sm"
@@ -238,6 +303,8 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.DOI}
+          onValueChange={(value) => setformData({ ...formData, DOI: value })}
         />
 
         <PDEUAuthors />
