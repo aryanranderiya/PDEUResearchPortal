@@ -44,3 +44,15 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error" }); // Return internal server error status (500)
   }
 });
+
+app.post("/insert/researchpaper", async (req, res) => {
+  try {
+    console.log(req.body);
+    // const { error } = await supabase
+    //   .from("countries")
+    //   .insert({ id: 1, name: "Denmark" });
+  } catch (error) {
+    console.error("Error logging in:", error.message);
+    res.status(500).json({ error: "Internal server error" }); // Return internal server error status (500)
+  }
+});

@@ -3,24 +3,18 @@ import {
   ListBoxPagesComponentAdd,
   ListBoxPagesComponentView,
 } from "./ComponentSidebarListbox";
-
 import { User, Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
-import { supabase } from "../pages/Login";
 
 export default function SideBar() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const { setAuthenticated } = React.useContext(AuthContext);
+  const { setAuthenticated } = React.useContext(AuthContext);
 
   async function signOut() {
-    console.log("To be implemented");
-    //   const { error } = await supabase.auth.signOut();
-    //   if (!error) {
-    //     setAuthenticated(false);
-    //     navigate("/login");
-    //   }
+    setAuthenticated(false);
+    navigate("/login");
   }
 
   return (

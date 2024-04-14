@@ -38,10 +38,12 @@ export default function Login() {
 
   return (
     <>
-      <main
-        className={`${darkTheme} text-foreground bg-background text-center flex justify-center gap-4 h-screen items-center flex-col w-screen`}
-      >
-        <form method="post" onSubmit={handleSubmit}>
+      <main>
+        <form
+          method="post"
+          onSubmit={handleSubmit}
+          className={`${darkTheme} text-foreground bg-background text-center flex justify-center gap-4 h-screen items-center flex-col w-screen`}
+        >
           <SelectComponent />
           <Input
             variant="faded"

@@ -11,31 +11,39 @@ import {
 } from "@nextui-org/react";
 
 export default function Form1({ is_conference = false }) {
-  const [inputFields, setInputFields] = React.useState([""]);
-
-  const handleAddField = () => {
-    setInputFields([...inputFields, ""]);
-  };
-
-  const handleRemoveField = (index) => {
-    const newInputFields = [...inputFields];
-    newInputFields.splice(index, 1);
-    setInputFields(newInputFields);
-  };
-
-  // const handleChange = (index, event) => {
-  //   const newInputFields = [...inputFields];
-  //   newInputFields[index] = event;
-  //   setInputFields(newInputFields);
-  // };
+  const [inputFields, setInputFields] = React.useState([[0], [0]]);
 
   React.useEffect(() => {
     console.log(inputFields);
   }, [inputFields]);
 
+  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
+  const journal_indexed = ["Scopus", "Web of Science (WOS)"];
+  const levels = ["International", "National"];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
+
+  const handleInputFieldAdd = () => {
+    setInputFields([...inputFields, { input: "" }]);
+  };
+
+  const handleInputFieldRemove = (index) => {
+    const list = [...inputFields];
+    list.splice(index, 1);
+    setInputFields(list);
+  };
+
+  const handleInputFieldsChange = (value, index) => {
+    const list = [...inputFields];
+    list[index] = value;
+    setInputFields(list);
+  };
+
   const users = [
     {
-      id: 1,
+      id: 0,
       name: "Tony Reichert",
       role: "CEO",
       team: "Management",
@@ -45,7 +53,7 @@ export default function Form1({ is_conference = false }) {
       email: "tony.reichert@example.com",
     },
     {
-      id: 2,
+      id: 1,
       name: "Zoey Lang",
       role: "Tech Lead",
       team: "Development",
@@ -55,7 +63,7 @@ export default function Form1({ is_conference = false }) {
       email: "zoey.lang@example.com",
     },
     {
-      id: 3,
+      id: 2,
       name: "Jane Fisher",
       role: "Sr. Dev",
       team: "Development",
@@ -65,13 +73,9 @@ export default function Form1({ is_conference = false }) {
       email: "jane.fisher@example.com",
     },
   ];
+  const [value, setValue] = React.useState(new Set([]));
 
-  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
-  const journal_indexed = ["Scopus", "Web of Science (WOS)"];
-
-  const levels = ["International", "National"];
-
-  function PDEUAuthors({ main = false }) {
+  function PDEUAuthors() {
     return (
       <>
         {inputFields.map((field, index) => (
@@ -82,14 +86,11 @@ export default function Form1({ is_conference = false }) {
               size="sm"
               variant="faded"
               isRequired
-              onInputChange={(e) => setInputFields(e)}
+              onSelectionChange={(e) => handleInputFieldsChange(e, index)}
+              defaultSelectedKey={inputFields[index]}
             >
               {users.map((user) => (
-                <AutocompleteItem
-                  key={user.id}
-                  value={user.name}
-                  defaultSelectedKey={field}
-                >
+                <AutocompleteItem key={user.id} value={user.id}>
                   {user.name}
                 </AutocompleteItem>
               ))}
@@ -97,20 +98,22 @@ export default function Form1({ is_conference = false }) {
             <Checkbox>First</Checkbox>
             <Checkbox>Corresponding</Checkbox>
 
-            {main ? (
+            {inputFields.length - 1 === index && (
               <Button
                 color="primary"
                 id="addAuthor"
-                onClick={() => handleAddField()}
+                onClick={handleInputFieldAdd}
               >
-                Add
+                Add Authors
               </Button>
-            ) : (
+            )}
+
+            {inputFields.length !== 1 && (
               <Button
                 isIconOnly
                 color="danger"
                 aria-label="Remove"
-                onClick={() => handleRemoveField()}
+                onClick={() => handleInputFieldRemove(index)}
               >
                 <span className="material-symbols-rounded">close</span>
               </Button>
@@ -122,186 +125,188 @@ export default function Form1({ is_conference = false }) {
   }
 
   return (
-    <div className="main_form">
-      <Input
-        size="sm"
-        type="text"
-        label="Paper Title"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Textarea
-        label="Abstract"
-        className="max-w-5xl"
-        variant="faded"
-        isRequired
-      />
-
-      <Input
-        size="sm"
-        type="text"
-        label="Journal Name"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Select label="Quartile" className="max-w-5xl" size="sm" isRequired>
-        {quartiles.map((quartile) => (
-          <SelectItem key={quartile} value={quartile}>
-            {quartile}
-          </SelectItem>
-        ))}
-      </Select>
-
-      <Select
-        label="Journal Indexed"
-        className="max-w-5xl"
-        size="sm"
-        isRequired
-      >
-        {journal_indexed.map((journal) => (
-          <SelectItem key={journal} value={journal}>
-            {journal}
-          </SelectItem>
-        ))}
-      </Select>
-      <Input
-        size="sm"
-        type="text"
-        label="Publisher Name"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-      <div className="flex max-w-5xl gap-2">
+    <form onSubmit={handleSubmit}>
+      <div className="main_form">
         <Input
           size="sm"
           type="text"
-          label="Volume"
+          label="Paper Title"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
+
+        <Textarea
+          label="Abstract"
+          className="max-w-5xl"
+          variant="faded"
+          isRequired
+        />
+
         <Input
           size="sm"
           type="text"
-          label="Issue"
+          label="Journal Name"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
-      </div>
 
-      <div className="flex max-w-5xl gap-2">
-        <Input
+        <Select label="Quartile" className="max-w-5xl" size="sm" isRequired>
+          {quartiles.map((quartile) => (
+            <SelectItem key={quartile} value={quartile}>
+              {quartile}
+            </SelectItem>
+          ))}
+        </Select>
+
+        <Select
+          label="Journal Indexed"
+          className="max-w-5xl"
           size="sm"
-          type="number"
-          label="Page Start"
-          variant="faded"
-          className="max-w-5xl"
-        />
-        <Input
-          size="sm"
-          type="number"
-          label="Page End"
-          variant="faded"
-          className="max-w-5xl"
-        />
-      </div>
-
-      <Input
-        size="sm"
-        type="date"
-        label="Paper Publish Date"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Input
-        size="sm"
-        type="text"
-        label="ISSN No./ISBN No."
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-      <Input
-        size="sm"
-        type="text"
-        label="DOI (i.e https://doi.org/10...)"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <PDEUAuthors main={true} />
-
-      <div className="flex max-w-5xl gap-2 items-center">
+          isRequired
+        >
+          {journal_indexed.map((journal) => (
+            <SelectItem key={journal} value={journal}>
+              {journal}
+            </SelectItem>
+          ))}
+        </Select>
         <Input
           size="sm"
           type="text"
-          label="Author outside of PDEU"
+          label="Publisher Name"
           variant="faded"
           className="max-w-5xl"
+          isRequired
         />
-        <Button color="primary">Add</Button>
-        <Checkbox>First</Checkbox>
-        <Checkbox>Corresponding</Checkbox>
-      </div>
-
-      {is_conference ? (
-        <>
+        <div className="flex max-w-5xl gap-2">
           <Input
             size="sm"
             type="text"
-            label="Conference Name"
+            label="Volume"
             variant="faded"
             className="max-w-5xl"
-            isRequired
-          />
-          <Input
-            size="sm"
-            type="date"
-            label="Conference Date"
-            variant="faded"
-            className="max-w-5xl"
-            isRequired
           />
           <Input
             size="sm"
             type="text"
-            label="Conference City"
+            label="Issue"
             variant="faded"
             className="max-w-5xl"
-            isRequired
           />
-          <Select
-            label="Conference Level"
-            className="max-w-5xl"
-            size="sm"
-            isRequired
-          >
-            {levels.map((level) => (
-              <SelectItem key={level} value={level}>
-                {level}
-              </SelectItem>
-            ))}
-          </Select>
-        </>
-      ) : (
-        <></>
-      )}
+        </div>
 
-      <div className="flex max-w-5xl gap-2 items-center justify-center">
-        <Button color="primary" size="md">
-          Submit
-        </Button>
-        <Button color="default" size="md" variant="ghost">
-          Cancel
-        </Button>
+        <div className="flex max-w-5xl gap-2">
+          <Input
+            size="sm"
+            type="number"
+            label="Page Start"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Input
+            size="sm"
+            type="number"
+            label="Page End"
+            variant="faded"
+            className="max-w-5xl"
+          />
+        </div>
+
+        <Input
+          size="sm"
+          type="date"
+          label="Paper Publish Date"
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+        />
+
+        <Input
+          size="sm"
+          type="text"
+          label="ISSN No./ISBN No."
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+        />
+        <Input
+          size="sm"
+          type="text"
+          label="DOI (i.e https://doi.org/10...)"
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+        />
+
+        <PDEUAuthors />
+
+        <div className="flex max-w-5xl gap-2 items-center">
+          <Input
+            size="sm"
+            type="text"
+            label="Author outside of PDEU"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Button color="primary">Add</Button>
+          <Checkbox>First</Checkbox>
+          <Checkbox>Corresponding</Checkbox>
+        </div>
+
+        {is_conference ? (
+          <>
+            <Input
+              size="sm"
+              type="text"
+              label="Conference Name"
+              variant="faded"
+              className="max-w-5xl"
+              isRequired
+            />
+            <Input
+              size="sm"
+              type="date"
+              label="Conference Date"
+              variant="faded"
+              className="max-w-5xl"
+              isRequired
+            />
+            <Input
+              size="sm"
+              type="text"
+              label="Conference City"
+              variant="faded"
+              className="max-w-5xl"
+              isRequired
+            />
+            <Select
+              label="Conference Level"
+              className="max-w-5xl"
+              size="sm"
+              isRequired
+            >
+              {levels.map((level) => (
+                <SelectItem key={level} value={level}>
+                  {level}
+                </SelectItem>
+              ))}
+            </Select>
+          </>
+        ) : (
+          <></>
+        )}
+
+        <div className="flex max-w-5xl gap-2 items-center justify-center">
+          <Button color="primary" size="md" type="submit">
+            Submit
+          </Button>
+          <Button color="default" size="md" variant="ghost">
+            Cancel
+          </Button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }
