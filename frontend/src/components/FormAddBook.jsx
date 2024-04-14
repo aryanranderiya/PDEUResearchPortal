@@ -101,7 +101,7 @@ export default function Form2() {
         isRequired
       />
 
-      <Select label="Book Type" className="max-w-5xl" size="sm" isRequired>
+      <Select label="Publisher Type" className="max-w-5xl" size="sm" isRequired>
         {publisher_type.map((publisher) => (
           <SelectItem key={publisher} value={publisher}>
             {publisher}

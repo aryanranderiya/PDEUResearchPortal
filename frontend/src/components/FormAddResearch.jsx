@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Input,
   Select,
@@ -10,8 +11,28 @@ import {
 } from "@nextui-org/react";
 
 export default function Form1({ is_conference = false }) {
-  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
-  const journals = ["Scopus", "Web of Science (WOS)"];
+  const [inputFields, setInputFields] = React.useState([""]);
+
+  const handleAddField = () => {
+    setInputFields([...inputFields, ""]);
+  };
+
+  const handleRemoveField = (index) => {
+    const newInputFields = [...inputFields];
+    newInputFields.splice(index, 1);
+    setInputFields(newInputFields);
+  };
+
+  // const handleChange = (index, event) => {
+  //   const newInputFields = [...inputFields];
+  //   newInputFields[index] = event;
+  //   setInputFields(newInputFields);
+  // };
+
+  React.useEffect(() => {
+    console.log(inputFields);
+  }, [inputFields]);
+
   const users = [
     {
       id: 1,
@@ -43,29 +64,62 @@ export default function Form1({ is_conference = false }) {
       avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/2.png",
       email: "jane.fisher@example.com",
     },
-    {
-      id: 4,
-      name: "William Howard",
-      role: "C.M.",
-      team: "Marketing",
-      status: "vacation",
-      age: "28",
-      avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/2.png",
-      email: "william.howard@example.com",
-    },
-    {
-      id: 5,
-      name: "Kristen Copper",
-      role: "S. Manager",
-      team: "Sales",
-      status: "active",
-      age: "24",
-      avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/3.png",
-      email: "kristen.cooper@example.com",
-    },
   ];
 
+  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
+  const journal_indexed = ["Scopus", "Web of Science (WOS)"];
+
   const levels = ["International", "National"];
+
+  function PDEUAuthors({ main = false }) {
+    return (
+      <>
+        {inputFields.map((field, index) => (
+          <div key={index} className="flex max-w-5xl gap-2 items-center">
+            <Autocomplete
+              label="Author from PDEU"
+              className="max-w-5xl"
+              size="sm"
+              variant="faded"
+              isRequired
+              onInputChange={(e) => setInputFields(e)}
+            >
+              {users.map((user) => (
+                <AutocompleteItem
+                  key={user.id}
+                  value={user.name}
+                  defaultSelectedKey={field}
+                >
+                  {user.name}
+                </AutocompleteItem>
+              ))}
+            </Autocomplete>
+            <Checkbox>First</Checkbox>
+            <Checkbox>Corresponding</Checkbox>
+
+            {main ? (
+              <Button
+                color="primary"
+                id="addAuthor"
+                onClick={() => handleAddField()}
+              >
+                Add
+              </Button>
+            ) : (
+              <Button
+                isIconOnly
+                color="danger"
+                aria-label="Remove"
+                onClick={() => handleRemoveField()}
+              >
+                <span className="material-symbols-rounded">close</span>
+              </Button>
+            )}
+          </div>
+        ))}
+      </>
+    );
+  }
 
   return (
     <div className="main_form">
@@ -102,8 +156,13 @@ export default function Form1({ is_conference = false }) {
         ))}
       </Select>
 
-      <Select label="Journal" className="max-w-5xl" size="sm" isRequired>
-        {journals.map((journal) => (
+      <Select
+        label="Journal Indexed"
+        className="max-w-5xl"
+        size="sm"
+        isRequired
+      >
+        {journal_indexed.map((journal) => (
           <SelectItem key={journal} value={journal}>
             {journal}
           </SelectItem>
@@ -124,7 +183,6 @@ export default function Form1({ is_conference = false }) {
           label="Volume"
           variant="faded"
           className="max-w-5xl"
-          isRequired
         />
         <Input
           size="sm"
@@ -132,9 +190,9 @@ export default function Form1({ is_conference = false }) {
           label="Issue"
           variant="faded"
           className="max-w-5xl"
-          isRequired
         />
       </div>
+
       <div className="flex max-w-5xl gap-2">
         <Input
           size="sm"
@@ -142,7 +200,6 @@ export default function Form1({ is_conference = false }) {
           label="Page Start"
           variant="faded"
           className="max-w-5xl"
-          isRequired
         />
         <Input
           size="sm"
@@ -150,7 +207,6 @@ export default function Form1({ is_conference = false }) {
           label="Page End"
           variant="faded"
           className="max-w-5xl"
-          isRequired
         />
       </div>
 
@@ -180,24 +236,7 @@ export default function Form1({ is_conference = false }) {
         isRequired
       />
 
-      <div className="flex max-w-5xl gap-2 items-center">
-        <Autocomplete
-          label="Author from PDEU"
-          className="max-w-5xl"
-          size="sm"
-          variant="faded"
-          isRequired
-        >
-          {users.map((user) => (
-            <AutocompleteItem key={user.id} value={user.name}>
-              {user.name}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-        <Button color="primary">Add</Button>
-        <Checkbox>First</Checkbox>
-        <Checkbox>Corresponding</Checkbox>
-      </div>
+      <PDEUAuthors main={true} />
 
       <div className="flex max-w-5xl gap-2 items-center">
         <Input

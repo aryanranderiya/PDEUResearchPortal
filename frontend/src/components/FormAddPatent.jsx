@@ -5,7 +5,6 @@ import {
   Checkbox,
   AutocompleteItem,
   Button,
-  Textarea,
   Autocomplete,
 } from "@nextui-org/react";
 
@@ -104,7 +103,7 @@ export default function Form1() {
 
       <Input
         size="sm"
-        type="text"
+        type="date"
         label="Application Date"
         variant="faded"
         className="max-w-5xl"
@@ -113,7 +112,7 @@ export default function Form1() {
 
       <Input
         size="sm"
-        type="text"
+        type="date"
         label="Published Date"
         variant="faded"
         className="max-w-5xl"
@@ -122,7 +121,7 @@ export default function Form1() {
 
       <Input
         size="sm"
-        type="text"
+        type="date"
         label="Grant Date"
         variant="faded"
         className="max-w-5xl"

@@ -10,16 +10,17 @@ import AuthContext from "../contexts/AuthContext";
 import { supabase } from "../pages/Login";
 
 export default function SideBar() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const { setAuthenticated } = React.useContext(AuthContext);
+  // const { setAuthenticated } = React.useContext(AuthContext);
 
   async function signOut() {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setAuthenticated(false);
-      navigate("/login");
-    }
+    console.log("To be implemented");
+    //   const { error } = await supabase.auth.signOut();
+    //   if (!error) {
+    //     setAuthenticated(false);
+    //     navigate("/login");
+    //   }
   }
 
   return (
