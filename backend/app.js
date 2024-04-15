@@ -88,3 +88,20 @@ app.get("/select/researchpaper", async (req, res) => {
     res.status(500).json({ error: "Could not Select from Research Papers" });
   }
 });
+
+app.post("/select/userdata", async (req, res) => {
+  const userId = req.body.userId;
+
+  let { data, error } = await supabase
+    .from("Employee")
+    .select("*")
+    .eq("id", userId);
+
+  if (!error) {
+    console.log("Reading User Data from Employee Successfull.", data);
+    res.json(data);
+  } else {
+    console.log("Read Error.", error);
+    res.status(500).json({ error: "Could not Select from Employee" });
+  }
+});

@@ -30,6 +30,10 @@ export default function Login() {
       if (!response.ok) throw new Error("Failed to POST data");
       console.log("Successfully Logged in!");
       setAuthenticated(true);
+
+      const responseJson = await response.json();
+      localStorage.setItem("userId", responseJson.user.id);
+
       if (isAuthenticated === true) navigate("/home");
     } catch (error) {
       console.error("Error posting data:", error.message);

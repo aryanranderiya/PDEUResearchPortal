@@ -11,20 +11,48 @@ export default function SideBar() {
   const navigate = useNavigate();
 
   const { setAuthenticated } = React.useContext(AuthContext);
+  const [userAvatarData, setUserAvatarData] = React.useState({
+    name: "User",
+    profile_photo: "https://links.aryanranderiya.com/l/default_user",
+    designation: "",
+  });
 
   async function signOut() {
     setAuthenticated(false);
     navigate("/login");
   }
 
+  React.useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/select/userdata", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: userId }),
+        });
+
+        const jsonData = await response.json();
+        setUserAvatarData(jsonData[0]);
+      } catch (error) {
+        console.error("Error fetching data:", error.message, error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between sidebar">
       <div className="flex justify-between items-center">
         <User
-          name="User"
-          description={"Designation"}
+          name={userAvatarData.name}
+          description={userAvatarData.designation}
           avatarProps={{
-            src: "https://links.aryanranderiya.com/l/default_user",
+            src: userAvatarData.profile_photo,
             size: "md",
           }}
           className="flex justify-start gap-4"
