@@ -3,11 +3,10 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Divider,
   Image,
   Button,
 } from "@nextui-org/react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function CardComponent({
   heading,
@@ -15,6 +14,13 @@ export default function CardComponent({
   imagelink,
   page,
 }) {
+  const navigate = useNavigate();
+
+  const navigateToPage = () => {
+    console.log(page);
+    navigate(page);
+  };
+
   return (
     <Card className="py-4">
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -33,9 +39,9 @@ export default function CardComponent({
         <Image />
       </CardBody>
       <CardFooter className="flex justify-center">
-        <Link to={page}>
-          <Button color="primary">View {heading}</Button>
-        </Link>
+        <Button color="primary" onClick={() => navigateToPage()}>
+          View {heading}
+        </Button>
       </CardFooter>
     </Card>
   );

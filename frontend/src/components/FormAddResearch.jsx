@@ -41,6 +41,23 @@ export default function Form1({ is_conference = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/insert/researchpaper",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      console.log("Response", response);
+    } catch (error) {
+      console.error("Error posting data:", error.message);
+    }
   };
 
   const handleInputFieldAdd = () => {
@@ -184,8 +201,10 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           isRequired
-          selectedKeys={formData.quartile}
-          onSelectionChange={(e) => setformData({ ...formData, quartile: e })}
+          selectedKeys={quartiles[formData.quartile]}
+          onSelectionChange={(e) =>
+            setformData({ ...formData, quartile: e["currentKey"] })
+          }
         >
           {quartiles.map((quartile) => (
             <SelectItem key={quartile} value={quartile}>
@@ -199,9 +218,9 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           isRequired
-          selectedKeys={formData.journal_indexed}
+          selectedKeys={journal_indexed[formData.journal_indexed]}
           onSelectionChange={(e) =>
-            setformData({ ...formData, journal_indexed: e })
+            setformData({ ...formData, journal_indexed: e["currentKey"] })
           }
         >
           {journal_indexed.map((journal) => (

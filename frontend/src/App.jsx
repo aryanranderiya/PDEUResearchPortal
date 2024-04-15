@@ -4,7 +4,13 @@ import SideBar from "./components/ComponentSidebar";
 import AuthContext from "./contexts/AuthContext";
 import ThemeContext from "./contexts/ThemeContext";
 import Login from "./pages/Login";
-import { DefaultCards, ResearchForm, BookForm, PatentForm } from "./pages/Home";
+import {
+  DefaultCards,
+  ResearchForm,
+  BookForm,
+  PatentForm,
+  ViewResearch,
+} from "./pages/Home";
 
 export default function App() {
   const navigate = useNavigate();
@@ -37,6 +43,7 @@ export default function App() {
               />
             }
           />
+          <Route path="journalpapers" element={<ViewResearch />} />
           <Route path="addBook" element={<BookForm />} />
           <Route path="addPatent" element={<PatentForm />} />
         </Route>

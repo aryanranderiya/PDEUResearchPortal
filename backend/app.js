@@ -47,12 +47,44 @@ app.post("/login", async (req, res) => {
 
 app.post("/insert/researchpaper", async (req, res) => {
   try {
-    console.log(req.body);
-    // const { error } = await supabase
-    //   .from("countries")
-    //   .insert({ id: 1, name: "Denmark" });
+    const formData = req.body;
+    const { data, error } = await supabase
+      .from("Research Paper")
+      .insert([
+        {
+          Title: formData.title,
+          Abstract: formData.abstract,
+          Journal_Name: formData.journal_name,
+          Quartile: formData.quartile,
+          Journal_Indexed: formData.journal_indexed,
+          Publisher_Name: formData.publisher_name,
+          Volume: formData.volume,
+          Issue: formData.issue,
+          Page_start: formData.page_start,
+          Page_end: formData.page_end,
+          Publish_date: formData.publish_date,
+          ISSN: formData.ISSN,
+          DOI: formData.DOI,
+        },
+      ])
+      .select();
+
+    console.log(data);
+    console.log(error);
   } catch (error) {
     console.error("Error logging in:", error.message);
-    res.status(500).json({ error: "Internal server error" }); // Return internal server error status (500)
+    res.status(500).json({ error: "Could not Insert into Research Papers" }); // Return internal server error status (500)
+  }
+});
+
+app.get("/select/researchpaper", async (req, res) => {
+  let { data, error } = await supabase.from("Research Paper").select("*");
+
+  if (!error) {
+    console.log("Read Successfull.", data);
+    res.json(data);
+  } else {
+    console.log("Read Error.", error);
+    res.status(500).json({ error: "Could not Select from Research Papers" });
   }
 });

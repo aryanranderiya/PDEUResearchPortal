@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   Listbox,
   ListboxItem,
-  ListboxSection,
   Accordion,
   Switch,
   AccordionItem,
@@ -41,27 +40,27 @@ const addItems = [
 
 const viewItems = [
   {
-    key: "/home/viewJournals",
+    key: "/home/journalpapers",
     label: "View Journal Papers",
     icon: <span class="material-symbols-rounded">description</span>,
   },
   {
-    key: "/home/viewConferencePaper",
+    key: "/home/conferencepapers",
     label: "View Conference Papers",
     icon: <span class="material-symbols-rounded">podium</span>,
   },
   {
-    key: "/home/viewPatents",
+    key: "/home/patents",
     label: "View Patents",
     icon: <span class="material-symbols-rounded">workspace_premium</span>,
   },
   {
-    key: "/home/viewBooks",
+    key: "/home/books",
     label: "View Books",
     icon: <span class="material-symbols-rounded">menu_book</span>,
   },
   {
-    key: "/home/viewProjects",
+    key: "/home/projects",
     label: "View Projects",
     icon: <span class="material-symbols-rounded">task</span>,
   },
@@ -154,16 +153,6 @@ export function ListBoxPagesComponentAdd() {
           }
         >
           <AccordionItemsList navigate={navigate} items={settingsItems} />
-
-          {/* <div className="flex flex-col items-end">
-            <Switch
-              isSelected={isSelected}
-              onValueChange={(e) => setIsSelected(e)}
-              size="md"
-              startContent={<SunIcon />}
-              endContent={<MoonIcon />}
-            />
-          </div> */}
 
           <Listbox aria-label="Dynamic Actions">
             <ListboxItem
