@@ -70,3 +70,11 @@ code {
 .button_add_new {
   min-height: 45px;
 }
+
+.button_width {
+  max-width: 20%;
+}
+
+.faded_input {
+  cursor: pointer;
+}

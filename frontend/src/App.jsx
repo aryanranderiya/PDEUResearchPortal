@@ -10,6 +10,7 @@ import {
   BookForm,
   PatentForm,
   ViewItems,
+  UserProfile,
 } from "./pages/Home";
 
 export default function App() {
@@ -50,9 +51,9 @@ export default function App() {
             path="conferencepapers"
             element={<ViewItems type="conference" />}
           />
-
           <Route path="addBook" element={<BookForm />} />
           <Route path="addPatent" element={<PatentForm />} />
+          <Route path="userProfile" element={<UserProfile />} />
         </Route>
         <Route path="login" element={<Login />} />
       </Routes>

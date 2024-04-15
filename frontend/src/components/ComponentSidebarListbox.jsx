@@ -10,34 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { SunIcon, MoonIcon } from "./icons";
 import ThemeContext from "../contexts/ThemeContext";
 
-// const addItems = [
-//   {
-//     key: "/home/addJournal",
-//     label: "Add Journal Paper",
-//     icon: <span class="material-symbols-rounded">description</span>,
-//   },
-//   {
-//     key: "/home/addConferencePaper",
-//     label: "Add Conference Paper",
-//     icon: <span class="material-symbols-rounded">podium</span>,
-//   },
-//   {
-//     key: "/home/addPatent",
-//     label: "Add Patent",
-//     icon: <span class="material-symbols-rounded">workspace_premium</span>,
-//   },
-//   {
-//     key: "/home/addBook",
-//     label: "Add Book",
-//     icon: <span class="material-symbols-rounded">menu_book</span>,
-//   },
-//   {
-//     key: "/home/addProject",
-//     label: "Add Project",
-//     icon: <span class="material-symbols-rounded">task</span>,
-//   },
-// ];
-
 const viewItems = [
   {
     key: "/home",
@@ -73,7 +45,7 @@ const viewItems = [
 
 const settingsItems = [
   {
-    key: "/home/editProfile",
+    key: "/home/userProfile",
     label: "Edit User Profile",
     icon: <span class="material-symbols-rounded">person_edit</span>,
   },
@@ -124,8 +96,8 @@ export function ListBoxPagesComponentAdd() {
         className="accordion_1"
       >
         <AccordionItem
-          key="3"
-          aria-label="Accordion 3"
+          key="1"
+          aria-label="Settings"
           title="Settings"
           startContent={
             <div className="flex">

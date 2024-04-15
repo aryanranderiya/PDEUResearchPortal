@@ -3,6 +3,7 @@ import CardComponent from "../components/ComponentCard";
 import Form1 from "../components/FormAddResearch";
 import Form2 from "../components/FormAddBook";
 import Form3 from "../components/FormAddPatent";
+import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
@@ -125,6 +126,15 @@ export function ViewItems({ type }) {
       >
         Add {shortname || title}
       </Button>
+    </div>
+  );
+}
+
+export function UserProfile() {
+  return (
+    <div className="form_add">
+      <h1 className="title"> Edit Profile</h1>
+      <FormUserProfile />
     </div>
   );
 }
