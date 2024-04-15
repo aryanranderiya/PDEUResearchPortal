@@ -52,6 +52,8 @@ export default function SideBar() {
           name={userAvatarData.name}
           description={userAvatarData.designation}
           avatarProps={{
+            isBordered: true,
+            showFallback: true,
             src: userAvatarData.profile_photo,
             size: "md",
           }}

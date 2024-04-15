@@ -77,7 +77,7 @@ app.post("/insert/researchpaper", async (req, res) => {
   }
 });
 
-app.get("/select/researchpaper", async (req, res) => {
+app.get("/select/research", async (req, res) => {
   let { data, error } = await supabase.from("Research Paper").select("*");
 
   if (!error) {

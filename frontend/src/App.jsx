@@ -9,7 +9,7 @@ import {
   ResearchForm,
   BookForm,
   PatentForm,
-  ViewResearch,
+  ViewItems,
 } from "./pages/Home";
 
 export default function App() {
@@ -43,7 +43,14 @@ export default function App() {
               />
             }
           />
-          <Route path="journalpapers" element={<ViewResearch />} />
+          <Route path="journalpapers" element={<ViewItems type="research" />} />
+          <Route path="patents" element={<ViewItems type="patents" />} />
+          <Route path="books" element={<ViewItems type="books" />} />
+          <Route
+            path="conferencepapers"
+            element={<ViewItems type="conference" />}
+          />
+
           <Route path="addBook" element={<BookForm />} />
           <Route path="addPatent" element={<PatentForm />} />
         </Route>

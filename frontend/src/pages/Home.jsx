@@ -80,13 +80,36 @@ export function PatentForm() {
   );
 }
 
-export function ViewResearch() {
+export function ViewItems({ type }) {
+  let title = "Title";
+
+  switch (type) {
+    case "research":
+      title = "Research Paper";
+      break;
+
+    case "conference":
+      title = "Conference Proceedings";
+      break;
+
+    case "books":
+      title = "Research Based Books, Textbooks or Literary Books";
+      break;
+
+    case "patents":
+      title = "Patents";
+      break;
+
+    default:
+      break;
+  }
+
   const navigate = useNavigate();
 
   return (
     <div className="form_add">
-      <h1 className="title">Research Papers</h1>
-      <ViewFormTable />
+      <h1 className="title">{title}</h1>
+      <ViewFormTable type={type} />
       <Button
         color="primary"
         onClick={() => navigate("../addJournal")}
