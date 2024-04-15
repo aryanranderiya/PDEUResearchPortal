@@ -5,6 +5,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
+  Button,
 } from "@nextui-org/react";
 import * as React from "react";
 
@@ -38,10 +39,25 @@ export default function ViewFormTable() {
   return (
     <Table aria-label="Collection of Data">
       <TableHeader>
-        <TableColumn>DOI</TableColumn>
-        <TableColumn>Title</TableColumn>
-        <TableColumn>Author(s)</TableColumn>
-        <TableColumn>Publish Date</TableColumn>
+        <TableColumn key="DOI" >
+          DOI
+        </TableColumn>
+
+        <TableColumn key="Title" >
+          Title
+        </TableColumn>
+
+        <TableColumn key="Author" >
+          Author(s)
+        </TableColumn>
+
+        <TableColumn key="Publish Date" >
+          Publish Date
+        </TableColumn>
+
+        <TableColumn></TableColumn>
+
+        <TableColumn></TableColumn>
       </TableHeader>
       {data === null && (
         <TableBody emptyContent={"No rows to display."}></TableBody>
@@ -54,6 +70,32 @@ export default function ViewFormTable() {
               <TableCell>{item.Title}</TableCell>
               <TableCell>{item.Abstract}</TableCell>
               <TableCell>{item.Journal_Name}</TableCell>
+
+              <TableCell>
+                <Button
+                  color="danger"
+                  aria-label="Like"
+                  size="sm"
+                  startContent={
+                    <span class="material-symbols-rounded">edit</span>
+                  }
+                >
+                  Edit
+                </Button>
+              </TableCell>
+
+              <TableCell>
+                <Button
+                  color="primary"
+                  aria-label="Like"
+                  size="sm"
+                  startContent={
+                    <span class="material-symbols-rounded">visibility</span>
+                  }
+                >
+                  View
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

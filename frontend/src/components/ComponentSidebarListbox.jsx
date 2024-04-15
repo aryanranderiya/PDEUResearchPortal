@@ -10,58 +10,63 @@ import { useNavigate } from "react-router-dom";
 import { SunIcon, MoonIcon } from "./icons";
 import ThemeContext from "../contexts/ThemeContext";
 
-const addItems = [
-  {
-    key: "/home/addJournal",
-    label: "Add Journal Paper",
-    icon: <span class="material-symbols-rounded">description</span>,
-  },
-  {
-    key: "/home/addConferencePaper",
-    label: "Add Conference Paper",
-    icon: <span class="material-symbols-rounded">podium</span>,
-  },
-  {
-    key: "/home/addPatent",
-    label: "Add Patent",
-    icon: <span class="material-symbols-rounded">workspace_premium</span>,
-  },
-  {
-    key: "/home/addBook",
-    label: "Add Book",
-    icon: <span class="material-symbols-rounded">menu_book</span>,
-  },
-  {
-    key: "/home/addProject",
-    label: "Add Project",
-    icon: <span class="material-symbols-rounded">task</span>,
-  },
-];
+// const addItems = [
+//   {
+//     key: "/home/addJournal",
+//     label: "Add Journal Paper",
+//     icon: <span class="material-symbols-rounded">description</span>,
+//   },
+//   {
+//     key: "/home/addConferencePaper",
+//     label: "Add Conference Paper",
+//     icon: <span class="material-symbols-rounded">podium</span>,
+//   },
+//   {
+//     key: "/home/addPatent",
+//     label: "Add Patent",
+//     icon: <span class="material-symbols-rounded">workspace_premium</span>,
+//   },
+//   {
+//     key: "/home/addBook",
+//     label: "Add Book",
+//     icon: <span class="material-symbols-rounded">menu_book</span>,
+//   },
+//   {
+//     key: "/home/addProject",
+//     label: "Add Project",
+//     icon: <span class="material-symbols-rounded">task</span>,
+//   },
+// ];
 
 const viewItems = [
   {
+    key: "/home",
+    label: "Home",
+    icon: <span class="material-symbols-rounded">home</span>,
+  },
+  {
     key: "/home/journalpapers",
-    label: "View Journal Papers",
+    label: "Journal Papers",
     icon: <span class="material-symbols-rounded">description</span>,
   },
   {
     key: "/home/conferencepapers",
-    label: "View Conference Papers",
+    label: "Conference Papers",
     icon: <span class="material-symbols-rounded">podium</span>,
   },
   {
     key: "/home/patents",
-    label: "View Patents",
+    label: "Patents",
     icon: <span class="material-symbols-rounded">workspace_premium</span>,
   },
   {
     key: "/home/books",
-    label: "View Books",
+    label: "Books",
     icon: <span class="material-symbols-rounded">menu_book</span>,
   },
   {
     key: "/home/projects",
-    label: "View Projects",
+    label: "Projects",
     icon: <span class="material-symbols-rounded">task</span>,
   },
 ];
@@ -93,7 +98,7 @@ export function ListBoxPagesComponentAdd() {
   return (
     <div className="sidebar_div">
       <Listbox
-        items={addItems}
+        items={viewItems}
         aria-label="Dynamic Actions"
         onAction={(item) => {
           navigate(item);
@@ -101,13 +106,15 @@ export function ListBoxPagesComponentAdd() {
         selectionMode="single"
         className="listbox1"
       >
-        <ListboxItem
-          key={"/home"}
-          className={"px-5"}
-          startContent={<span class="material-symbols-rounded">home</span>}
-        >
-          Home
-        </ListboxItem>
+        {viewItems.map((item) => (
+          <ListboxItem
+            key={item.key}
+            className={"px-5"}
+            startContent={item.icon}
+          >
+            {item.label}
+          </ListboxItem>
+        ))}
       </Listbox>
 
       <Accordion
@@ -116,32 +123,6 @@ export function ListBoxPagesComponentAdd() {
         defaultExpandedKeys={["1"]}
         className="accordion_1"
       >
-        <AccordionItem
-          key="1"
-          aria-label="Accordion 1"
-          title="Add"
-          startContent={
-            <div className="flex">
-              <span class="material-symbols-rounded">upload</span>
-            </div>
-          }
-        >
-          <AccordionItemsList navigate={navigate} items={addItems} />
-        </AccordionItem>
-
-        <AccordionItem
-          key="2"
-          aria-label="Accordion 2"
-          title="View"
-          startContent={
-            <div className="flex">
-              <span class="material-symbols-rounded">search</span>
-            </div>
-          }
-        >
-          <AccordionItemsList navigate={navigate} items={viewItems} />
-        </AccordionItem>
-
         <AccordionItem
           key="3"
           aria-label="Accordion 3"
@@ -195,25 +176,6 @@ function AccordionItemsList({ navigate, items }) {
     </Listbox>
   );
 }
-
-// function AccordionItemsView({ navigate }) {
-//   return (
-//     <Listbox
-//       items={viewItems}
-//       aria-label="Dynamic Actions"
-//       onAction={(item) => {
-//         navigate(item);
-//       }}
-//       selectionMode="single"
-//     >
-//       {viewItems.map((item) => (
-//         <ListboxItem key={item.key} className={"px-5"} startContent={item.icon}>
-//           {item.label}
-//         </ListboxItem>
-//       ))}
-//     </Listbox>
-//   );
-// }
 
 export function ListBoxPagesComponentView() {
   return <></>;
