@@ -82,22 +82,29 @@ export function PatentForm() {
 
 export function ViewItems({ type }) {
   let title = "Title";
-
+  let shortname = null;
+  let addPageURL = "home";
   switch (type) {
     case "research":
       title = "Research Paper";
+      addPageURL = "/addJournal";
       break;
 
     case "conference":
       title = "Conference Proceedings";
+      shortname = "Conference Papers";
+      addPageURL = "/addConferencePaper";
       break;
 
     case "books":
       title = "Research Based Books, Textbooks or Literary Books";
+      shortname = "Books";
+      addPageURL = "/addBook";
       break;
 
     case "patents":
       title = "Patents";
+      addPageURL = "/addPatent";
       break;
 
     default:
@@ -112,11 +119,11 @@ export function ViewItems({ type }) {
       <ViewFormTable type={type} />
       <Button
         color="primary"
-        onClick={() => navigate("../addJournal")}
-        className="max-w-sm"
+        onClick={() => navigate(`/home${addPageURL}`)}
+        className="max-w-sm button_add_new"
         startContent={<span class="material-symbols-rounded">add</span>}
       >
-        Add New Paper
+        Add {shortname || title}
       </Button>
     </div>
   );

@@ -29,6 +29,7 @@ code {
   gap: 1em;
   height: 100vh;
   overflow-y: scroll;
+  margin-bottom: 100px;
 }
 
 .main_form {
@@ -64,4 +65,8 @@ code {
 
 .accordion_1 {
   padding: 0% 2%;
+}
+
+.button_add_new {
+  min-height: 45px;
 }

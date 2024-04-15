@@ -64,7 +64,7 @@ export default function ViewFormTable({ type }) {
             <TableRow key={index}>
               <TableCell>{item.DOI}</TableCell>
               <TableCell>{item.Title}</TableCell>
-              <TableCell>{item.Abstract}</TableCell>
+              <TableCell> - </TableCell>
               <TableCell>{item.Journal_Name}</TableCell>
 
               <TableCell>
