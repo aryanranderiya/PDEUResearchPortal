@@ -85,22 +85,40 @@ export function ViewItems({ type }) {
   let title = "Title";
   let shortname = null;
   let addPageURL = "home";
+  let columnNames = [];
+
   switch (type) {
     case "research":
-      title = "Research Paper";
+      title = "Research Papers";
       addPageURL = "/addJournal";
+      columnNames = ["DOI", "Title", "Authors", "Publish date"];
       break;
 
     case "conference":
       title = "Conference Proceedings";
       shortname = "Conference Papers";
       addPageURL = "/addConferencePaper";
+      columnNames = [
+        "DOI",
+        "Title",
+        "Authors",
+        "Publish date",
+        "Conference Name",
+      ];
+
       break;
 
     case "books":
       title = "Research Based Books, Textbooks or Literary Books";
       shortname = "Books";
       addPageURL = "/addBook";
+      columnNames = [
+        "Book Title",
+        "Publisher Name",
+        "Author(s)",
+        "Publish Date",
+      ];
+
       break;
 
     case "patents":
@@ -117,7 +135,11 @@ export function ViewItems({ type }) {
   return (
     <div className="form_add">
       <h1 className="title">{title}</h1>
-      <ViewFormTable type={type} />
+      <ViewFormTable
+        type={type}
+        columnNames={columnNames}
+        table_name={shortname || title}
+      />
       <Button
         color="primary"
         onClick={() => navigate(`/home${addPageURL}`)}

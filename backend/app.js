@@ -77,8 +77,11 @@ app.post("/insert/researchpaper", async (req, res) => {
   }
 });
 
-app.get("/select/research", async (req, res) => {
-  let { data, error } = await supabase.from("Research Paper").select("*");
+app.post("/select", async (req, res) => {
+  const table_name = req.body.table_name;
+  const columns = req.body.columnNames.join(",").replace(" ", "_");
+
+  let { data, error } = await supabase.from(table_name).select(columns);
 
   if (!error) {
     console.log("Read Successfull.", data);

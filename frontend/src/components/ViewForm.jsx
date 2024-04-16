@@ -10,7 +10,7 @@ import {
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ViewFormTable({ type }) {
+export default function ViewFormTable({ type, columnNames, table_name }) {
   const [data, setData] = React.useState(null);
   const navigate = useNavigate();
 
@@ -18,11 +18,12 @@ export default function ViewFormTable({ type }) {
     () => {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/select/${type}`, {
-            method: "GET",
+          const response = await fetch(`http://localhost:5000/select`, {
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            body: JSON.stringify({ table_name, columnNames }),
           });
 
           const jsonData = await response.json();
@@ -43,16 +44,11 @@ export default function ViewFormTable({ type }) {
   return (
     <Table aria-label="Collection of Data">
       <TableHeader>
-        <TableColumn key="DOI">DOI</TableColumn>
-
-        <TableColumn key="Title">Title</TableColumn>
-
-        <TableColumn key="Author">Author(s)</TableColumn>
-
-        <TableColumn key="Publish Date">Publish Date</TableColumn>
+        {columnNames.map((column) => (
+          <TableColumn key={column}>{column}</TableColumn>
+        ))}
 
         <TableColumn></TableColumn>
-
         <TableColumn></TableColumn>
       </TableHeader>
       {data === null && (
@@ -60,13 +56,11 @@ export default function ViewFormTable({ type }) {
       )}
       {data !== null && (
         <TableBody>
-          {data.map((item, index) => (
+          {Object.entries(data).map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.DOI}</TableCell>
-              <TableCell>{item.Title}</TableCell>
-              <TableCell> - </TableCell>
-              <TableCell>{item.Journal_Name}</TableCell>
-
+              {Object.entries(item[1]).map(([key, value]) => (
+                <TableCell>{value}</TableCell>
+              ))}
               <TableCell>
                 <Button
                   color="danger"
