@@ -10,57 +10,75 @@ import {
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ViewFormTable({ type, columnNames, table_name }) {
+const flattenObject = (obj, delimiter = ".", prefix = "") =>
+  Object.keys(obj).reduce((acc, k) => {
+    const pre = prefix.length ? `${prefix}${delimiter}` : "";
+    if (
+      typeof obj[k] === "object" &&
+      obj[k] !== null &&
+      Object.keys(obj[k]).length > 0
+    )
+      Object.assign(acc, flattenObject(obj[k], delimiter, pre + k));
+    else acc[pre + k] = obj[k];
+    return acc;
+  }, {});
+
+export default function ViewFormTable({ type, columnNames }) {
   const [data, setData] = React.useState(null);
   const navigate = useNavigate();
 
-  React.useEffect(
-    () => {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(`http://localhost:5000/select`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ table_name, columnNames }),
-          });
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/select/${type}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-          const jsonData = await response.json();
-          setData(jsonData);
-          console.log("Data: ", jsonData);
-        } catch (error) {
-          console.error("Error fetching data:", error.message);
-          setData(null);
-        }
-      };
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+        setData(null);
+      }
+    };
 
-      fetchData();
-    },
-    [navigate],
-    []
-  );
+    fetchData();
+  }, [type]);
 
   return (
     <Table aria-label="Collection of Data">
       <TableHeader>
         {columnNames.map((column) => (
-          <TableColumn key={column}>{column}</TableColumn>
+          <TableColumn>
+            {console.log("Column: ", column)}
+            {column}
+          </TableColumn>
         ))}
 
         <TableColumn></TableColumn>
         <TableColumn></TableColumn>
       </TableHeader>
+
       {data === null && (
         <TableBody emptyContent={"No rows to display."}></TableBody>
       )}
+
       {data !== null && (
         <TableBody>
           {Object.entries(data).map((item, index) => (
             <TableRow key={index}>
-              {Object.entries(item[1]).map(([key, value]) => (
-                <TableCell>{value}</TableCell>
+              {columnNames.map((columnName, columnIndex) => (
+                <TableCell key={columnIndex}>
+                  {console.log(
+                    Object.entries(flattenObject(item[1]))[columnIndex][1]
+                  )}
+                  {Object.entries(flattenObject(item[1]))[columnIndex][1]}
+                </TableCell>
               ))}
+
               <TableCell>
                 <Button
                   color="danger"

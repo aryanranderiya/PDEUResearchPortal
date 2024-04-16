@@ -77,20 +77,57 @@ app.post("/insert/researchpaper", async (req, res) => {
   }
 });
 
-app.post("/select", async (req, res) => {
-  const table_name = req.body.table_name;
-  const columns = req.body.columnNames.join(",").replace(" ", "_");
+app.post("/select/:type", async (req, res) => {
+  const type = req.params.type;
+  let result = undefined;
 
-  let { data, error } = await supabase.from(table_name).select(columns);
+  switch (type) {
+    case "research":
+      result = await readFromTable(
+        "ResearchPapers",
+        "DOI,Title,Authors,Publish_date"
+      );
+
+      if (result[0]) res.json(result[1]);
+
+      break;
+
+    case "conference":
+      result = await readFromTable(
+        "ConferencePapers",
+        `DOI,Conference_Name, ResearchPapers(Title,Authors,Publish_date)`
+      );
+      if (result[0]) res.json(result[1]);
+
+      break;
+
+    case "patents":
+      break;
+
+    case "books":
+      break;
+    default:
+      break;
+  }
+});
+
+async function readFromTable(table_name, columns = "*", where = []) {
+  let query = supabase.from(table_name).select(columns);
+
+  if (where.length > 0) {
+    query = query.eq(where[0], where[1]);
+  }
+
+  const { data, error } = await query;
 
   if (!error) {
     console.log("Read Successfull.", data);
-    res.json(data);
+    return [true, data];
   } else {
     console.log("Read Error.", error);
-    res.status(500).json({ error: "Could not Select from Research Papers" });
+    return [true, error];
   }
-});
+}
 
 app.post("/select/userdata", async (req, res) => {
   const userId = req.body.userId;

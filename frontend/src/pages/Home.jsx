@@ -100,10 +100,10 @@ export function ViewItems({ type }) {
       addPageURL = "/addConferencePaper";
       columnNames = [
         "DOI",
+        "Conference Name",
         "Title",
         "Authors",
         "Publish date",
-        "Conference Name",
       ];
 
       break;
@@ -135,11 +135,7 @@ export function ViewItems({ type }) {
   return (
     <div className="form_add">
       <h1 className="title">{title}</h1>
-      <ViewFormTable
-        type={type}
-        columnNames={columnNames}
-        table_name={shortname || title}
-      />
+      <ViewFormTable type={type} columnNames={columnNames} />
       <Button
         color="primary"
         onClick={() => navigate(`/home${addPageURL}`)}
