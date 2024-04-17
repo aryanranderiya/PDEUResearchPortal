@@ -16,7 +16,7 @@ export default function Login() {
   const [password, setPassword] = React.useState("");
 
   const validateEmail = (email) =>
-    email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+    email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g);
 
   const isInvalid = React.useMemo(() => {
     if (email === "") return false;
