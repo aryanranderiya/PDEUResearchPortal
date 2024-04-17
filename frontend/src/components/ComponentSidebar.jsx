@@ -27,13 +27,16 @@ export default function SideBar() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/userinfo", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: userId }),
-        });
+        const response = await fetch(
+          "https://pdeu-research-portal-api.vercel.app//userinfo",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId: userId }),
+          }
+        );
 
         const jsonData = await response.json();
         setUserAvatarData(jsonData[0]);

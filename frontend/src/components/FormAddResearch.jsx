@@ -47,7 +47,7 @@ export default function Form1({ is_conference = false }) {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/insert/journalpapers",
+        "https://pdeu-research-portal-api.vercel.app/insert/journalpapers",
         {
           method: "POST",
           headers: {

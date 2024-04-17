@@ -27,12 +27,15 @@ export default function ViewFormTable({ type }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/select/${type}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://pdeu-research-portal-api.vercel.app/select/${type}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const jsonData = await response.json();
       if (!response.ok) throw new Error(jsonData.error);
