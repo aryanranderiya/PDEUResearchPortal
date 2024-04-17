@@ -44,7 +44,7 @@ export default function App() {
               />
             }
           />
-          <Route path="journalpapers" element={<ViewItems type="research" />} />
+          <Route path="journalpapers" element={<ViewItems type="journal" />} />
           <Route path="patents" element={<ViewItems type="patents" />} />
           <Route path="books" element={<ViewItems type="books" />} />
           <Route

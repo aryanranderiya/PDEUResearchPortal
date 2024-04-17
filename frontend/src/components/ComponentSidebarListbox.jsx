@@ -44,11 +44,11 @@ const viewItems = [
 ];
 
 const settingsItems = [
-  {
-    key: "/home/userProfile",
-    label: "Edit User Profile",
-    icon: <span class="material-symbols-rounded">person_edit</span>,
-  },
+  // {
+  //   key: "/home/userProfile",
+  //   label: "Edit User Profile",
+  //   icon: <span class="material-symbols-rounded">person_edit</span>,
+  // },
 ];
 
 export function ListBoxPagesComponentAdd() {
@@ -105,7 +105,7 @@ export function ListBoxPagesComponentAdd() {
             </div>
           }
         >
-          <AccordionItemsList navigate={navigate} items={settingsItems} />
+          {/* <AccordionItemsList navigate={navigate} items={settingsItems} /> */}
 
           <Listbox aria-label="Dynamic Actions">
             <ListboxItem
@@ -114,7 +114,7 @@ export function ListBoxPagesComponentAdd() {
               startContent={
                 <Switch
                   isSelected={isSelected}
-                  onValueChange={(e) => setIsSelected(e)}
+                  onValueChange={setIsSelected}
                   size="md"
                   startContent={<SunIcon />}
                   endContent={<MoonIcon />}

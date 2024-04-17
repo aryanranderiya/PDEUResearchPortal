@@ -45,11 +45,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/insert/researchpaper", async (req, res) => {
+app.post("/insert/journalpapers", async (req, res) => {
   try {
     const formData = req.body;
     const { data, error } = await supabase
-      .from("Research Paper")
+      .from("JournalPapers")
       .insert([
         {
           Title: formData.title,
@@ -82,30 +82,44 @@ app.post("/select/:type", async (req, res) => {
   let result = undefined;
 
   switch (type) {
-    case "research":
+    case "journal":
       result = await readFromTable(
-        "ResearchPapers",
+        "JournalPapers",
         "DOI,Title,Authors,Publish_date"
       );
 
-      if (result[0]) res.json(result[1]);
+      if (result[0]) res.status(200).json(result[1]);
+      else res.status(404).json({ error: "Could not Fetch Journal Data" });
 
       break;
 
     case "conference":
       result = await readFromTable(
         "ConferencePapers",
-        `DOI,Conference_Name, ResearchPapers(Title,Authors,Publish_date)`
+        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
       );
-      if (result[0]) res.json(result[1]);
-
+      if (result[0]) res.status(200).json(result[1]);
+      else res.status(404).json({ error: "Could not Fetch Conference Data" });
       break;
 
     case "patents":
+      result = await readFromTable(
+        "Patents",
+        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
+      );
+      if (result[0]) res.status(200).json(result[1]);
+      else res.status(404).json({ error: "Could not Fetch Patents Data" });
       break;
 
     case "books":
+      result = await readFromTable(
+        "Books",
+        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
+      );
+      if (result[0]) res.status(200).json(result[1]);
+      else res.status(404).json({ error: "Could not Fetch Books Data" });
       break;
+
     default:
       break;
   }
@@ -125,7 +139,7 @@ async function readFromTable(table_name, columns = "*", where = []) {
     return [true, data];
   } else {
     console.log("Read Error.", table_name, error);
-    return [true, error];
+    return [false, error];
   }
 }
 

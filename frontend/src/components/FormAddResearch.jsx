@@ -31,9 +31,12 @@ export default function Form1({ is_conference = false }) {
     outside_authors: [],
   });
 
-  React.useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  const [conferenceFormData, setConferenceFormData] = React.useState({
+    conferenceName: "",
+    conferenceDate: "",
+    conferenceCity: "",
+    conferenceLevel: "",
+  });
 
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
@@ -44,7 +47,7 @@ export default function Form1({ is_conference = false }) {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/insert/researchpaper",
+        "http://localhost:5000/insert/journalpapers",
         {
           method: "POST",
           headers: {
@@ -134,7 +137,7 @@ export default function Form1({ is_conference = false }) {
 
             {authorInputFields.length - 1 === index && (
               <Button
-                color="primary"
+                color="default"
                 id="addAuthor"
                 onClick={handleInputFieldAdd}
               >
@@ -165,8 +168,8 @@ export default function Form1({ is_conference = false }) {
           size="sm"
           type="text"
           label="Paper Title"
-          variant="faded"
           className="max-w-5xl"
+          variant="faded"
           isRequired
           value={formData.title}
           onValueChange={(value) => setformData({ ...formData, title: value })}
@@ -336,7 +339,7 @@ export default function Form1({ is_conference = false }) {
             variant="faded"
             className="max-w-5xl"
           />
-          <Button color="primary">Add</Button>
+          <Button color="default">Add</Button>
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
         </div>
@@ -350,6 +353,13 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
+              value={conferenceFormData.conferenceName}
+              onValueChange={(value) =>
+                setConferenceFormData({
+                  ...conferenceFormData,
+                  conferenceName: value,
+                })
+              }
             />
             <Input
               size="sm"
@@ -358,6 +368,13 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
+              value={conferenceFormData.conferenceDate}
+              onValueChange={(value) =>
+                setConferenceFormData({
+                  ...conferenceFormData,
+                  conferenceDate: value,
+                })
+              }
             />
             <Input
               size="sm"
@@ -366,12 +383,26 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
+              value={conferenceFormData.conferenceCity}
+              onValueChange={(value) =>
+                setConferenceFormData({
+                  ...conferenceFormData,
+                  conferenceCity: value,
+                })
+              }
             />
             <Select
               label="Conference Level"
               className="max-w-5xl"
               size="sm"
               isRequired
+              selectedKeys={levels[conferenceFormData.conferenceLevel]}
+              onSelectionChange={(e) =>
+                setformData({
+                  ...conferenceFormData,
+                  level: e["currentKey"],
+                })
+              }
             >
               {levels.map((level) => (
                 <SelectItem key={level} value={level}>

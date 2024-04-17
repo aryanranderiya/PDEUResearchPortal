@@ -15,6 +15,15 @@ export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const validateEmail = (email) =>
+    email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+
+  const isInvalid = React.useMemo(() => {
+    if (email === "") return false;
+
+    return validateEmail(email) ? false : true;
+  }, [email]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -27,16 +36,18 @@ export default function Login() {
         body: JSON.stringify({ email: email, password: password }),
       });
 
-      if (!response.ok) throw new Error("Failed to POST data");
+      const responseJson = await response.json();
+
+      if (!response.ok) throw new Error(responseJson.error);
       console.log("Successfully Logged in!");
       setAuthenticated(true);
 
-      const responseJson = await response.json();
       localStorage.setItem("userId", responseJson.user.id);
 
       if (isAuthenticated === true) navigate("/home");
     } catch (error) {
       console.error("Error posting data:", error.message);
+      alert(error);
     }
   };
 
@@ -57,7 +68,10 @@ export default function Login() {
             className="max-w-xs"
             isClearable="true"
             value={email}
-            onValueChange={(e) => setEmail(e)}
+            onValueChange={setEmail}
+            isInvalid={isInvalid}
+            color={isInvalid ? "danger" : "default"}
+            errorMessage={isInvalid && "Please enter a valid email"}
           />
           <Input
             variant="faded"
