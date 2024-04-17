@@ -21,6 +21,10 @@ app.listen(port, () => {
   console.log(`> Ready on http://localhost:${port}`);
 });
 
+app.get("/hey", async (req, res) => {
+  res.send("<h1>Hello World!</h1>");
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
