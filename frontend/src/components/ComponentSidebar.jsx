@@ -10,7 +10,7 @@ import AuthContext from "../contexts/AuthContext";
 export default function SideBar() {
   const navigate = useNavigate();
 
-  const { setAuthenticated } = React.useContext(AuthContext);
+  const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
   const [userAvatarData, setUserAvatarData] = React.useState({
     name: "User",
     profile_photo: "https://links.aryanranderiya.com/l/default_user",
@@ -27,7 +27,7 @@ export default function SideBar() {
 
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/select/userdata", {
+        const response = await fetch("http://localhost:5000/userinfo", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export default function SideBar() {
     };
 
     fetchData();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between sidebar">

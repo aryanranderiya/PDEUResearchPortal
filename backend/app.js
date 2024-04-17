@@ -121,15 +121,15 @@ async function readFromTable(table_name, columns = "*", where = []) {
   const { data, error } = await query;
 
   if (!error) {
-    console.log("Read Successfull.", data);
+    console.log("\nRead Successfull.", table_name, data, "\n");
     return [true, data];
   } else {
-    console.log("Read Error.", error);
+    console.log("Read Error.", table_name, error);
     return [true, error];
   }
 }
 
-app.post("/select/userdata", async (req, res) => {
+app.post("/userinfo", async (req, res) => {
   const userId = req.body.userId;
 
   let { data, error } = await supabase
