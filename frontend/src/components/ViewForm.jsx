@@ -28,7 +28,7 @@ export default function ViewFormTable({ type }) {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `http://pdeu-research-portal-api.vercel.app/select/${type}`,
+        `https://pdeu-research-portal-api.vercel.app/select/${type}`,
         {
           method: "POST",
           headers: {

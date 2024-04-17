@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       const response = await fetch(
-        "http://pdeu-research-portal-api.vercel.app/login",
+        "https://pdeu-research-portal-api.vercel.app/login",
         {
           method: "POST",
           headers: {
