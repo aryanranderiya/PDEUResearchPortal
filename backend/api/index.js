@@ -1,22 +1,26 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import bodyParser from "body-parser";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+const corsOptions = {
+  origin: "https://research-portal-pdeu.vercel.app",
+  optionsSuccessStatus: 200,
+}; /* This configuration allows requests from the specified origin and sets the optionsSuccessStatus to 200 to ensure preflight requests (OPTIONS) receive a successful response status.*/
+
 const app = express();
-app.use(cors()); // Initiailise Cross Origin Resource Sharing from different domains
-app.use(express.json()); // Initialise API responses to be in json format
-app.use(morgan("combined"));
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(morgan("combined")); // For logging formatting
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
 const port = 5000;
+
 app.listen(port, () => {
   console.log(`> Ready on http://localhost:${port}`);
 });
@@ -25,7 +29,7 @@ app.get("/hey", async (req, res) => {
   res.send("<h1>Hello World!</h1>");
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", cors(corsOptions), async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -49,7 +53,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/insert/journalpapers", async (req, res) => {
+app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
   try {
     const formData = req.body;
     const { data, error } = await supabase
@@ -77,11 +81,11 @@ app.post("/insert/journalpapers", async (req, res) => {
     console.log(error);
   } catch (error) {
     console.error("Error logging in:", error.message);
-    res.status(500).json({ error: "Could not Insert into Research Papers" }); // Return internal server error status (500)
+    res.status(500).json({ error: "Could not Insert into Research Papers" });
   }
 });
 
-app.post("/select/:type", async (req, res) => {
+app.post("/select/:type", cors(corsOptions), async (req, res) => {
   const type = req.params.type;
   let result = undefined;
 
@@ -147,7 +151,7 @@ async function readFromTable(table_name, columns = "*", where = []) {
   }
 }
 
-app.post("/userinfo", async (req, res) => {
+app.post("/userinfo", cors(corsOptions), async (req, res) => {
   const userId = req.body.userId;
 
   let { data, error } = await supabase
