@@ -28,7 +28,7 @@ export default function SideBar() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://pdeu-research-portal-api.vercel.app//userinfo",
+          "https://pdeu-research-portal-api.vercel.app/userinfo",
           {
             method: "POST",
             headers: {
