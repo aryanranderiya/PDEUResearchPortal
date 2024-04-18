@@ -70,6 +70,31 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
   }
 });
 
+app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
+  try {
+    const journalFormData = req.body.journalData;
+    const conferenceFormData = req.body.conferenceData;
+
+    const { data, error } = await supabase
+      .from("JournalPapers")
+      .insert([journalFormData])
+      .select();
+
+    const { dataConference, errorConference } = await supabase
+      .from("ConferencePapers")
+      .insert([conferenceFormData])
+      .select();
+
+    console.log("Data Successfully Inserted! Journal", data);
+    console.log("Data Successfully Inserted! Conference", dataConference);
+    console.log("journalerror", error);
+    console.log("conference error", errorConference);
+  } catch (error) {
+    console.error("Error logging in:", error.message);
+    res.status(500).json({ error: "Could not Insert into Research Papers" });
+  }
+});
+
 app.post("/select/:type", cors(corsOptions), async (req, res) => {
   const type = req.params.type;
 

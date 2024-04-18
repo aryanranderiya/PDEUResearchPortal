@@ -6,7 +6,7 @@ import {
   TableRow,
   TableCell,
   Button,
-  CircularProgress,
+  Spinner,
   getKeyValue,
   Spacer,
 } from "@nextui-org/react";
@@ -80,10 +80,10 @@ export default function ViewFormTable({ type }) {
       <TableBody
         items={data}
         isLoading={isLoading}
-        loadingContent={<CircularProgress />}
+        loadingContent={<Spinner size="lg" />}
         emptyContent={
           <>
-            <Spacer y={5} />
+            <Spacer y={7} />
             {loadingText}
           </>
         }

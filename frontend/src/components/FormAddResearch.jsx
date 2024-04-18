@@ -12,6 +12,7 @@ import {
 
 export default function Form1({ is_conference = false }) {
   const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
+  const postType = is_conference ? "conferencepapers" : "journalpapers";
 
   const [formData, setformData] = React.useState({
     Title: "",
@@ -47,13 +48,18 @@ export default function Form1({ is_conference = false }) {
 
     try {
       const response = await fetch(
-        "https://pdeu-research-portal-api.vercel.app/insert/journalpapers",
+        `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: is_conference
+            ? JSON.stringify({
+                journalData: formData,
+                conferenceData: conferenceFormData,
+              })
+            : JSON.stringify(formData),
         }
       );
 
