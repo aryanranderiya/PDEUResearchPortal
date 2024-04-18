@@ -59,26 +59,10 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
     const formData = req.body;
     const { data, error } = await supabase
       .from("JournalPapers")
-      .insert([
-        {
-          Title: formData.title,
-          Abstract: formData.abstract,
-          Journal_Name: formData.journal_name,
-          Quartile: formData.quartile,
-          Journal_Indexed: formData.journal_indexed,
-          Publisher_Name: formData.publisher_name,
-          Volume: formData.volume,
-          Issue: formData.issue,
-          Page_start: formData.page_start,
-          Page_end: formData.page_end,
-          Publish_date: formData.publish_date,
-          ISSN: formData.ISSN,
-          DOI: formData.DOI,
-        },
-      ])
+      .insert([formData])
       .select();
 
-    console.log(data);
+    console.log("Data Successfully Inserted!", data);
     console.log(error);
   } catch (error) {
     console.error("Error logging in:", error.message);
@@ -88,50 +72,40 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
 
 app.post("/select/:type", cors(corsOptions), async (req, res) => {
   const type = req.params.type;
+
   let result = undefined;
+  let table_name = undefined;
+  let columns = undefined;
 
   switch (type) {
     case "journal":
-      result = await readFromTable(
-        "JournalPapers",
-        "DOI,Title,Authors,Publish_date"
-      );
-
-      if (result[0]) res.status(200).json(result[1]);
-      else res.status(404).json({ error: "Could not Fetch Journal Data" });
-
+      table_name = "JournalPapers";
+      columns = "DOI,Title,Authors,Publish_date";
       break;
 
     case "conference":
-      result = await readFromTable(
-        "ConferencePapers",
-        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
-      );
-      if (result[0]) res.status(200).json(result[1]);
-      else res.status(404).json({ error: "Could not Fetch Conference Data" });
+      table_name = "ConferencePapers";
+      columns =
+        "DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)";
       break;
 
     case "patents":
-      result = await readFromTable(
-        "Patents",
-        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
-      );
-      if (result[0]) res.status(200).json(result[1]);
-      else res.status(404).json({ error: "Could not Fetch Patents Data" });
+      table_name = "Patents";
+      columns = "";
       break;
 
     case "books":
-      result = await readFromTable(
-        "Books",
-        `DOI,Conference_Name, JournalPapers(Title,Authors,Publish_date)`
-      );
-      if (result[0]) res.status(200).json(result[1]);
-      else res.status(404).json({ error: "Could not Fetch Books Data" });
+      table_name = "Books";
+      columns = "";
       break;
 
     default:
-      break;
+      return;
   }
+
+  result = await readFromTable(table_name, columns);
+  if (result[0]) res.status(200).json(result[1]);
+  else res.status(404).json({ error: `Could not Fetch ${table_name} Data` });
 });
 
 async function readFromTable(table_name, columns = "*", where = []) {

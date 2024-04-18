@@ -14,17 +14,17 @@ export default function Form1({ is_conference = false }) {
   const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
 
   const [formData, setformData] = React.useState({
-    title: "",
-    abstract: "",
-    journal_name: "",
-    quartile: "",
-    journal_indexed: "",
-    publisher_name: "",
-    volume: "",
-    issue: "",
-    page_start: "",
-    page_end: "",
-    publish_date: "",
+    Title: "",
+    Abstract: "",
+    Journal_Name: "",
+    Quartile: "",
+    Journal_Indexed: "",
+    Publisher_Name: "",
+    Volume: "",
+    Issue: "",
+    Page_start: "",
+    Page_end: "",
+    Publish_date: "",
     ISSN: "",
     DOI: "",
     pdeu_authors: [],
@@ -171,8 +171,8 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           variant="faded"
           isRequired
-          value={formData.title}
-          onValueChange={(value) => setformData({ ...formData, title: value })}
+          value={formData.Title}
+          onValueChange={(value) => setformData({ ...formData, Title: value })}
         />
 
         <Textarea
@@ -180,9 +180,9 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           variant="faded"
           isRequired
-          value={formData.abstract}
+          value={formData.Abstract}
           onValueChange={(value) =>
-            setformData({ ...formData, abstract: value })
+            setformData({ ...formData, Abstract: value })
           }
         />
 
@@ -193,9 +193,9 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
-          value={formData.journal_name}
+          value={formData.Journal_Name}
           onValueChange={(value) =>
-            setformData({ ...formData, journal_name: value })
+            setformData({ ...formData, Journal_Name: value })
           }
         />
 
@@ -204,9 +204,9 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           isRequired
-          selectedKeys={quartiles[formData.quartile]}
+          selectedKeys={quartiles[formData.Quartile]}
           onSelectionChange={(e) =>
-            setformData({ ...formData, quartile: e["currentKey"] })
+            setformData({ ...formData, Quartile: e["currentKey"] })
           }
         >
           {quartiles.map((quartile) => (
@@ -221,9 +221,9 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           size="sm"
           isRequired
-          selectedKeys={journal_indexed[formData.journal_indexed]}
+          selectedKeys={journal_indexed[formData.Journal_Indexed]}
           onSelectionChange={(e) =>
-            setformData({ ...formData, journal_indexed: e["currentKey"] })
+            setformData({ ...formData, Journal_Indexed: e["currentKey"] })
           }
         >
           {journal_indexed.map((journal) => (
@@ -240,9 +240,9 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
-          value={formData.publisher_name}
+          value={formData.Publisher_Name}
           onValueChange={(value) =>
-            setformData({ ...formData, publisher_name: value })
+            setformData({ ...formData, Publisher_Name: value })
           }
         />
         <div className="flex max-w-5xl gap-2">
@@ -252,9 +252,9 @@ export default function Form1({ is_conference = false }) {
             label="Volume"
             variant="faded"
             className="max-w-5xl"
-            value={formData.volume}
+            value={formData.Volume}
             onValueChange={(value) =>
-              setformData({ ...formData, volume: value })
+              setformData({ ...formData, Volume: value })
             }
           />
           <Input
@@ -263,9 +263,9 @@ export default function Form1({ is_conference = false }) {
             label="Issue"
             variant="faded"
             className="max-w-5xl"
-            value={formData.issue}
+            value={formData.Issue}
             onValueChange={(value) =>
-              setformData({ ...formData, issue: value })
+              setformData({ ...formData, Issue: value })
             }
           />
         </div>
@@ -277,9 +277,9 @@ export default function Form1({ is_conference = false }) {
             label="Page Start"
             variant="faded"
             className="max-w-5xl"
-            value={formData.page_start}
+            value={formData.Page_start}
             onValueChange={(value) =>
-              setformData({ ...formData, page_start: value })
+              setformData({ ...formData, Page_start: value })
             }
           />
           <Input
@@ -288,9 +288,9 @@ export default function Form1({ is_conference = false }) {
             label="Page End"
             variant="faded"
             className="max-w-5xl"
-            value={formData.page_end}
+            value={formData.Page_end}
             onValueChange={(value) =>
-              setformData({ ...formData, page_end: value })
+              setformData({ ...formData, Page_end: value })
             }
           />
         </div>
@@ -302,9 +302,9 @@ export default function Form1({ is_conference = false }) {
           variant="faded"
           className="max-w-5xl"
           isRequired
-          value={formData.publish_date}
+          value={formData.Publish_date}
           onValueChange={(value) =>
-            setformData({ ...formData, publish_date: value })
+            setformData({ ...formData, Publish_date: value })
           }
         />
 
