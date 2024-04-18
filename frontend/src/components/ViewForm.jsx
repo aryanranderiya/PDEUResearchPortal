@@ -46,6 +46,7 @@ export default function ViewFormTable({ type }) {
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ userId: localStorage.getItem("userId") }),
         }
       );
 

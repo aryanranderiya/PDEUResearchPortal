@@ -1,16 +1,83 @@
 import * as React from "react";
 import {
   Input,
-  Select,
-  SelectItem,
   Checkbox,
   AutocompleteItem,
   Button,
   Textarea,
   Autocomplete,
+  RadioGroup,
+  Radio,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export default function Form1({ is_conference = false }) {
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [successfullyUploaded, setsuccessfullyUploaded] = React.useState(true);
+
+  function FormAddedModal() {
+    const title = is_conference ? "Conference Proceedings" : "Journal Paper";
+
+    const link = is_conference
+      ? "/home/conferencepapers"
+      : "/home/journalpapers";
+
+    const body = successfullyUploaded
+      ? "Successfully Uploaded"
+      : "Error Uploading";
+
+    return (
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody>
+                <p>
+                  <br></br>
+                  {body}: {title}
+                  <br></br>
+                  <br></br>
+                  <b>DOI:</b> {formData.DOI}
+                </p>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button color="danger" onPress={onClose}>
+                  X
+                </Button>
+
+                <Button
+                  color="default"
+                  onPress={() => {
+                    navigate("/home");
+                  }}
+                >
+                  Home
+                </Button>
+
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    navigate(link);
+                  }}
+                >
+                  View All {title}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    );
+  }
+
   const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
   const postType = is_conference ? "conferencepapers" : "journalpapers";
 
@@ -28,6 +95,7 @@ export default function Form1({ is_conference = false }) {
     Publish_date: "",
     ISSN: "",
     DOI: "",
+    Created_By: localStorage.getItem("userId"),
     // pdeu_authors: [],
     // outside_authors: [],
   });
@@ -38,13 +106,15 @@ export default function Form1({ is_conference = false }) {
     Conference_Date: "",
     Conference_City: "",
     Conference_Level: "",
+    Created_By: localStorage.getItem("userId"),
   });
-  React.useEffect(() => {
-    console.log({
-      journalData: formData,
-      conferenceData: conferenceFormData,
-    });
-  }, [formData, conferenceFormData]);
+
+  // React.useEffect(() => {
+  //   console.log({
+  //     journalData: formData,
+  //     conferenceData: conferenceFormData,
+  //   });
+  // }, [formData, conferenceFormData]);
 
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
@@ -69,10 +139,19 @@ export default function Form1({ is_conference = false }) {
         }
       );
 
-      console.log("Response", response);
+      console.log(response);
+
+      if (!response.ok) throw new Error(response.error);
+      else {
+        setsuccessfullyUploaded(true);
+        console.log("Form submitted successfully");
+      }
     } catch (error) {
       console.error("Error posting data:", error.message);
+      setsuccessfullyUploaded(false);
     }
+
+    onOpen();
   };
 
   const handleInputFieldAdd = () => {
@@ -175,6 +254,7 @@ export default function Form1({ is_conference = false }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <FormAddedModal />
       <div className="main_form">
         <Input
           size="sm"
@@ -211,39 +291,29 @@ export default function Form1({ is_conference = false }) {
           }
         />
 
-        <Select
+        <RadioGroup
           label="Quartile"
-          className="max-w-5xl"
-          size="sm"
-          isRequired
-          selectedKeys={quartiles[formData.Quartile]}
-          onSelectionChange={(e) =>
-            setformData({ ...formData, Quartile: e["currentKey"] })
-          }
+          orientation="horizontal"
+          value={quartiles[formData.Quartile]}
+          onValueChange={(e) => setformData({ ...formData, Quartile: e })}
         >
           {quartiles.map((quartile) => (
-            <SelectItem key={quartile} value={quartile}>
-              {quartile}
-            </SelectItem>
+            <Radio value={quartile}>{quartile}</Radio>
           ))}
-        </Select>
+        </RadioGroup>
 
-        <Select
+        <RadioGroup
           label="Journal Indexed"
-          className="max-w-5xl"
-          size="sm"
-          isRequired
-          selectedKeys={journal_indexed[formData.Journal_Indexed]}
-          onSelectionChange={(e) =>
-            setformData({ ...formData, Journal_Indexed: e["currentKey"] })
+          orientation="horizontal"
+          value={journal_indexed[formData.Journal_Indexed]}
+          onValueChange={(e) =>
+            setformData({ ...formData, Journal_Indexed: e })
           }
         >
           {journal_indexed.map((journal) => (
-            <SelectItem key={journal} value={journal}>
-              {journal}
-            </SelectItem>
+            <Radio value={journal}>{journal}</Radio>
           ))}
-        </Select>
+        </RadioGroup>
 
         <Input
           size="sm"
@@ -407,25 +477,21 @@ export default function Form1({ is_conference = false }) {
               }
             />
 
-            <Select
+            <RadioGroup
               label="Conference Level"
-              className="max-w-5xl"
-              size="sm"
-              isRequired
-              selectedKeys={levels[conferenceFormData.Conference_Level]}
-              onSelectionChange={(e) =>
+              orientation="horizontal"
+              value={levels[conferenceFormData.Conference_Level]}
+              onValueChange={(e) =>
                 setConferenceFormData({
                   ...conferenceFormData,
-                  Conference_Level: e["currentKey"],
+                  Conference_Level: e,
                 })
               }
             >
               {levels.map((level) => (
-                <SelectItem key={level} value={level}>
-                  {level}
-                </SelectItem>
+                <Radio value={level}>{level}</Radio>
               ))}
-            </Select>
+            </RadioGroup>
           </>
         ) : (
           <></>

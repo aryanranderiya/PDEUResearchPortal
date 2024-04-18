@@ -59,11 +59,12 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
     const formData = req.body;
     const { data, error } = await supabase
       .from("JournalPapers")
-      .insert([formData])
+      .insert([formData.journalData])
       .select();
 
     console.log("Data Successfully Inserted!", data);
     console.log(error);
+    res.status(200).json({ message: "Inserted!" });
   } catch (error) {
     console.error("Error logging in:", error.message);
     res.status(500).json({ error: "Could not Insert into Research Papers" });
@@ -108,6 +109,7 @@ app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
 
 app.post("/select/:type", cors(corsOptions), async (req, res) => {
   const type = req.params.type;
+  const userId = req.body.userId;
 
   let result = undefined;
   let table_name = undefined;
@@ -139,13 +141,17 @@ app.post("/select/:type", cors(corsOptions), async (req, res) => {
       return;
   }
 
-  result = await readFromTable(table_name, columns);
+  result = await readFromTable(table_name, columns, userId);
+
   if (result[0]) res.status(200).json(result[1]);
   else res.status(404).json({ error: `Could not Fetch ${table_name} Data` });
 });
 
-async function readFromTable(table_name, columns = "*", where = []) {
-  let query = supabase.from(table_name).select(columns);
+async function readFromTable(table_name, columns = "*", userId, where = []) {
+  let query = supabase
+    .from(table_name)
+    .select(columns)
+    .eq("Created_By", userId);
 
   if (where.length > 0) {
     query = query.eq(where[0], where[1]);
