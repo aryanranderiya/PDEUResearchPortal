@@ -6,6 +6,9 @@ import {
   TableRow,
   TableCell,
   Button,
+  CircularProgress,
+  getKeyValue,
+  Spacer,
 } from "@nextui-org/react";
 import * as React from "react";
 
@@ -22,10 +25,18 @@ const flattenObject = (obj, delimiter = ".", prefix = "") =>
   }, {});
 
 export default function ViewFormTable({ type }) {
-  const [data, setData] = React.useState(null);
-  const [keys, setKeys] = React.useState(null);
+  const [data, setData] = React.useState([]);
+
+  const [columns, setColumns] = React.useState([{ key: "" }]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [loadingText, setloadingText] = React.useState("Loading...");
 
   const fetchData = async () => {
+    setData([]);
+    setColumns([{ key: "" }]);
+    setIsLoading(true);
+    setloadingText("Loading...");
+
     try {
       const response = await fetch(
         `https://pdeu-research-portal-api.vercel.app/select/${type}`,
@@ -43,10 +54,12 @@ export default function ViewFormTable({ type }) {
         flattenObject(item[1])
       );
       setData(finalData);
-      setKeys(Object.keys(finalData[0]));
+      setColumns(Object.keys(finalData[0]).map((key) => ({ key })));
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error.message);
-      setData(null);
+      setloadingText("Error Fetching Data");
+      setIsLoading(false);
     }
   };
 
@@ -55,52 +68,33 @@ export default function ViewFormTable({ type }) {
   }, [type]);
 
   return (
-    <Table aria-label="Collection of Data">
-      <TableHeader>
-        {keys !== null ? (
-          keys.map((item) => <TableColumn>{item}</TableColumn>)
-        ) : (
-          <TableColumn></TableColumn>
-        )}
-
-        <TableColumn></TableColumn>
-        <TableColumn></TableColumn>
+    <Table
+      aria-label="Example table with dynamic content"
+      selectionMode="single"
+      color="primary"
+      defaultSelectedKeys={[]}
+    >
+      <TableHeader columns={columns}>
+        {(column) => <TableColumn key={column.key}>{column.key}</TableColumn>}
       </TableHeader>
-
-      <TableBody emptyContent={"No Data"}>
-        {data !== null &&
-          data.map((record, index) => (
-            <TableRow key={index}>
-              {Object.entries(record).map(([key, value]) => (
-                <TableCell key={key}>{value}</TableCell>
-              ))}
-              <TableCell>
-                <Button
-                  color="danger"
-                  aria-label="Like"
-                  size="sm"
-                  startContent={
-                    <span class="material-symbols-rounded">edit</span>
-                  }
-                >
-                  Edit
-                </Button>
-              </TableCell>
-
-              <TableCell>
-                <Button
-                  color="primary"
-                  aria-label="Like"
-                  size="sm"
-                  startContent={
-                    <span class="material-symbols-rounded">visibility</span>
-                  }
-                >
-                  View
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+      <TableBody
+        items={data}
+        isLoading={isLoading}
+        loadingContent={<CircularProgress />}
+        emptyContent={
+          <>
+            <Spacer y={5} />
+            {loadingText}
+          </>
+        }
+      >
+        {(item) => (
+          <TableRow key={item.DOI}>
+            {(columnKey) => (
+              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+            )}
+          </TableRow>
+        )}
       </TableBody>
     </Table>
   );
