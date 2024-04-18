@@ -75,6 +75,9 @@ app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
     const journalFormData = req.body.journalData;
     const conferenceFormData = req.body.conferenceData;
 
+    console.log("journalFormData", journalFormData);
+    console.log("conferenceFormData", conferenceFormData);
+
     const { data, error } = await supabase
       .from("JournalPapers")
       .insert([journalFormData])

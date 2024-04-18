@@ -33,10 +33,10 @@ export default function Form1({ is_conference = false }) {
   });
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
-    conferenceName: "",
-    conferenceDate: "",
-    conferenceCity: "",
-    conferenceLevel: "",
+    Conference_Name: "",
+    Conference_Data: "",
+    Conference_City: "",
+    Conference_Level: "",
   });
 
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
@@ -359,11 +359,11 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
-              value={conferenceFormData.conferenceName}
+              value={conferenceFormData.Conference_Name}
               onValueChange={(value) =>
                 setConferenceFormData({
                   ...conferenceFormData,
-                  conferenceName: value,
+                  Conference_Name: value,
                 })
               }
             />
@@ -374,11 +374,11 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
-              value={conferenceFormData.conferenceDate}
+              value={conferenceFormData.Conference_Data}
               onValueChange={(value) =>
                 setConferenceFormData({
                   ...conferenceFormData,
-                  conferenceDate: value,
+                  Conference_Data: value,
                 })
               }
             />
@@ -389,11 +389,11 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
-              value={conferenceFormData.conferenceCity}
+              value={conferenceFormData.Conference_City}
               onValueChange={(value) =>
                 setConferenceFormData({
                   ...conferenceFormData,
-                  conferenceCity: value,
+                  Conference_City: value,
                 })
               }
             />
@@ -402,7 +402,7 @@ export default function Form1({ is_conference = false }) {
               className="max-w-5xl"
               size="sm"
               isRequired
-              selectedKeys={levels[conferenceFormData.conferenceLevel]}
+              selectedKeys={levels[conferenceFormData.Conference_Level]}
               onSelectionChange={(e) =>
                 setformData({
                   ...conferenceFormData,
