@@ -72,29 +72,37 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
 
 app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
   try {
+    console.log("BODY TEST ------------------- ", req.body);
+
     const journalFormData = req.body.journalData;
     const conferenceFormData = req.body.conferenceData;
 
     console.log("journalFormData", journalFormData);
     console.log("conferenceFormData", conferenceFormData);
 
-    const { data, error } = await supabase
+    supabase
       .from("JournalPapers")
       .insert([journalFormData])
-      .select();
+      .select()
+      .then(({ data, error }) => {
+        if (error) throw new Error(error.message);
+        console.log("Data Successfully Inserted! Journal", data);
 
-    const { dataConference, errorConference } = await supabase
-      .from("ConferencePapers")
-      .insert([conferenceFormData])
-      .select();
-
-    console.log("Data Successfully Inserted! Journal", data);
-    console.log("Data Successfully Inserted! Conference", dataConference);
-    console.log("journalerror", error);
-    console.log("conference error", errorConference);
+        return supabase
+          .from("ConferencePapers")
+          .insert([conferenceFormData])
+          .select();
+      })
+      .then(({ data, error }) => {
+        if (error) throw new Error(error.message);
+        console.log("Data Successfully Inserted! Conference", data);
+      })
+      .catch((error) => {
+        console.error("Error inserting data:", error.message);
+      });
   } catch (error) {
-    console.error("Error logging in:", error.message);
-    res.status(500).json({ error: "Could not Insert into Research Papers" });
+    console.error(`Error Inserting`, error.message);
+    res.status(500).json({ error: "Could not Insert" });
   }
 });
 

@@ -21,23 +21,30 @@ export default function Form1({ is_conference = false }) {
     Quartile: "",
     Journal_Indexed: "",
     Publisher_Name: "",
-    Volume: "",
-    Issue: "",
-    Page_start: "",
-    Page_end: "",
+    Volume: null,
+    Issue: null,
+    Page_start: null,
+    Page_end: null,
     Publish_date: "",
     ISSN: "",
     DOI: "",
-    pdeu_authors: [],
-    outside_authors: [],
+    // pdeu_authors: [],
+    // outside_authors: [],
   });
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
+    DOI: "",
     Conference_Name: "",
-    Conference_Data: "",
+    Conference_Date: "",
     Conference_City: "",
     Conference_Level: "",
   });
+  React.useEffect(() => {
+    console.log({
+      journalData: formData,
+      conferenceData: conferenceFormData,
+    });
+  }, [formData, conferenceFormData]);
 
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
@@ -48,18 +55,17 @@ export default function Form1({ is_conference = false }) {
 
     try {
       const response = await fetch(
-        `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
+        // `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
+        `http://localhost:5000/insert/${postType}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: is_conference
-            ? JSON.stringify({
-                journalData: formData,
-                conferenceData: conferenceFormData,
-              })
-            : JSON.stringify(formData),
+          body: JSON.stringify({
+            journalData: formData,
+            conferenceData: conferenceFormData,
+          }),
         }
       );
 
@@ -332,7 +338,10 @@ export default function Form1({ is_conference = false }) {
           className="max-w-5xl"
           isRequired
           value={formData.DOI}
-          onValueChange={(value) => setformData({ ...formData, DOI: value })}
+          onValueChange={(value) => {
+            setformData({ ...formData, DOI: value });
+            setConferenceFormData({ ...conferenceFormData, DOI: value });
+          }}
         />
 
         <PDEUAuthors />
@@ -374,11 +383,11 @@ export default function Form1({ is_conference = false }) {
               variant="faded"
               className="max-w-5xl"
               isRequired
-              value={conferenceFormData.Conference_Data}
+              value={conferenceFormData.Conference_Date}
               onValueChange={(value) =>
                 setConferenceFormData({
                   ...conferenceFormData,
-                  Conference_Data: value,
+                  Conference_Date: value,
                 })
               }
             />
@@ -397,6 +406,7 @@ export default function Form1({ is_conference = false }) {
                 })
               }
             />
+
             <Select
               label="Conference Level"
               className="max-w-5xl"
@@ -404,9 +414,9 @@ export default function Form1({ is_conference = false }) {
               isRequired
               selectedKeys={levels[conferenceFormData.Conference_Level]}
               onSelectionChange={(e) =>
-                setformData({
+                setConferenceFormData({
                   ...conferenceFormData,
-                  level: e["currentKey"],
+                  Conference_Level: e["currentKey"],
                 })
               }
             >
