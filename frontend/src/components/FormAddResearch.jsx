@@ -35,9 +35,9 @@ export default function Form1({ is_conference = false }) {
     ISSN: "",
     DOI: "",
     Created_By: localStorage.getItem("userId"),
-    // pdeu_authors: [],
-    // outside_authors: [],
   });
+
+  const [authorDataPDEU, setauthorData] = React.useState([{}]);
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
     DOI: "",
@@ -48,12 +48,13 @@ export default function Form1({ is_conference = false }) {
     Created_By: localStorage.getItem("userId"),
   });
 
-  // React.useEffect(() => {
-  //   console.log({
-  //     journalData: formData,
-  //     conferenceData: conferenceFormData,
-  //   });
-  // }, [formData, conferenceFormData]);
+  React.useEffect(() => {
+    console.log({
+      journalData: formData,
+      conferenceData: conferenceFormData,
+      authorData: authorDataPDEU,
+    });
+  }, [formData, conferenceFormData, authorDataPDEU]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,6 +71,7 @@ export default function Form1({ is_conference = false }) {
           body: JSON.stringify({
             journalData: formData,
             conferenceData: conferenceFormData,
+            authorDataPDEU: authorDataPDEU,
           }),
         }
       );
@@ -261,7 +263,10 @@ export default function Form1({ is_conference = false }) {
           }}
         />
 
-        <PDEUAuthors />
+        <PDEUAuthors
+          authorData={authorDataPDEU}
+          setauthorData={setauthorData}
+        />
 
         <div className="flex max-w-5xl gap-2 items-center">
           <Input

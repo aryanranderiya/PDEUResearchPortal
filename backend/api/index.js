@@ -73,37 +73,52 @@ app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
 
 app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
   try {
-    console.log("BODY TEST ------------------- ", req.body);
-
     const journalFormData = req.body.journalData;
     const conferenceFormData = req.body.conferenceData;
+    const authorFormDataPDEU = Object.values(req.body.authorDataPDEU);
 
-    console.log("journalFormData", journalFormData);
-    console.log("conferenceFormData", conferenceFormData);
+    // console.log("journalFormData", journalFormData);
+    // console.log("conferenceFormData", conferenceFormData);
+    console.log("authorFormDataPDEU", authorFormDataPDEU);
 
+    // const { data: journalData, error: journalError } = await supabase
+    //   .from("JournalPapers")
+    //   .insert([journalFormData])
+    //   .select();
+    // if (journalError) throw new Error(journalError.message);
+    // console.log("Data Successfully Inserted! Journal", journalData);
+
+    // const { data: conferenceData, error: conferenceError } = await supabase
+    //   .from("ConferencePapers")
+    //   .insert([conferenceFormData])
+    //   .select();
+    // if (conferenceError) throw new Error(conferenceError.message);
+    // console.log("Data Successfully Inserted! Conference", conferenceData);
     supabase
-      .from("JournalPapers")
-      .insert([journalFormData])
-      .select()
+      .from("Employee")
+      .select("id")
+      .in("name", authorFormDataPDEU)
       .then(({ data, error }) => {
-        if (error) throw new Error(error.message);
-        console.log("Data Successfully Inserted! Journal", data);
-
-        return supabase
-          .from("ConferencePapers")
-          .insert([conferenceFormData])
-          .select();
-      })
-      .then(({ data, error }) => {
-        if (error) throw new Error(error.message);
-        console.log("Data Successfully Inserted! Conference", data);
+        if (error) throw new Error(error);
+        else {
+          console.log("Data fetched successfully:", data);
+        }
       })
       .catch((error) => {
-        console.error("Error inserting data:", error.message);
+        console.error("Error:", error.message);
       });
+
+    // const { data: authorDataPDEU, error: authorDataPDEUError } = await supabase
+    //   .from("Authors_inside_PDEU")
+    //   .insert(authorFormDataPDEU)
+    //   .select();
+    // if (authorDataPDEUError) throw new Error(authorDataPDEUError.message);
+    // console.log("Data Successfully Inserted! Conference", authorDataPDEU);
+
+    // res.status(200).json({ message: "Data successfully inserted" });
   } catch (error) {
-    console.error(`Error Inserting`, error.message);
-    res.status(500).json({ error: "Could not Insert" });
+    console.error("Error inserting data:", error.message);
+    res.status(500).json({ error: "Could not insert data" });
   }
 });
 

@@ -6,7 +6,7 @@ import {
   Autocomplete,
 } from "@nextui-org/react";
 
-export default function PDEUAuthors() {
+export default function PDEUAuthors({ authorData, setauthorData }) {
   const [users, setUsers] = React.useState([{ user: "none" }]);
 
   const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
@@ -14,24 +14,18 @@ export default function PDEUAuthors() {
   const handleInputFieldAdd = () => {
     setAuthorInputFields([...authorInputFields, []]);
   };
+
   const handleInputFieldRemove = (index) => {
-    console.log("Before removing:", authorInputFields);
-    console.log("Index to remove:", index);
-
-    // Create a copy of the authorInputFields array
     const list = [...authorInputFields];
-    // Remove the element at the specified index using splice
     list.splice(index, 1);
-    // Update the state with the modified array
     setAuthorInputFields(list);
-
-    console.log("After removing:", list);
   };
 
   const handleInputFieldsChange = (value, index) => {
     const list = [...authorInputFields];
     list[index] = value;
     setAuthorInputFields(list);
+    setauthorData((prevData) => ({ ...prevData, [index]: users[value].name }));
   };
 
   React.useEffect(() => {
@@ -58,7 +52,6 @@ export default function PDEUAuthors() {
     <>
       {authorInputFields.map((value, index) => (
         <div key={index} className="flex max-w-5xl gap-2 items-center">
-          {console.log(index, value)}
           <Autocomplete
             label="Author from PDEU"
             className="max-w-5xl"
@@ -76,6 +69,7 @@ export default function PDEUAuthors() {
           </Autocomplete>
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
+
           {authorInputFields.length !== users.length && (
             <Button
               color="primary"

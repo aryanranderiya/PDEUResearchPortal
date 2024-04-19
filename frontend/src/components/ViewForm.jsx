@@ -73,7 +73,7 @@ export default function ViewFormTable({ type }) {
     <Table
       aria-label="Example table with dynamic content"
       selectionMode="single"
-      color="primary"
+      color="success"
       defaultSelectedKeys={[]}
     >
       <TableHeader columns={columns}>
