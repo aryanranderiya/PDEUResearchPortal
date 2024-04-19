@@ -8,78 +8,35 @@ import {
   Autocomplete,
   RadioGroup,
   Radio,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
+import FormAddedModal from "./FormAddedModal";
 
 export default function Form1({ is_conference = false }) {
-  const navigate = useNavigate();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [successfullyUploaded, setsuccessfullyUploaded] = React.useState(true);
-
-  function FormAddedModal() {
-    const title = is_conference ? "Conference Proceedings" : "Journal Paper";
-
-    const link = is_conference
-      ? "/home/conferencepapers"
-      : "/home/journalpapers";
-
-    const body = successfullyUploaded
-      ? "Successfully Uploaded"
-      : "Error Uploading";
-
-    return (
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalBody>
-                <p>
-                  <br></br>
-                  {body}: {title}
-                  <br></br>
-                  <br></br>
-                  <b>DOI:</b> {formData.DOI}
-                </p>
-              </ModalBody>
-
-              <ModalFooter>
-                <Button color="danger" onPress={onClose}>
-                  X
-                </Button>
-
-                <Button
-                  color="default"
-                  onPress={() => {
-                    navigate("/home");
-                  }}
-                >
-                  Home
-                </Button>
-
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    navigate(link);
-                  }}
-                >
-                  View All {title}
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    );
-  }
-
   const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
+
   const postType = is_conference ? "conferencepapers" : "journalpapers";
+  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
+  const journal_indexed = ["Scopus", "Web of Science (WOS)"];
+  const levels = ["International", "National"];
+
+  const handleInputFieldAdd = () => {
+    setAuthorInputFields([...authorInputFields, []]);
+  };
+
+  const handleInputFieldRemove = (index) => {
+    const list = [...authorInputFields];
+    list.splice(index, 1);
+    setAuthorInputFields(list);
+  };
+
+  const handleInputFieldsChange = (value, index) => {
+    const list = [...authorInputFields];
+    list[index] = value;
+    setAuthorInputFields(list);
+  };
 
   const [formData, setformData] = React.useState({
     Title: "",
@@ -88,10 +45,10 @@ export default function Form1({ is_conference = false }) {
     Quartile: "",
     Journal_Indexed: "",
     Publisher_Name: "",
-    Volume: null,
-    Issue: null,
-    Page_start: null,
-    Page_end: null,
+    Volume: undefined,
+    Issue: undefined,
+    Page_start: undefined,
+    Page_end: undefined,
     Publish_date: "",
     ISSN: "",
     DOI: "",
@@ -116,9 +73,31 @@ export default function Form1({ is_conference = false }) {
   //   });
   // }, [formData, conferenceFormData]);
 
-  const quartiles = ["Q1", "Q2", "Q3", "Q4"];
-  const journal_indexed = ["Scopus", "Web of Science (WOS)"];
-  const levels = ["International", "National"];
+  const [users, setUsers] = React.useState([{ user: "none" }]);
+
+  React.useEffect(() => {
+    const fetchUsernames = async () => {
+      try {
+        const response = await fetch(
+          // `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
+          `http://localhost:5000/fetchusernames`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error(response.error);
+        else setUsers(await response.json());
+      } catch (error) {
+        console.error("Error posting data:", error.message);
+      }
+    };
+
+    fetchUsernames();
+  }, [is_conference]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,8 +118,6 @@ export default function Form1({ is_conference = false }) {
         }
       );
 
-      console.log(response);
-
       if (!response.ok) throw new Error(response.error);
       else {
         setsuccessfullyUploaded(true);
@@ -154,59 +131,10 @@ export default function Form1({ is_conference = false }) {
     onOpen();
   };
 
-  const handleInputFieldAdd = () => {
-    setAuthorInputFields([...authorInputFields, []]);
-  };
-
-  const handleInputFieldRemove = (index) => {
-    const list = [...authorInputFields];
-    list.splice(index, 1);
-    setAuthorInputFields(list);
-  };
-
-  const handleInputFieldsChange = (value, index) => {
-    const list = [...authorInputFields];
-    list[index] = value;
-    setAuthorInputFields(list);
-  };
-
-  const users = [
-    {
-      id: 0,
-      name: "Tony Reichert",
-      role: "CEO",
-      team: "Management",
-      status: "active",
-      age: "29",
-      avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/male/1.png",
-      email: "tony.reichert@example.com",
-    },
-    {
-      id: 1,
-      name: "Zoey Lang",
-      role: "Tech Lead",
-      team: "Development",
-      status: "paused",
-      age: "25",
-      avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/1.png",
-      email: "zoey.lang@example.com",
-    },
-    {
-      id: 2,
-      name: "Jane Fisher",
-      role: "Sr. Dev",
-      team: "Development",
-      status: "active",
-      age: "22",
-      avatar: "https://d2u8k2ocievbld.cloudfront.net/memojis/female/2.png",
-      email: "jane.fisher@example.com",
-    },
-  ];
-
   function PDEUAuthors() {
     return (
       <>
-        {authorInputFields.map((index) => (
+        {authorInputFields.map((value, index) => (
           <div key={index} className="flex max-w-5xl gap-2 items-center">
             <Autocomplete
               label="Author from PDEU"
@@ -217,8 +145,8 @@ export default function Form1({ is_conference = false }) {
               onSelectionChange={(e) => handleInputFieldsChange(e, index)}
               defaultSelectedKey={authorInputFields[index]}
             >
-              {users.map((user) => (
-                <AutocompleteItem key={user.id} value={user.id}>
+              {users.map((user, index) => (
+                <AutocompleteItem key={index} value={user.name}>
                   {user.name}
                 </AutocompleteItem>
               ))}
@@ -226,16 +154,15 @@ export default function Form1({ is_conference = false }) {
             <Checkbox>First</Checkbox>
             <Checkbox>Corresponding</Checkbox>
 
-            {authorInputFields.length - 1 === index && (
+            {authorInputFields.length !== users.length && (
               <Button
-                color="default"
+                color="primary"
                 id="addAuthor"
                 onClick={handleInputFieldAdd}
               >
-                Add Authors
+                Add
               </Button>
             )}
-
             {authorInputFields.length !== 1 && (
               <Button
                 isIconOnly
@@ -254,7 +181,15 @@ export default function Form1({ is_conference = false }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <FormAddedModal />
+      <FormAddedModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        successfullyUploaded={successfullyUploaded}
+        title={is_conference ? "Conference Proceedings" : "Journal Paper"}
+        link={is_conference ? "/home/conferencepapers" : "/home/journalpapers"}
+        formData={formData}
+      />
+
       <div className="main_form">
         <Input
           size="sm"
@@ -297,8 +232,10 @@ export default function Form1({ is_conference = false }) {
           value={quartiles[formData.Quartile]}
           onValueChange={(e) => setformData({ ...formData, Quartile: e })}
         >
-          {quartiles.map((quartile) => (
-            <Radio value={quartile}>{quartile}</Radio>
+          {quartiles.map((quartile, index) => (
+            <Radio key={index} value={quartile}>
+              {quartile}
+            </Radio>
           ))}
         </RadioGroup>
 
@@ -310,8 +247,10 @@ export default function Form1({ is_conference = false }) {
             setformData({ ...formData, Journal_Indexed: e })
           }
         >
-          {journal_indexed.map((journal) => (
-            <Radio value={journal}>{journal}</Radio>
+          {journal_indexed.map((journal, index) => (
+            <Radio key={index} value={journal}>
+              {journal}
+            </Radio>
           ))}
         </RadioGroup>
 
@@ -424,9 +363,9 @@ export default function Form1({ is_conference = false }) {
             variant="faded"
             className="max-w-5xl"
           />
-          <Button color="default">Add</Button>
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
+          <Button color="primary">Add</Button>
         </div>
 
         {is_conference ? (
@@ -488,8 +427,10 @@ export default function Form1({ is_conference = false }) {
                 })
               }
             >
-              {levels.map((level) => (
-                <Radio value={level}>{level}</Radio>
+              {levels.map((level, index) => (
+                <Radio key={index} value={level}>
+                  {level}
+                </Radio>
               ))}
             </RadioGroup>
           </>

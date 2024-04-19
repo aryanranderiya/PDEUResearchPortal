@@ -167,7 +167,7 @@ async function readFromTable(table_name, columns = "*", userId, where = []) {
     return [false, error];
   }
 }
-
+1;
 app.post("/userinfo", cors(corsOptions), async (req, res) => {
   const userId = req.body.userId;
 
@@ -179,6 +179,18 @@ app.post("/userinfo", cors(corsOptions), async (req, res) => {
   if (!error) {
     console.log("Reading User Data from Employee Successfull.", data);
     res.json(data);
+  } else {
+    console.log("Read Error.", error);
+    res.status(500).json({ error: "Could not Select from Employee" });
+  }
+});
+
+app.post("/fetchusernames", cors(corsOptions), async (req, res) => {
+  let { data, error } = await supabase.from("Employee").select("name");
+
+  if (!error) {
+    console.log("Reading User Data from Employee Successfull.", data);
+    res.status(200).json(data);
   } else {
     console.log("Read Error.", error);
     res.status(500).json({ error: "Could not Select from Employee" });

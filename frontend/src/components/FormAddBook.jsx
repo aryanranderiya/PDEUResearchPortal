@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Input,
   Select,
@@ -66,144 +67,219 @@ export default function Form2() {
     },
   ];
 
+  const [formData, setFormData] = useState({
+    Book_Title: "",
+    Abstract: "",
+    Book_Type: "",
+    Publisher_Name: "",
+    Publisher_Type: "",
+    Volume: "",
+    Edition: "",
+    Total_Pages: "",
+    Publish_Date: "",
+    ISBN: "",
+    DOI: "",
+    PDEU_Author: "",
+    Outside_Author: "",
+    First: false,
+    Corresponding: false,
+  });
+
+  const handleChange = (field, value) => {
+    // console.log(value);
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(formData);
+  };
+
   return (
-    <>
-      <Input
-        size="sm"
-        type="text"
-        label="Book Title"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Textarea
-        label="Abstract"
-        className="max-w-5xl"
-        variant="faded"
-        isRequired
-      />
-
-      <Select label="Book Type" className="max-w-5xl" size="sm" isRequired>
-        {book_type.map((type) => (
-          <SelectItem key={type} value={type}>
-            {type}
-          </SelectItem>
-        ))}
-      </Select>
-
-      <Input
-        size="sm"
-        type="text"
-        label="Publisher Name"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Select label="Publisher Type" className="max-w-5xl" size="sm" isRequired>
-        {publisher_type.map((publisher) => (
-          <SelectItem key={publisher} value={publisher}>
-            {publisher}
-          </SelectItem>
-        ))}
-      </Select>
-
-      <div className="flex max-w-5xl gap-2 items-center">
+    <form onSubmit={handleSubmit}>
+      <div className="main_form">
         <Input
           size="sm"
           type="text"
-          label="Volume"
+          label="Book Title"
           variant="faded"
           className="max-w-5xl"
           isRequired
+          value={formData.Book_Title}
+          onValueChange={(value) => handleChange("Book_Title", value)}
         />
-        <Input
-          size="sm"
-          type="text"
-          label="Edition"
-          variant="faded"
+
+        <Textarea
+          label="Abstract"
           className="max-w-5xl"
+          variant="faded"
           isRequired
+          value={formData.Abstract}
+          onValueChange={(value) => handleChange("Abstract", value)}
         />
-      </div>
 
-      <Input
-        size="sm"
-        type="number"
-        label="Total Pages"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Input
-        size="sm"
-        type="date"
-        label="Publish Date"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Input
-        size="sm"
-        type="text"
-        label="ISBN No."
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <Input
-        size="sm"
-        type="text"
-        label="DOI (i.e https://doi.org/19...)"
-        variant="faded"
-        className="max-w-5xl"
-        isRequired
-      />
-
-      <div className="flex max-w-5xl gap-2 items-center">
-        <Autocomplete
-          label="Author from PDEU"
+        <Select
+          label="Book Type"
           className="max-w-5xl"
           size="sm"
-          variant="faded"
           isRequired
+          value={book_type[formData.Book_Type]}
+          onSelectionChange={(e) =>
+            setFormData({ ...formData, Book_Type: e["currentKey"] })
+          }
         >
-          {users.map((user) => (
-            <AutocompleteItem key={user.id} value={user.name}>
-              {user.name}
-            </AutocompleteItem>
+          {book_type.map((type) => (
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
           ))}
-        </Autocomplete>
-        <Button color="primary">Add</Button>
-        <Checkbox>First</Checkbox>
-        <Checkbox>Corresponding</Checkbox>
-      </div>
+        </Select>
 
-      <div className="flex max-w-5xl gap-2 items-center">
         <Input
           size="sm"
           type="text"
-          label="Author outside of PDEU"
+          label="Publisher Name"
           variant="faded"
           className="max-w-5xl"
+          isRequired
+          value={formData.Publisher_Name}
+          onValueChange={(value) => handleChange("Publisher_Name", value)}
         />
-        <Button color="primary">Add</Button>
-        <Checkbox>First</Checkbox>
-        <Checkbox>Corresponding</Checkbox>
-      </div>
 
-      <div className="flex max-w-5xl gap-2 items-center justify-center">
-        <Button color="primary" size="md">
-          Submit
-        </Button>
-        <Button color="default" size="md" variant="ghost">
-          Cancel
-        </Button>
+        <Select
+          label="Publisher Type"
+          className="max-w-5xl"
+          size="sm"
+          isRequired
+          value={formData.Publisher_Type}
+          onValueChange={(value) => handleChange("Publisher_Type", value)}
+        >
+          {publisher_type.map((publisher) => (
+            <SelectItem key={publisher} value={publisher}>
+              {publisher}
+            </SelectItem>
+          ))}
+        </Select>
+
+        <div className="flex max-w-5xl gap-2 items-center">
+          <Input
+            size="sm"
+            type="text"
+            label="Volume"
+            variant="faded"
+            className="max-w-5xl"
+            isRequired
+            value={formData.Volume}
+            onValueChange={(value) => handleChange("Volume", value)}
+          />
+          <Input
+            size="sm"
+            type="text"
+            label="Edition"
+            variant="faded"
+            className="max-w-5xl"
+            isRequired
+            value={formData.Edition}
+            onValueChange={(value) => handleChange("Edition", value)}
+          />
+        </div>
+
+        <Input
+          size="sm"
+          type="number"
+          label="Total Pages"
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+          value={formData.Total_Pages}
+          onValueChange={(value) => handleChange("Total_Pages", value)}
+        />
+
+        <Input
+          size="sm"
+          type="date"
+          label="Publish Date"
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+          value={formData.Publish_Date}
+          onValueChange={(value) => handleChange("Publish_Date", value)}
+        />
+
+        <Input
+          size="sm"
+          type="text"
+          label="ISBN No."
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+          value={formData.ISBN}
+          onValueChange={(value) => handleChange("ISBN", value)}
+        />
+
+        <Input
+          size="sm"
+          type="text"
+          label="DOI (i.e https://doi.org/19...)"
+          variant="faded"
+          className="max-w-5xl"
+          isRequired
+          value={formData.DOI}
+          onValueChange={(value) => handleChange("DOI", value)}
+        />
+
+        <div className="flex max-w-5xl gap-2 items-center">
+          <Autocomplete
+            label="Author from PDEU"
+            className="max-w-5xl"
+            size="sm"
+            variant="faded"
+            isRequired
+            onSelectionChange={(value) => handleChange("PDEU_Author", value)}
+          >
+            {users.map((user) => (
+              <AutocompleteItem key={user.id} value={user.name}>
+                {user.name}
+              </AutocompleteItem>
+            ))}
+          </Autocomplete>
+          <Button color="primary">Add</Button>
+          <Checkbox
+            checked={formData.First}
+            onChange={(e) => handleChange("First", e.target.checked)}
+          >
+            First
+          </Checkbox>
+          <Checkbox
+            checked={formData.Corresponding}
+            onChange={(e) => handleChange("Corresponding", e.target.checked)}
+          >
+            Corresponding
+          </Checkbox>
+        </div>
+
+        <div className="flex max-w-5xl gap-2 items-center">
+          <Input
+            size="sm"
+            type="text"
+            label="Author outside of PDEU"
+            variant="faded"
+            className="max-w-5xl"
+          />
+          <Button color="primary">Add</Button>
+          <Checkbox>First</Checkbox>
+          <Checkbox>Corresponding</Checkbox>
+        </div>
+
+        <div className="flex max-w-5xl gap-2 items-center justify-center">
+          <Button color="primary" size="md" type="submit">
+            Submit
+          </Button>
+          <Button color="default" size="md" variant="ghost">
+            Cancel
+          </Button>
+        </div>
       </div>
-    </>
+    </form>
   );
 }

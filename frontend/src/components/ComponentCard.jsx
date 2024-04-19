@@ -17,7 +17,6 @@ export default function CardComponent({
   const navigate = useNavigate();
 
   const navigateToPage = () => {
-    console.log(page);
     navigate(page);
   };
 

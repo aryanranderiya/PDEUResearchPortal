@@ -60,7 +60,7 @@ export default function ViewFormTable({ type }) {
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error.message);
-      setloadingText("Error Fetching Data");
+      setloadingText("No Data Found");
       setIsLoading(false);
     }
   };
