@@ -1,8 +1,5 @@
 import * as React from "react";
-import {
-  ListBoxPagesComponentAdd,
-  ListBoxPagesComponentView,
-} from "./ComponentSidebarListbox";
+import { ListBoxPagesComponentAdd } from "./ComponentSidebarListbox";
 import { User, Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
@@ -66,8 +63,6 @@ export default function SideBar() {
       </div>
 
       <ListBoxPagesComponentAdd />
-
-      <ListBoxPagesComponentView />
 
       <div className="flex flex-col gap-4 justify-end items-end">
         <Button

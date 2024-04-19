@@ -43,13 +43,13 @@ const viewItems = [
   },
 ];
 
-const settingsItems = [
-  // {
-  //   key: "/home/userProfile",
-  //   label: "Edit User Profile",
-  //   icon: <span class="material-symbols-rounded">person_edit</span>,
-  // },
-];
+// const settingsItems = [
+//   // {
+//   //   key: "/home/userProfile",
+//   //   label: "Edit User Profile",
+//   //   icon: <span class="material-symbols-rounded">person_edit</span>,
+//   // },
+// ];
 
 export function ListBoxPagesComponentAdd() {
   const { darkTheme, setDarkTheme } = React.useContext(ThemeContext);
@@ -58,7 +58,7 @@ export function ListBoxPagesComponentAdd() {
   React.useEffect(() => {
     if (isSelected === true) setDarkTheme("dark");
     else setDarkTheme("light");
-  }, [isSelected]);
+  }, [isSelected, setDarkTheme]);
 
   React.useEffect(() => {
     if (darkTheme === "dark") setIsSelected(true);
@@ -105,8 +105,6 @@ export function ListBoxPagesComponentAdd() {
             </div>
           }
         >
-          {/* <AccordionItemsList navigate={navigate} items={settingsItems} /> */}
-
           <Listbox aria-label="Dynamic Actions">
             <ListboxItem
               className={"px-5"}
@@ -128,27 +126,4 @@ export function ListBoxPagesComponentAdd() {
       </Accordion>
     </div>
   );
-}
-
-function AccordionItemsList({ navigate, items }) {
-  return (
-    <Listbox
-      items={items}
-      aria-label="Dynamic Actions"
-      onAction={(item) => {
-        navigate(item);
-      }}
-      selectionMode="single"
-    >
-      {items.map((item) => (
-        <ListboxItem key={item.key} className={"px-5"} startContent={item.icon}>
-          {item.label}
-        </ListboxItem>
-      ))}
-    </Listbox>
-  );
-}
-
-export function ListBoxPagesComponentView() {
-  return <></>;
 }

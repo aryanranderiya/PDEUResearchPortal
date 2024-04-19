@@ -2,41 +2,23 @@ import * as React from "react";
 import {
   Input,
   Checkbox,
-  AutocompleteItem,
   Button,
   Textarea,
-  Autocomplete,
   RadioGroup,
   Radio,
   useDisclosure,
 } from "@nextui-org/react";
 import FormAddedModal from "./FormAddedModal";
+import PDEUAuthors from "./ComponentFormAuthors";
 
 export default function Form1({ is_conference = false }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [successfullyUploaded, setsuccessfullyUploaded] = React.useState(true);
-  const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
 
   const postType = is_conference ? "conferencepapers" : "journalpapers";
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
   const levels = ["International", "National"];
-
-  const handleInputFieldAdd = () => {
-    setAuthorInputFields([...authorInputFields, []]);
-  };
-
-  const handleInputFieldRemove = (index) => {
-    const list = [...authorInputFields];
-    list.splice(index, 1);
-    setAuthorInputFields(list);
-  };
-
-  const handleInputFieldsChange = (value, index) => {
-    const list = [...authorInputFields];
-    list[index] = value;
-    setAuthorInputFields(list);
-  };
 
   const [formData, setformData] = React.useState({
     Title: "",
@@ -73,32 +55,6 @@ export default function Form1({ is_conference = false }) {
   //   });
   // }, [formData, conferenceFormData]);
 
-  const [users, setUsers] = React.useState([{ user: "none" }]);
-
-  React.useEffect(() => {
-    const fetchUsernames = async () => {
-      try {
-        const response = await fetch(
-          // `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
-          `http://localhost:5000/fetchusernames`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) throw new Error(response.error);
-        else setUsers(await response.json());
-      } catch (error) {
-        console.error("Error posting data:", error.message);
-      }
-    };
-
-    fetchUsernames();
-  }, [is_conference]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -130,54 +86,6 @@ export default function Form1({ is_conference = false }) {
 
     onOpen();
   };
-
-  function PDEUAuthors() {
-    return (
-      <>
-        {authorInputFields.map((value, index) => (
-          <div key={index} className="flex max-w-5xl gap-2 items-center">
-            <Autocomplete
-              label="Author from PDEU"
-              className="max-w-5xl"
-              size="sm"
-              variant="faded"
-              isRequired
-              onSelectionChange={(e) => handleInputFieldsChange(e, index)}
-              defaultSelectedKey={authorInputFields[index]}
-            >
-              {users.map((user, index) => (
-                <AutocompleteItem key={index} value={user.name}>
-                  {user.name}
-                </AutocompleteItem>
-              ))}
-            </Autocomplete>
-            <Checkbox>First</Checkbox>
-            <Checkbox>Corresponding</Checkbox>
-
-            {authorInputFields.length !== users.length && (
-              <Button
-                color="primary"
-                id="addAuthor"
-                onClick={handleInputFieldAdd}
-              >
-                Add
-              </Button>
-            )}
-            {authorInputFields.length !== 1 && (
-              <Button
-                isIconOnly
-                color="danger"
-                aria-label="Remove"
-                onClick={() => handleInputFieldRemove(index)}
-              >
-                <span className="material-symbols-rounded">close</span>
-              </Button>
-            )}
-          </div>
-        ))}
-      </>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit}>
