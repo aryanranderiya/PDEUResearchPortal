@@ -48,11 +48,11 @@ export default function Form1({ is_conference = false }) {
   });
 
   React.useEffect(() => {
-    // console.log({
-    //   journalData: formData,
-    //   conferenceData: conferenceFormData,
-    //   authorData: authorData,
-    // });
+    console.log({
+      journalData: formData,
+      conferenceData: conferenceFormData,
+      authorData: authorData,
+    });
   }, [formData, conferenceFormData, authorData]);
 
   const handleSubmit = async (e) => {

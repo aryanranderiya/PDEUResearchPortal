@@ -44,7 +44,7 @@ app.post("/login", cors(corsOptions), async (req, res) => {
       console.error("Error logging in:", error.message);
       res.status(401).json({ error: "Invalid credentials" }); // Return unauthorized status (401)
     } else {
-      // User has logged in successfully
+      // User has logged n successfully
       console.log("User logged in:", data.user);
       res.status(200).json({ message: "Login successful", user: data.user }); // Return success status (200)
     }
@@ -54,71 +54,11 @@ app.post("/login", cors(corsOptions), async (req, res) => {
   }
 });
 
-app.post("/insert/journalpapers", cors(corsOptions), async (req, res) => {
-  try {
-    const formData = req.body;
-    const authorData = req.body.authorData;
-    console.log("authorFormDataPDEU", authorData);
-    await insertAuthors(authorData);
-
-    // const { data, error } = await supabase
-    //   .from("JournalPapers")
-    //   .insert([formData.journalData])
-    //   .select();
-
-    // console.log("Data Successfully Inserted!", data);
-    // console.log(error);
-    // res.status(200).json({ message: "Inserted!" });
-  } catch (error) {
-    console.error("Error logging in:", error.message);
-    res.status(500).json({ error: "Could not Insert into Research Papers" });
-  }
-});
-
-app.post("/insert/conferencepapers", cors(corsOptions), async (req, res) => {
-  try {
-    const journalFormData = req.body.journalData;
-    const conferenceFormData = req.body.conferenceData;
-    const authorFormDataPDEU = Object.values(req.body.authorDataPDEU);
-
-    // console.log("journalFormData", journalFormData);
-    // console.log("conferenceFormData", conferenceFormData);
-    console.log("authorFormDataPDEU", authorFormDataPDEU);
-
-    // const { data: journalData, error: journalError } = await supabase
-    //   .from("JournalPapers")
-    //   .insert([journalFormData])
-    //   .select();
-    // if (journalError) throw new Error(journalError.message);
-    // console.log("Data Successfully Inserted! Journal", journalData);
-
-    // const { data: conferenceData, error: conferenceError } = await supabase
-    //   .from("ConferencePapers")
-    //   .insert([conferenceFormData])
-    //   .select();
-    // if (conferenceError) throw new Error(conferenceError.message);
-    // console.log("Data Successfully Inserted! Conference", conferenceData);
-
-    // const { data: authorDataPDEU, error: authorDataPDEUError } = await supabase
-    //   .from("Authors_inside_PDEU")
-    //   .insert(authorFormDataPDEU)
-    //   .select();
-    // if (authorDataPDEUError) throw new Error(authorDataPDEUError.message);
-    // console.log("Data Successfully Inserted! Conference", authorDataPDEU);
-
-    // res.status(200).json({ message: "Data successfully inserted" });
-  } catch (error) {
-    console.error("Error inserting data:", error.message);
-    res.status(500).json({ error: "Could not insert data" });
-  }
-});
-
 // Select data based on the type
 app.post("/select/:type", cors(corsOptions), async (req, res) => {
   const type = req.params.type;
   const userId = req.body.userId;
 
-  let result = undefined;
   let table_name = undefined;
   let columns = undefined;
 
@@ -131,7 +71,7 @@ app.post("/select/:type", cors(corsOptions), async (req, res) => {
     case "conference":
       table_name = "ConferencePapers";
       columns =
-        "DOI,Conference_Name,JournalPapers(Title,Publish_date,Journal_Indexed)";
+        "DOI,Conference_Name,JournalPapers(Title,Journal_Indexed,Publish_date)";
       break;
 
     case "patents":
@@ -148,10 +88,87 @@ app.post("/select/:type", cors(corsOptions), async (req, res) => {
       return;
   }
 
-  result = await readFromTable(table_name, columns, userId);
+  let result = await readFromTable(table_name, columns, userId);
 
   if (result[0]) res.status(200).json(result[1]);
   else res.status(404).json({ error: `Could not Fetch ${table_name} Data` });
+});
+
+async function insertintoTable(table_name, form_data, res) {
+  console.log("CALLED INSERT INTO TABLE METHOD");
+
+  try {
+    const { data, error } = await supabase
+      .from(table_name)
+      .insert(form_data)
+      .select();
+
+    if (error) throw new Error(error.message);
+
+    console.log(`Data successfully inserted into ${table_name}`, data);
+    return [`Data successfully inserted into ${table_name}`, 200];
+  } catch (error) {
+    console.log(`Could not Insert into ${table_name}:  ${error}`);
+    return [`Could not Insert into ${table_name}:  ${error}`, 500];
+  }
+}
+
+// Select data based on the type
+app.post("/insert/:type", cors(corsOptions), async (req, res) => {
+  const type = req.params.type;
+  const formData = req.body;
+  let [message, statusCode] = [];
+
+  switch (type) {
+    case "journalpapers":
+      [message, statusCode] = await insertintoTable(
+        "JournalPapers",
+        [formData.journalData],
+        res
+      );
+      await insertAuthors(formData.authorData);
+      res.status(statusCode).json({ message: message });
+      break;
+
+    case "conferencepapers":
+      [message, statusCode] = await insertintoTable(
+        "JournalPapers",
+        [formData.journalData],
+        res
+      );
+      let [message2, statusCode2] = await insertintoTable(
+        "ConferencePapers",
+        [formData.conferenceData],
+        res
+      );
+
+      if (statusCode2 === 500 || statusCode === 500)
+        res.status(500).json({
+          message: {
+            journal: message,
+            conference: message2,
+          },
+        });
+      else
+        res.status(200).json({
+          message: {
+            journal: message,
+            conference: message2,
+          },
+        });
+
+      await insertAuthors(formData.authorData);
+      break;
+
+    case "patents":
+      break;
+
+    case "books":
+      break;
+
+    default:
+      return;
+  }
 });
 
 // Read from any table (Select)
@@ -218,10 +235,10 @@ async function insertAuthors(authorFormData) {
       .select()
       .then((response) => {
         const { data, error } = response;
-        if (error) console.error("Error inserting data:", error.message);
+        if (error) throw new Error("Error inserting data:" + error.message);
         else console.log("Data inserted successfully:", data);
       })
-      .catch((error) => console.error("Error:", error.message));
+      .catch((error) => console.error("Error:", error));
 
   if (OutsideAuthors)
     supabase
@@ -230,8 +247,8 @@ async function insertAuthors(authorFormData) {
       .select()
       .then((response) => {
         const { data, error } = response;
-        if (error) console.error("Error inserting data:", error.message);
+        if (error) throw new Error("Error inserting data:" + error.message);
         else console.log("Data inserted successfully:", data);
       })
-      .catch((error) => console.error("Error:", error.message));
+      .catch((error) => console.error("Error:", error));
 }
