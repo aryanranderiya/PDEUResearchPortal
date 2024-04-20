@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   Input,
-  Checkbox,
   Button,
   Textarea,
   RadioGroup,
@@ -37,7 +36,7 @@ export default function Form1({ is_conference = false }) {
     Created_By: localStorage.getItem("userId"),
   });
 
-  const [authorDataPDEU, setauthorData] = React.useState([{}]);
+  const [authorData, setauthorData] = React.useState([]);
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
     DOI: "",
@@ -49,12 +48,12 @@ export default function Form1({ is_conference = false }) {
   });
 
   React.useEffect(() => {
-    console.log({
-      journalData: formData,
-      conferenceData: conferenceFormData,
-      authorData: authorDataPDEU,
-    });
-  }, [formData, conferenceFormData, authorDataPDEU]);
+    // console.log({
+    //   journalData: formData,
+    //   conferenceData: conferenceFormData,
+    //   authorData: authorData,
+    // });
+  }, [formData, conferenceFormData, authorData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +70,7 @@ export default function Form1({ is_conference = false }) {
           body: JSON.stringify({
             journalData: formData,
             conferenceData: conferenceFormData,
-            authorDataPDEU: authorDataPDEU,
+            authorData: authorData,
           }),
         }
       );
@@ -264,22 +263,10 @@ export default function Form1({ is_conference = false }) {
         />
 
         <PDEUAuthors
-          authorData={authorDataPDEU}
+          formDataDOI={formData.DOI}
           setauthorData={setauthorData}
+          authorData={authorData}
         />
-
-        <div className="flex max-w-5xl gap-2 items-center">
-          <Input
-            size="sm"
-            type="text"
-            label="Author outside of PDEU"
-            variant="faded"
-            className="max-w-5xl"
-          />
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
-          <Button color="primary">Add</Button>
-        </div>
 
         {is_conference ? (
           <>

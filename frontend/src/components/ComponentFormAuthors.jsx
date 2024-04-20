@@ -4,28 +4,94 @@ import {
   AutocompleteItem,
   Button,
   Autocomplete,
+  Input,
 } from "@nextui-org/react";
 
-export default function PDEUAuthors({ authorData, setauthorData }) {
+export default function PDEUAuthors({
+  formDataDOI,
+  setauthorData,
+  authorData,
+}) {
   const [users, setUsers] = React.useState([{ user: "none" }]);
 
-  const [authorInputFields, setAuthorInputFields] = React.useState([[]]);
+  const [AuthorPDEUInputs, setAuthorPDEUInputs] = React.useState([[]]);
+  const [AuthorOtherInputs, setAuthorOtherInputs] = React.useState([[]]);
 
-  const handleInputFieldAdd = () => {
-    setAuthorInputFields([...authorInputFields, []]);
-  };
+  const handleAuthorInputAddOther = () =>
+    setAuthorOtherInputs([...AuthorOtherInputs, []]);
 
-  const handleInputFieldRemove = (index) => {
-    const list = [...authorInputFields];
+  const handleAuthorInputAddPDEU = () =>
+    setAuthorPDEUInputs([...AuthorPDEUInputs, []]);
+
+  const handleAuthorInputRemovePDEU = (index) => {
+    const list = [...AuthorPDEUInputs];
     list.splice(index, 1);
-    setAuthorInputFields(list);
+    setAuthorPDEUInputs(list);
   };
 
-  const handleInputFieldsChange = (value, index) => {
-    const list = [...authorInputFields];
+  const handleAuthorInputRemoveOther = (index) => {
+    const list = [...AuthorOtherInputs];
+    list.splice(index, 1);
+    setAuthorOtherInputs(list);
+  };
+
+  React.useEffect(() => {
+    if (formDataDOI) {
+      console.log("authorData", authorData);
+
+      for (let category in authorData) {
+        for (let authorIndex in authorData[category]) {
+          authorData[category][authorIndex].DOI = formDataDOI;
+        }
+      }
+    }
+  }, [authorData, formDataDOI]);
+
+  const handleAuthorInputChangePDEU = (value, index) => {
+    const list = [...AuthorPDEUInputs];
     list[index] = value;
-    setAuthorInputFields(list);
-    setauthorData((prevData) => ({ ...prevData, [index]: users[value].name }));
+    setAuthorPDEUInputs(list);
+
+    if (value !== "" && users[value] && users[value].id)
+      setauthorData((prevData) => ({
+        ...prevData,
+        PDEUAuthors: {
+          ...prevData.PDEUAuthors,
+          [index]: { DOI: formDataDOI, id: users[value].id },
+        },
+      }));
+    else
+      setauthorData((prevData) => ({
+        ...prevData,
+        PDEUAuthors: {
+          ...prevData.PDEUAuthors,
+          [index]: { DOI: formDataDOI, id: null },
+        },
+      }));
+  };
+
+  const handleAuthorInputChangeOther = (value, index) => {
+    const list = [...AuthorOtherInputs];
+    list[index] = value;
+    setAuthorOtherInputs(list);
+
+    if (value !== "")
+      setauthorData((prevData) => ({
+        ...prevData,
+
+        OutsideAuthors: {
+          ...prevData.OutsideAuthors,
+          [index]: { DOI: formDataDOI, Author_Name: value },
+        },
+      }));
+    else
+      setauthorData((prevData) => ({
+        ...prevData,
+        OutsideAuthors: {
+          ...prevData.OutsideAuthors,
+          [index]: { DOI: formDataDOI, Author_Name: null },
+        },
+      }));
   };
 
   React.useEffect(() => {
@@ -50,7 +116,7 @@ export default function PDEUAuthors({ authorData, setauthorData }) {
 
   return (
     <>
-      {authorInputFields.map((value, index) => (
+      {AuthorPDEUInputs.map((value, index) => (
         <div key={index} className="flex max-w-5xl gap-2 items-center">
           <Autocomplete
             label="Author from PDEU"
@@ -58,11 +124,11 @@ export default function PDEUAuthors({ authorData, setauthorData }) {
             size="sm"
             variant="faded"
             isRequired
-            onSelectionChange={(e) => handleInputFieldsChange(e, index)}
-            defaultSelectedKey={authorInputFields[index]}
+            onSelectionChange={(e) => handleAuthorInputChangePDEU(e, index)}
+            defaultSelectedKey={AuthorPDEUInputs[index]}
           >
             {users.map((user, index) => (
-              <AutocompleteItem key={index} value={user.name}>
+              <AutocompleteItem key={index} value={user.id || ""}>
                 {user.name}
               </AutocompleteItem>
             ))}
@@ -70,21 +136,54 @@ export default function PDEUAuthors({ authorData, setauthorData }) {
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
 
-          {authorInputFields.length !== users.length && (
+          {AuthorPDEUInputs.length !== users.length && (
             <Button
               color="primary"
               id="addAuthor"
-              onClick={handleInputFieldAdd}
+              onClick={handleAuthorInputAddPDEU}
             >
               Add
             </Button>
           )}
-          {authorInputFields.length !== 1 && (
+          {AuthorPDEUInputs.length !== 1 && (
             <Button
               isIconOnly
               color="danger"
               aria-label="Remove"
-              onClick={() => handleInputFieldRemove(index)}
+              onClick={() => handleAuthorInputRemovePDEU(index)}
+            >
+              <span className="material-symbols-rounded">close</span>
+            </Button>
+          )}
+        </div>
+      ))}
+
+      {AuthorOtherInputs.map((value, index) => (
+        <div key={index} className="flex max-w-5xl gap-2 items-center">
+          <Input
+            size="sm"
+            type="text"
+            label="Author outside of PDEU"
+            variant="faded"
+            className="max-w-5xl"
+            onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+          />
+          <Checkbox>First</Checkbox>
+          <Checkbox>Corresponding</Checkbox>
+          <Button
+            color="primary"
+            id="addAuthor"
+            onClick={handleAuthorInputAddOther}
+          >
+            Add
+          </Button>
+
+          {AuthorOtherInputs.length !== 1 && (
+            <Button
+              isIconOnly
+              color="danger"
+              aria-label="Remove"
+              onClick={() => handleAuthorInputRemoveOther(index)}
             >
               <span className="material-symbols-rounded">close</span>
             </Button>
