@@ -30,7 +30,7 @@ export default function ViewFormTable({ type, url }) {
   const [columns, setColumns] = React.useState([{ key: "" }]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadingText, setloadingText] = React.useState("Loading...");
-  const [btnsViewEditEnable, setbtnsViewEditEnable] = React.useState(true);
+  const [btnsEditEnable, setbtnsEditEnable] = React.useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -61,6 +61,7 @@ export default function ViewFormTable({ type, url }) {
 
       case "books":
         table_name = "Books";
+        columns = "DOI,Book_Title,Book_Type,Publisher_name,Book_Publish_Date";
         break;
 
       default:
@@ -94,8 +95,32 @@ export default function ViewFormTable({ type, url }) {
     }
   };
 
+  const fetchDesignation = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/select`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          table_name: "Employee",
+          columns: "designation",
+          where: ["id", localStorage.getItem("userId")],
+        }),
+      });
+
+      const designationResponseJson = await response.json();
+      if (!response.ok) throw new Error(designationResponseJson.error);
+      if (designationResponseJson[0].designation !== "Employee")
+        setbtnsEditEnable(true);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+    }
+  };
+
   React.useEffect(() => {
     fetchData();
+    fetchDesignation();
   }, [type]);
 
   return (
@@ -139,7 +164,6 @@ export default function ViewFormTable({ type, url }) {
                 startContent={
                   <span className="material-symbols-rounded">visibility</span>
                 }
-                disabled={btnsViewEditEnable}
                 color="primary"
                 size="sm"
                 onPress={() => navigate(`${url}?id=${item.DOI}`)}
@@ -154,7 +178,7 @@ export default function ViewFormTable({ type, url }) {
                 startContent={
                   <span className="material-symbols-rounded">edit</span>
                 }
-                disabled={btnsViewEditEnable}
+                isDisabled={btnsEditEnable}
                 color="danger"
                 size="sm"
               >

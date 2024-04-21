@@ -13,8 +13,13 @@ import ThemeContext from "../contexts/ThemeContext";
 const viewItems = [
   {
     key: "/home",
-    label: "Home",
+    label: "Dashboard",
     icon: <span class="material-symbols-rounded">home</span>,
+  },
+  {
+    key: "/home/analytics",
+    label: "Analytics",
+    icon: <span class="material-symbols-rounded">monitoring</span>,
   },
   {
     key: "/home/journalpapers",

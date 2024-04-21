@@ -5,6 +5,7 @@ import Form2 from "../components/FormAddBook";
 import Form3 from "../components/FormAddPatent";
 import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
+import ComponentAnalyticsTable from "../components/ComponentAnalyticsTable";
 import { useNavigate } from "react-router-dom";
 import { Button, Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
@@ -25,6 +26,7 @@ export function DefaultCards() {
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ userId: localStorage.getItem("userId") }),
         });
 
         if (!response.ok) throw new Error(response.error);
@@ -200,6 +202,19 @@ export function ViewItems({ type }) {
         </Button>
       </div>
       <ViewFormTable type={type} url={`/home${viewPageURL}`} />
+    </div>
+  );
+}
+
+export function Analytics() {
+  return (
+    <div className="form_add">
+      <Breadcrumbs>
+        <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+        <BreadcrumbItem href={"/home/analytics"}>Analytics</BreadcrumbItem>
+      </Breadcrumbs>
+      <h1 className="title">Research Analytics</h1>
+      <ComponentAnalyticsTable />
     </div>
   );
 }

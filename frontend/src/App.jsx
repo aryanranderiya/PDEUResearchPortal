@@ -11,6 +11,7 @@ import {
   PatentForm,
   ViewItems,
   UserProfile,
+  Analytics,
 } from "./pages/Home";
 import { NextUIProvider } from "@nextui-org/react";
 
@@ -85,6 +86,8 @@ export default function App() {
                 />
               }
             />
+
+            <Route path="analytics" element={<Analytics />} />
           </Route>
           <Route path="login" element={<Login />} />
         </Routes>

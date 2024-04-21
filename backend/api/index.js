@@ -166,6 +166,7 @@ async function insertAuthors(authorFormData) {
 
 app.post("/selectcount", async (req, res) => {
   try {
+    const userId = req.body.userId;
     const tables = [
       "JournalPapers",
       "ConferencePapers",
@@ -175,10 +176,26 @@ app.post("/selectcount", async (req, res) => {
     ];
     const counts = {};
 
+    const { data: employee, error: employeeError } = await supabase
+      .from("Employee")
+      .select("designation")
+      .eq("id", userId)
+      .single();
+
+    if (employeeError) throw new Error(employeeError.message);
+
+    const designation = employee.designation;
+
     for (const table of tables) {
-      const { count, error } = await supabase
+      let query = supabase
         .from(table)
         .select("*", { count: "exact", head: true });
+
+      if (designation.toLowerCase() === "faculty")
+        query = query.eq("Created_By", userId);
+
+      const { count, error } = await query;
+
       if (error) counts[table] = 0;
       else counts[table] = count;
     }

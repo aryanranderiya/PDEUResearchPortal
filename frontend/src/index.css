@@ -21,6 +21,17 @@ code {
   font-weight: bold;
 }
 
+.table_title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.table_description {
+  font-size: 0.9em;
+  margin-top: -15px;
+  color: grey;
+}
+
 .form_add {
   padding: 5%;
   display: flex;
