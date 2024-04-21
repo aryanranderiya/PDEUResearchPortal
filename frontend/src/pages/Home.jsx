@@ -9,42 +9,70 @@ import { useNavigate } from "react-router-dom";
 import { Button, Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
 export function DefaultCards() {
+  const [dataCount, setDataCount] = React.useState({
+    Books: 0,
+    ConferencePapers: 1,
+    JournalPapers: 9,
+    Patents: 0,
+    Projects: 0,
+  });
+
+  React.useEffect(() => {
+    const fetchDataCount = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/fetchDataCount`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) throw new Error(response.error);
+        setDataCount(await response.json());
+      } catch (error) {
+        console.error("Error posting data:", error.message);
+      }
+    };
+
+    fetchDataCount();
+  }, []);
+
   return (
     <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4 overflow-scroll h-auto flex-wrap px-7">
       <CardComponent
         heading={"Journal Papers"}
-        subheading={10}
         imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
         page="./journalpapers"
         size="sm"
+        subheading={dataCount.JournalPapers}
       />
 
       <CardComponent
         heading={"Conference Papers"}
-        subheading={20}
+        subheading={dataCount.ConferencePapers}
         imagelink={"https://i.ibb.co/6WhQFpD/Seminar-pana.png"}
         page="./conferencepapers"
       />
 
       <CardComponent
         heading={"Patents"}
-        subheading={30}
+        subheading={dataCount.Patents}
         imagelink={"https://i.ibb.co/KVxTyyD/Visionary-technology-rafiki.png"}
         page="./patents"
       />
 
       <CardComponent
         heading={"Books"}
-        subheading={40}
         imagelink={"https://i.ibb.co/QjTfXVY/Library-rafiki.png"}
         page="./books"
+        subheading={dataCount.Books}
       />
 
       <CardComponent
         heading={"Projects"}
-        subheading={40}
         imagelink={"https://i.ibb.co/NVct2Fh/Online-tech-talks-amico.png"}
         page="./projects"
+        subheading={dataCount.Projects}
       />
     </div>
   );

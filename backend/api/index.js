@@ -252,3 +252,30 @@ async function insertAuthors(authorFormData) {
       })
       .catch((error) => console.error("Error:", error));
 }
+
+app.post("/fetchDataCount", async (req, res) => {
+  try {
+    const tables = [
+      "JournalPapers",
+      "ConferencePapers",
+      "Patents",
+      "Books",
+      "Projects",
+    ];
+    const counts = {};
+
+    for (const table of tables) {
+      const { count, error } = await supabase
+        .from(table)
+        .select("*", { count: "exact", head: true });
+      if (error) counts[table] = 0;
+      else counts[table] = count;
+    }
+
+    console.log("Counts:", counts);
+    res.status(200).json(counts);
+  } catch (error) {
+    console.error("Error fetching data counts:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
