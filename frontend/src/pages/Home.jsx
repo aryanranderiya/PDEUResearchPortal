@@ -6,7 +6,7 @@ import Form3 from "../components/FormAddPatent";
 import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@nextui-org/react";
+import { Button, Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
 export function DefaultCards() {
   return (
@@ -51,8 +51,17 @@ export function DefaultCards() {
 }
 
 export function ResearchForm({ title, is_conference = false }) {
+  const type = is_conference ? "conferencepapers" : "journalpapers";
+
   return (
     <div className="form_add">
+      <Breadcrumbs>
+        <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/${type}`}>
+          {title.replace("Add", "")}
+        </BreadcrumbItem>
+        <BreadcrumbItem href={`/home/${type}/add`}>Add</BreadcrumbItem>
+      </Breadcrumbs>
       <h1 className="title"> {title}</h1>
       <Form1 is_conference={is_conference} />
     </div>
@@ -62,6 +71,11 @@ export function ResearchForm({ title, is_conference = false }) {
 export function BookForm() {
   return (
     <div className="form_add">
+      <Breadcrumbs>
+        <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+        <BreadcrumbItem href={"/home/books"}>Books</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/books/add`}>Add Books</BreadcrumbItem>
+      </Breadcrumbs>
       <h1 className="title">
         Add Research Based Books, Textbooks or Literary Books
       </h1>
@@ -73,6 +87,11 @@ export function BookForm() {
 export function PatentForm() {
   return (
     <div className="form_add">
+      <Breadcrumbs>
+        <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+        <BreadcrumbItem href={"/home/patents"}>Patents</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/patents/add`}>Add Patents</BreadcrumbItem>
+      </Breadcrumbs>
       <h1 className="title">
         Add Details for Patent Applied / Filed / Published
       </h1>
@@ -89,24 +108,24 @@ export function ViewItems({ type }) {
   switch (type) {
     case "journal":
       title = "Journal Papers";
-      addPageURL = "/addJournal";
+      addPageURL = "/journalpapers/add";
       break;
 
     case "conference":
       title = "Conference Proceedings";
       shortname = "Conference Papers";
-      addPageURL = "/addConferencePaper";
+      addPageURL = "/conferencepapers/add";
       break;
 
     case "books":
       title = "Research Based Books, Textbooks or Literary Books";
       shortname = "Books";
-      addPageURL = "/addBook";
+      addPageURL = "/books/add";
       break;
 
     case "patents":
       title = "Patents";
-      addPageURL = "/addPatent";
+      addPageURL = "/patents/add";
       break;
 
     default:
@@ -117,25 +136,23 @@ export function ViewItems({ type }) {
 
   return (
     <div className="form_add">
+      <Breadcrumbs>
+        <BreadcrumbItem href="/home">Home</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/${type}`}>
+          {shortname || title}
+        </BreadcrumbItem>
+      </Breadcrumbs>
       <h1 className="title">{title}</h1>
       <Button
         color="primary"
         onClick={() => navigate(`/home${addPageURL}`)}
-        className="max-w-sm button_add_new"
+        className="button_add_new"
         startContent={<span class="material-symbols-rounded">add</span>}
+        variant="shadow"
       >
         Add {shortname || title}
       </Button>
       <ViewFormTable type={type} />
-    </div>
-  );
-}
-
-export function UserProfile() {
-  return (
-    <div className="form_add">
-      <h1 className="title"> Edit Profile</h1>
-      <FormUserProfile />
     </div>
   );
 }

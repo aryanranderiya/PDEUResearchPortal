@@ -16,12 +16,12 @@ export default function CardComponent({
 }) {
   const navigate = useNavigate();
 
-  const navigateToPage = () => {
-    navigate(page);
-  };
+  // const navigateToPage = () => {
+  //   ;
+  // };
 
   return (
-    <Card className="py-4">
+    <Card className="py-4" isPressable onPress={() => navigate(page)}>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
         <p className="text-large uppercase font-bold">{heading}</p>
         <small className="text-default-500">
@@ -38,7 +38,7 @@ export default function CardComponent({
         <Image />
       </CardBody>
       <CardFooter className="flex justify-center">
-        <Button color="primary" onClick={() => navigateToPage()}>
+        <Button color="primary" onClick={() => navigate(page)}>
           View {heading}
         </Button>
       </CardFooter>

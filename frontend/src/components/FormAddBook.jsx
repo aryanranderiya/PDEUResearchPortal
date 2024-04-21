@@ -276,7 +276,7 @@ export default function Form2() {
             Submit
           </Button>
           <Button color="default" size="md" variant="ghost">
-            Cancel
+            Clear
           </Button>
         </div>
       </div>

@@ -11,6 +11,7 @@ export default function PDEUAuthors({
   formDataDOI,
   setauthorData,
   authorData,
+  formReadOnly,
 }) {
   const [users, setUsers] = React.useState([{ user: "none" }]);
 
@@ -126,6 +127,7 @@ export default function PDEUAuthors({
             isRequired
             onSelectionChange={(e) => handleAuthorInputChangePDEU(e, index)}
             defaultSelectedKey={AuthorPDEUInputs[index]}
+            isDisabled={formReadOnly}
           >
             {users.map((user, index) => (
               <AutocompleteItem key={index} value={user.id || ""}>
@@ -141,6 +143,7 @@ export default function PDEUAuthors({
               color="primary"
               id="addAuthor"
               onClick={handleAuthorInputAddPDEU}
+              isDisabled={formReadOnly}
             >
               Add
             </Button>
@@ -151,6 +154,7 @@ export default function PDEUAuthors({
               color="danger"
               aria-label="Remove"
               onClick={() => handleAuthorInputRemovePDEU(index)}
+              isDisabled={formReadOnly}
             >
               <span className="material-symbols-rounded">close</span>
             </Button>
@@ -167,6 +171,7 @@ export default function PDEUAuthors({
             variant="faded"
             className="max-w-5xl"
             onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+            isDisabled={formReadOnly}
           />
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
@@ -174,6 +179,7 @@ export default function PDEUAuthors({
             color="primary"
             id="addAuthor"
             onClick={handleAuthorInputAddOther}
+            isDisabled={formReadOnly}
           >
             Add
           </Button>
@@ -184,6 +190,7 @@ export default function PDEUAuthors({
               color="danger"
               aria-label="Remove"
               onClick={() => handleAuthorInputRemoveOther(index)}
+              isDisabled={formReadOnly}
             >
               <span className="material-symbols-rounded">close</span>
             </Button>

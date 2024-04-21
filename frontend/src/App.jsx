@@ -12,6 +12,7 @@ import {
   ViewItems,
   UserProfile,
 } from "./pages/Home";
+import { NextUIProvider } from "@nextui-org/react";
 
 export default function App() {
   const navigate = useNavigate();
@@ -19,44 +20,51 @@ export default function App() {
   const { darkTheme } = React.useContext(ThemeContext);
 
   React.useEffect(() => {
-    if (isAuthenticated) navigate("home");
-    else navigate("login");
+    if (!isAuthenticated) navigate("/login");
+    else if (isAuthenticated && window.location.pathname === "/login")
+      navigate("/home");
   }, [isAuthenticated]);
 
   return (
-    <main
-      className={`${darkTheme} text-foreground bg-background h-screen w-screen flex overflow-hidden`}
-    >
-      {isAuthenticated && <SideBar />}
-      <Routes>
-        <Route path="home">
-          <Route index element={<DefaultCards />} />
-          <Route
-            path="addJournal"
-            element={<ResearchForm title="Add Journal Papers" />}
-          />
-          <Route
-            path="addConferencePaper"
-            element={
-              <ResearchForm
-                title="Add Conference Proceedings"
-                is_conference={true}
-              />
-            }
-          />
-          <Route path="journalpapers" element={<ViewItems type="journal" />} />
-          <Route path="patents" element={<ViewItems type="patents" />} />
-          <Route path="books" element={<ViewItems type="books" />} />
-          <Route
-            path="conferencepapers"
-            element={<ViewItems type="conference" />}
-          />
-          <Route path="addBook" element={<BookForm />} />
-          <Route path="addPatent" element={<PatentForm />} />
-          <Route path="userProfile" element={<UserProfile />} />
-        </Route>
-        <Route path="login" element={<Login />} />
-      </Routes>
-    </main>
+    <NextUIProvider navigate={navigate}>
+      <main
+        className={`${darkTheme} text-foreground bg-background h-screen w-screen flex overflow-hidden`}
+      >
+        {isAuthenticated && <SideBar />}
+        <Routes>
+          <Route path="home">
+            <Route index element={<DefaultCards />} />
+
+            <Route
+              path="journalpapers"
+              element={<ViewItems type="journal" />}
+            />
+            <Route path="patents" element={<ViewItems type="patents" />} />
+            <Route path="books" element={<ViewItems type="books" />} />
+            <Route
+              path="conferencepapers"
+              element={<ViewItems type="conference" />}
+            />
+
+            <Route path="books/add" element={<BookForm />} />
+            <Route path="patents/add" element={<PatentForm />} />
+            <Route
+              path="journalpapers/add"
+              element={<ResearchForm title="Add Journal Papers" />}
+            />
+            <Route
+              path="conferencepapers/add"
+              element={
+                <ResearchForm
+                  title="Add Conference Proceedings"
+                  is_conference={true}
+                />
+              }
+            />
+          </Route>
+          <Route path="login" element={<Login />} />
+        </Routes>
+      </main>
+    </NextUIProvider>
   );
 }

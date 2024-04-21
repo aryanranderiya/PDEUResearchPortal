@@ -26,10 +26,10 @@ export default function Form1({ is_conference = false }) {
     Quartile: "",
     Journal_Indexed: "",
     Publisher_Name: "",
-    Volume: undefined,
-    Issue: undefined,
-    Page_start: undefined,
-    Page_end: undefined,
+    Volume: "",
+    Issue: "",
+    Page_start: null,
+    Page_end: null,
     Publish_date: "",
     ISSN: "",
     DOI: "",
@@ -88,6 +88,8 @@ export default function Form1({ is_conference = false }) {
     onOpen();
   };
 
+  const [formReadOnly, setformReadOnly] = React.useState(false);
+
   return (
     <form onSubmit={handleSubmit}>
       <FormAddedModal
@@ -101,6 +103,7 @@ export default function Form1({ is_conference = false }) {
 
       <div className="main_form">
         <Input
+          isDisabled={formReadOnly}
           size="sm"
           type="text"
           label="Paper Title"
@@ -120,6 +123,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Abstract: value })
           }
+          isDisabled={formReadOnly}
         />
 
         <Input
@@ -133,6 +137,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Journal_Name: value })
           }
+          isDisabled={formReadOnly}
         />
 
         <RadioGroup
@@ -140,6 +145,7 @@ export default function Form1({ is_conference = false }) {
           orientation="horizontal"
           value={quartiles[formData.Quartile]}
           onValueChange={(e) => setformData({ ...formData, Quartile: e })}
+          isDisabled={formReadOnly}
         >
           {quartiles.map((quartile, index) => (
             <Radio key={index} value={quartile}>
@@ -155,6 +161,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(e) =>
             setformData({ ...formData, Journal_Indexed: e })
           }
+          isDisabled={formReadOnly}
         >
           {journal_indexed.map((journal, index) => (
             <Radio key={index} value={journal}>
@@ -174,6 +181,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Publisher_Name: value })
           }
+          isDisabled={formReadOnly}
         />
         <div className="flex max-w-5xl gap-2">
           <Input
@@ -186,6 +194,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Volume: value })
             }
+            isDisabled={formReadOnly}
           />
           <Input
             size="sm"
@@ -197,6 +206,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Issue: value })
             }
+            isDisabled={formReadOnly}
           />
         </div>
 
@@ -207,10 +217,11 @@ export default function Form1({ is_conference = false }) {
             label="Page Start"
             variant="faded"
             className="max-w-5xl"
-            value={formData.Page_start}
+            value={formData.Page_start || ""}
             onValueChange={(value) =>
               setformData({ ...formData, Page_start: value })
             }
+            isDisabled={formReadOnly}
           />
           <Input
             size="sm"
@@ -218,10 +229,11 @@ export default function Form1({ is_conference = false }) {
             label="Page End"
             variant="faded"
             className="max-w-5xl"
-            value={formData.Page_end}
+            value={formData.Page_end || ""}
             onValueChange={(value) =>
               setformData({ ...formData, Page_end: value })
             }
+            isDisabled={formReadOnly}
           />
         </div>
 
@@ -236,6 +248,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Publish_date: value })
           }
+          isDisabled={formReadOnly}
         />
 
         <Input
@@ -247,6 +260,7 @@ export default function Form1({ is_conference = false }) {
           isRequired
           value={formData.ISSN}
           onValueChange={(value) => setformData({ ...formData, ISSN: value })}
+          isDisabled={formReadOnly}
         />
         <Input
           size="sm"
@@ -260,12 +274,14 @@ export default function Form1({ is_conference = false }) {
             setformData({ ...formData, DOI: value });
             setConferenceFormData({ ...conferenceFormData, DOI: value });
           }}
+          isDisabled={formReadOnly}
         />
 
         <PDEUAuthors
           formDataDOI={formData.DOI}
           setauthorData={setauthorData}
           authorData={authorData}
+          formReadOnly={formReadOnly}
         />
 
         {is_conference ? (
@@ -284,6 +300,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Name: value,
                 })
               }
+              isDisabled={formReadOnly}
             />
             <Input
               size="sm"
@@ -299,6 +316,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Date: value,
                 })
               }
+              isDisabled={formReadOnly}
             />
             <Input
               size="sm"
@@ -314,6 +332,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_City: value,
                 })
               }
+              isDisabled={formReadOnly}
             />
 
             <RadioGroup
@@ -326,6 +345,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Level: e,
                 })
               }
+              isDisabled={formReadOnly}
             >
               {levels.map((level, index) => (
                 <Radio key={index} value={level}>
@@ -339,11 +359,48 @@ export default function Form1({ is_conference = false }) {
         )}
 
         <div className="flex max-w-5xl gap-2 items-center justify-center">
-          <Button color="primary" size="md" type="submit">
+          <Button
+            color="primary"
+            size="md"
+            type="submit"
+            isDisabled={formReadOnly}
+          >
             Submit
           </Button>
-          <Button color="default" size="md" variant="ghost">
-            Cancel
+          <Button
+            color="default"
+            size="md"
+            variant="ghost"
+            isDisabled={formReadOnly}
+            onClick={() => {
+              setformData({
+                Title: "",
+                Abstract: "",
+                Journal_Name: "",
+                Quartile: "",
+                Journal_Indexed: "",
+                Publisher_Name: "",
+                Volume: "",
+                Issue: "",
+                Page_start: null,
+                Page_end: null,
+                Publish_date: "",
+                ISSN: "",
+                DOI: "",
+                Created_By: localStorage.getItem("userId"),
+              });
+              setConferenceFormData({
+                DOI: "",
+                Conference_Name: "",
+                Conference_Date: "",
+                Conference_City: "",
+                Conference_Level: "",
+                Created_By: localStorage.getItem("userId"),
+              });
+              setauthorData([]);
+            }}
+          >
+            Clear
           </Button>
         </div>
       </div>

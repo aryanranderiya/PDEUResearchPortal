@@ -51,7 +51,7 @@ code {
 }
 
 .sidebar {
-  background-color: rgba(216, 216, 216, 0.1);
+  background-color: rgba(156, 155, 172, 0.1);
 }
 
 .listbox1 li,
@@ -68,7 +68,9 @@ code {
 }
 
 .button_add_new {
-  min-height: 45px;
+  min-height: 40px;
+  min-width: 100px;
+  width: fit-content;
 }
 
 .button_width {
