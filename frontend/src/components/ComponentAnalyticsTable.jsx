@@ -66,10 +66,12 @@ function ComponentTable({ title, description, timePeriod = null }) {
             </div>
             <span className="table_description">
               {description}
-              <i>
-                {new Date(Date.now() - timePeriod).toDateString()}
-                &nbsp;— Today
-              </i>
+              {timePeriod !== null && (
+                <i>
+                  {new Date(Date.now() - timePeriod).toDateString()}
+                  &nbsp;— Today
+                </i>
+              )}
             </span>
           </>
         }

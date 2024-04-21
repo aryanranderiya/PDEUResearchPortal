@@ -166,7 +166,7 @@ async function insertAuthors(authorFormData) {
 app.post("/selectcount", async (req, res) => {
   try {
     const userId = req.body.userId;
-    const timePeriod = req.body.timePeriod || 9999999999999 * 1000;
+    const timePeriod = req.body.timePeriod;
 
     console.log("timePeriod", timePeriod);
 
@@ -192,8 +192,13 @@ app.post("/selectcount", async (req, res) => {
     for (const table of tables) {
       let query = supabase
         .from(table)
-        .select("*", { count: "exact", head: true })
-        .gte("Created_Date", new Date(Date.now() - timePeriod).toISOString());
+        .select("*", { count: "exact", head: true });
+
+      if (timePeriod !== null)
+        query = query.gte(
+          "Created_Date",
+          new Date(Date.now() - timePeriod).toISOString()
+        );
 
       if (designation.toLowerCase() === "faculty")
         query = query.eq("Created_By", userId);
