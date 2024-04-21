@@ -96,11 +96,16 @@ export default function PDEUAuthors({
   React.useEffect(() => {
     const fetchUsernames = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/fetchusernames`, {
+        const response = await fetch(`http://localhost:5000/select`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            userId: localStorage.getItem("userId"),
+            table_name: "Employee",
+            columns: "id,name",
+          }),
         });
 
         if (!response.ok) throw new Error(response.error);
@@ -133,8 +138,6 @@ export default function PDEUAuthors({
               </AutocompleteItem>
             ))}
           </Autocomplete>
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
 
           {AuthorPDEUInputs.length !== users.length && (
             <Button
@@ -171,8 +174,6 @@ export default function PDEUAuthors({
             onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
             isDisabled={formReadOnly}
           />
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
           <Button
             color="primary"
             id="addAuthor"

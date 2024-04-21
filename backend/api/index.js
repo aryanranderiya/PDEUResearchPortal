@@ -26,10 +26,6 @@ app.listen(port, () => {
   console.log(`> Ready on http://localhost:${port}`);
 });
 
-app.get("/hey", async (req, res) => {
-  res.send("<h1>Hello World!</h1>");
-});
-
 app.post("/login", cors(corsOptions), async (req, res) => {
   const { email, password } = req.body;
 
@@ -55,48 +51,74 @@ app.post("/login", cors(corsOptions), async (req, res) => {
 });
 
 // Select data based on the type
-app.post("/select/:type", cors(corsOptions), async (req, res) => {
-  const type = req.params.type;
-  const userId = req.body.userId;
+app.post("/select", cors(corsOptions), async (req, res) => {
+  const columns = req.body.columns || "*";
+  const table_name = req.body.table_name;
+  const where = req.body.where || [];
 
-  let table_name = undefined;
-  let columns = undefined;
+  let query = supabase.from(table_name).select(columns);
+  if (where.length > 0) query = query.eq(where[0], where[1]);
+
+  const { data, error } = await query;
+  if (!error) {
+    console.log("Successfully read from ", table_name);
+    res.status(200).json(data);
+  } else {
+    console.error("Could not read from ", table_name, error);
+    res.status(404).json({ error: `Could not Fetch ${table_name} Data` });
+  }
+});
+
+// Select data based on the type
+app.post("/insert/", cors(corsOptions), async (req, res) => {
+  const type = req.body.type;
+  const formData = req.body;
+  let message = "";
+  let statusCode = 200;
 
   switch (type) {
-    case "journal":
-      table_name = "JournalPapers";
-      columns = "DOI,Title,Journal_Indexed,Publish_date";
+    case "journalpapers":
+      [message, statusCode] = await insertintoTable(
+        "JournalPapers",
+        [formData.journalData],
+        res
+      );
       break;
 
-    case "conference":
-      table_name = "ConferencePapers";
-      columns =
-        "DOI,Conference_Name,JournalPapers(Title,Journal_Indexed,Publish_date)";
+    case "conferencepapers":
+      const [conferenceMessage1, conferenceStatus1] = await insertintoTable(
+        "JournalPapers",
+        [formData.journalData],
+        res
+      );
+
+      const [conferenceMessage2, conferenceStatus2] = await insertintoTable(
+        "ConferencePapers",
+        [formData.conferenceData],
+        res
+      );
+
+      message = conferenceMessage1 + conferenceMessage2;
+      if (conferenceStatus1 === 500 || conferenceStatus2 === 500)
+        statusCode = 500;
+
+      await insertAuthors(formData.authorData);
       break;
 
     case "patents":
-      table_name = "Patents";
-      columns = "";
       break;
 
     case "books":
-      table_name = "Books";
-      columns = "";
       break;
 
     default:
       return;
   }
-
-  let result = await readFromTable(table_name, columns, userId);
-
-  if (result[0]) res.status(200).json(result[1]);
-  else res.status(404).json({ error: `Could not Fetch ${table_name} Data` });
+  await insertAuthors(formData.authorData);
+  res.status(statusCode).json({ message: message });
 });
 
 async function insertintoTable(table_name, form_data, res) {
-  console.log("CALLED INSERT INTO TABLE METHOD");
-
   try {
     const { data, error } = await supabase
       .from(table_name)
@@ -112,117 +134,6 @@ async function insertintoTable(table_name, form_data, res) {
     return [`Could not Insert into ${table_name}:  ${error}`, 500];
   }
 }
-
-// Select data based on the type
-app.post("/insert/:type", cors(corsOptions), async (req, res) => {
-  const type = req.params.type;
-  const formData = req.body;
-  let [message, statusCode] = [];
-
-  switch (type) {
-    case "journalpapers":
-      [message, statusCode] = await insertintoTable(
-        "JournalPapers",
-        [formData.journalData],
-        res
-      );
-      await insertAuthors(formData.authorData);
-      res.status(statusCode).json({ message: message });
-      break;
-
-    case "conferencepapers":
-      [message, statusCode] = await insertintoTable(
-        "JournalPapers",
-        [formData.journalData],
-        res
-      );
-      let [message2, statusCode2] = await insertintoTable(
-        "ConferencePapers",
-        [formData.conferenceData],
-        res
-      );
-
-      if (statusCode2 === 500 || statusCode === 500)
-        res.status(500).json({
-          message: {
-            journal: message,
-            conference: message2,
-          },
-        });
-      else
-        res.status(200).json({
-          message: {
-            journal: message,
-            conference: message2,
-          },
-        });
-
-      await insertAuthors(formData.authorData);
-      break;
-
-    case "patents":
-      break;
-
-    case "books":
-      break;
-
-    default:
-      return;
-  }
-});
-
-// Read from any table (Select)
-async function readFromTable(table_name, columns = "*", userId, where = []) {
-  let query = supabase
-    .from(table_name)
-    .select(columns)
-    .eq("Created_By", userId);
-
-  if (where.length > 0) {
-    query = query.eq(where[0], where[1]);
-  }
-
-  const { data, error } = await query;
-
-  if (!error) {
-    console.log("\nRead Successfull.", table_name, data, "\n");
-    return [true, data];
-  } else {
-    console.log("Read Error.", table_name, error);
-    return [false, error];
-  }
-}
-
-// User information display in sidebar
-app.post("/userinfo", cors(corsOptions), async (req, res) => {
-  const userId = req.body.userId;
-
-  let { data, error } = await supabase
-    .from("Employee")
-    .select("*")
-    .eq("id", userId);
-
-  if (!error) {
-    console.log("Reading User Data from Employee Successfull.", data);
-    res.json(data);
-  } else {
-    console.log("Read Error.", error);
-    res.status(500).json({ error: "Could not Select from Employee" });
-  }
-});
-
-// Fetch all the usernames for author select in form
-app.post("/fetchusernames", cors(corsOptions), async (req, res) => {
-  let { data, error } = await supabase.from("Employee").select("id,name");
-
-  if (!error) {
-    console.log("Reading User Data from Employee Successfull.", data);
-    res.status(200).json(data);
-  } else {
-    console.log("Read Error.", error);
-    res.status(500).json({ error: "Could not Select from Employee" });
-  }
-});
 
 async function insertAuthors(authorFormData) {
   const PDEUAuthors = Object.values(authorFormData.PDEUAuthors) || null;
@@ -253,7 +164,7 @@ async function insertAuthors(authorFormData) {
       .catch((error) => console.error("Error:", error));
 }
 
-app.post("/fetchDataCount", async (req, res) => {
+app.post("/selectcount", async (req, res) => {
   try {
     const tables = [
       "JournalPapers",

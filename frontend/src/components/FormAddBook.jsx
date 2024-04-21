@@ -81,8 +81,6 @@ export default function Form2() {
     DOI: "",
     PDEU_Author: "",
     Outside_Author: "",
-    First: false,
-    Corresponding: false,
   });
 
   const handleChange = (field, value) => {
@@ -244,18 +242,6 @@ export default function Form2() {
             ))}
           </Autocomplete>
           <Button color="primary">Add</Button>
-          <Checkbox
-            checked={formData.First}
-            onChange={(e) => handleChange("First", e.target.checked)}
-          >
-            First
-          </Checkbox>
-          <Checkbox
-            checked={formData.Corresponding}
-            onChange={(e) => handleChange("Corresponding", e.target.checked)}
-          >
-            Corresponding
-          </Checkbox>
         </div>
 
         <div className="flex max-w-5xl gap-2 items-center">
@@ -267,8 +253,6 @@ export default function Form2() {
             className="max-w-5xl"
           />
           <Button color="primary">Add</Button>
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
         </div>
 
         <div className="flex max-w-5xl gap-2 items-center justify-center">

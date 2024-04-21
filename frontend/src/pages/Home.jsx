@@ -20,7 +20,7 @@ export function DefaultCards() {
   React.useEffect(() => {
     const fetchDataCount = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/fetchDataCount`, {
+        const response = await fetch(`http://localhost:5000/selectcount`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -78,8 +78,17 @@ export function DefaultCards() {
   );
 }
 
-export function ResearchForm({ title, is_conference = false }) {
+export function ResearchForm({
+  title,
+  is_conference = false,
+  formReadOnly = true,
+}) {
   const type = is_conference ? "conferencepapers" : "journalpapers";
+  const addorview = formReadOnly ? "view" : "add";
+
+  React.useEffect(() => {
+    console.log("addorview", addorview);
+  }, [title]);
 
   return (
     <div className="form_add">
@@ -88,10 +97,13 @@ export function ResearchForm({ title, is_conference = false }) {
         <BreadcrumbItem href={`/home/${type}`}>
           {title.replace("Add", "")}
         </BreadcrumbItem>
-        <BreadcrumbItem href={`/home/${type}/add`}>Add</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/${type}/${addorview}`}>
+          {addorview.charAt(0).toUpperCase()}
+          {addorview.slice(1)}
+        </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title"> {title}</h1>
-      <Form1 is_conference={is_conference} />
+      <Form1 is_conference={is_conference} formReadOnly={formReadOnly} />
     </div>
   );
 }
@@ -132,28 +144,33 @@ export function ViewItems({ type }) {
   let title = "Title";
   let shortname = null;
   let addPageURL = "home";
+  let viewPageURL = "home";
 
   switch (type) {
     case "journal":
       title = "Journal Papers";
       addPageURL = "/journalpapers/add";
+      viewPageURL = "/journalpapers/view";
       break;
 
     case "conference":
       title = "Conference Proceedings";
       shortname = "Conference Papers";
       addPageURL = "/conferencepapers/add";
+      viewPageURL = "/conferencepapers/view";
       break;
 
     case "books":
       title = "Research Based Books, Textbooks or Literary Books";
       shortname = "Books";
       addPageURL = "/books/add";
+      viewPageURL = "/books/view";
       break;
 
     case "patents":
       title = "Patents";
       addPageURL = "/patents/add";
+      viewPageURL = "/patents/view";
       break;
 
     default:
@@ -171,16 +188,18 @@ export function ViewItems({ type }) {
         </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title">{title}</h1>
-      <Button
-        color="primary"
-        onClick={() => navigate(`/home${addPageURL}`)}
-        className="button_add_new"
-        startContent={<span class="material-symbols-rounded">add</span>}
-        variant="shadow"
-      >
-        Add {shortname || title}
-      </Button>
-      <ViewFormTable type={type} />
+      <div className="flex gap-2">
+        <Button
+          color="primary"
+          onClick={() => navigate(`/home${addPageURL}`)}
+          className="button_add_new"
+          startContent={<span class="material-symbols-rounded">add</span>}
+          variant="shadow"
+        >
+          Add {shortname || title}
+        </Button>
+      </div>
+      <ViewFormTable type={type} url={`/home${viewPageURL}`} />
     </div>
   );
 }

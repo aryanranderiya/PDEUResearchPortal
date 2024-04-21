@@ -10,11 +10,12 @@ import {
 import FormAddedModal from "./FormAddedModal";
 import PDEUAuthors from "./ComponentFormAuthors";
 
-export default function Form1({ is_conference = false }) {
+export default function Form1({ is_conference = false, formReadOnly = false }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [successfullyUploaded, setsuccessfullyUploaded] = React.useState(true);
 
   const postType = is_conference ? "conferencepapers" : "journalpapers";
+  // const table_name = is_conference ? "ConferencePapers" : "JournalPapers";
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
   const levels = ["International", "National"];
@@ -37,7 +38,6 @@ export default function Form1({ is_conference = false }) {
   });
 
   const [authorData, setauthorData] = React.useState([]);
-  const [formReadOnly, setformReadOnly] = React.useState(false);
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
     DOI: "",
@@ -56,25 +56,60 @@ export default function Form1({ is_conference = false }) {
     });
   }, [formData, conferenceFormData, authorData]);
 
+  React.useEffect(
+    () => {
+      const fetchRecordData = async () => {
+        console.log("formReadOnly", formReadOnly);
+        if (formReadOnly) {
+          try {
+            const response = await fetch(`http://localhost:5000/select`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                columns: "*",
+                table_name: "JournalPapers",
+                where: [
+                  "DOI",
+                  new URLSearchParams(window.location.search).get("id"),
+                ],
+              }),
+            });
+            if (!response.ok) throw new Error(response.error);
+            else console.log("Read Data successfully");
+            const responseJson = await response.json();
+            console.log(responseJson);
+            setformData(responseJson[0]);
+          } catch (error) {
+            console.error("Error posting data:", error.message);
+          }
+        }
+      };
+      fetchRecordData();
+    },
+    [formReadOnly],
+    []
+  );
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        // `https://pdeu-research-portal-api.vercel.app/insert/${postType}`,
-        `http://localhost:5000/insert/${postType}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+      const response = await fetch(`http://localhost:5000/insert/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: postType,
+          formData: {
             journalData: formData,
             conferenceData: conferenceFormData,
             authorData: authorData,
-          }),
-        }
-      );
+          },
+        }),
+      });
 
       if (!response.ok) throw new Error(response.error);
       else {
@@ -102,7 +137,7 @@ export default function Form1({ is_conference = false }) {
 
       <div className="main_form">
         <Input
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
           size="sm"
           type="text"
           label="Paper Title"
@@ -122,7 +157,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Abstract: value })
           }
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
 
         <Input
@@ -136,15 +171,15 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Journal_Name: value })
           }
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
 
         <RadioGroup
           label="Quartile"
           orientation="horizontal"
-          value={quartiles[formData.Quartile]}
+          value={formData.Quartile}
           onValueChange={(e) => setformData({ ...formData, Quartile: e })}
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         >
           {quartiles.map((quartile, index) => (
             <Radio key={index} value={quartile}>
@@ -156,11 +191,11 @@ export default function Form1({ is_conference = false }) {
         <RadioGroup
           label="Journal Indexed"
           orientation="horizontal"
-          value={journal_indexed[formData.Journal_Indexed]}
+          value={formData.Journal_Indexed}
           onValueChange={(e) =>
             setformData({ ...formData, Journal_Indexed: e })
           }
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         >
           {journal_indexed.map((journal, index) => (
             <Radio key={index} value={journal}>
@@ -180,7 +215,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Publisher_Name: value })
           }
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
         <div className="flex max-w-5xl gap-2">
           <Input
@@ -193,7 +228,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Volume: value })
             }
-            isDisabled={formReadOnly}
+            isReadOnly={formReadOnly}
           />
           <Input
             size="sm"
@@ -205,7 +240,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Issue: value })
             }
-            isDisabled={formReadOnly}
+            isReadOnly={formReadOnly}
           />
         </div>
 
@@ -220,7 +255,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Page_start: value })
             }
-            isDisabled={formReadOnly}
+            isReadOnly={formReadOnly}
           />
           <Input
             size="sm"
@@ -232,7 +267,7 @@ export default function Form1({ is_conference = false }) {
             onValueChange={(value) =>
               setformData({ ...formData, Page_end: value })
             }
-            isDisabled={formReadOnly}
+            isReadOnly={formReadOnly}
           />
         </div>
 
@@ -247,7 +282,7 @@ export default function Form1({ is_conference = false }) {
           onValueChange={(value) =>
             setformData({ ...formData, Publish_date: value })
           }
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
 
         <Input
@@ -259,7 +294,7 @@ export default function Form1({ is_conference = false }) {
           isRequired
           value={formData.ISSN}
           onValueChange={(value) => setformData({ ...formData, ISSN: value })}
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
         <Input
           size="sm"
@@ -273,7 +308,7 @@ export default function Form1({ is_conference = false }) {
             setformData({ ...formData, DOI: value });
             setConferenceFormData({ ...conferenceFormData, DOI: value });
           }}
-          isDisabled={formReadOnly}
+          isReadOnly={formReadOnly}
         />
 
         <PDEUAuthors
@@ -299,7 +334,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Name: value,
                 })
               }
-              isDisabled={formReadOnly}
+              isReadOnly={formReadOnly}
             />
             <Input
               size="sm"
@@ -315,7 +350,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Date: value,
                 })
               }
-              isDisabled={formReadOnly}
+              isReadOnly={formReadOnly}
             />
             <Input
               size="sm"
@@ -331,7 +366,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_City: value,
                 })
               }
-              isDisabled={formReadOnly}
+              isReadOnly={formReadOnly}
             />
 
             <RadioGroup
@@ -344,7 +379,7 @@ export default function Form1({ is_conference = false }) {
                   Conference_Level: e,
                 })
               }
-              isDisabled={formReadOnly}
+              isReadOnly={formReadOnly}
             >
               {levels.map((level, index) => (
                 <Radio key={index} value={level}>

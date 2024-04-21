@@ -46,7 +46,6 @@ export default function PatentPIs({
   const handlePIInputChangePDEU = (value, index) => {
     const list = [...PIPDEUInputs];
     list[index] = value;
-    console.log("list", list);
     setPIPDEUInputs(list);
 
     if (value !== "" && users[value] && users[value].id)
@@ -141,8 +140,6 @@ export default function PatentPIs({
               </AutocompleteItem>
             ))}
           </Autocomplete>
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
 
           {PIPDEUInputs.length !== users.length && (
             <Button
@@ -180,8 +177,6 @@ export default function PatentPIs({
             onValueChange={(e) => handlePIInputChangeOther(e, index)}
             isDisabled={formReadOnly}
           />
-          <Checkbox>First</Checkbox>
-          <Checkbox>Corresponding</Checkbox>
           <Button
             color="primary"
             id="addPI"

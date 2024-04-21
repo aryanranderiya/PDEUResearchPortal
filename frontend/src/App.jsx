@@ -46,17 +46,41 @@ export default function App() {
               element={<ViewItems type="conference" />}
             />
 
-            <Route path="books/add" element={<BookForm />} />
-            <Route path="patents/add" element={<PatentForm />} />
+            <Route
+              path="books/add"
+              element={<BookForm formReadOnly={false} />}
+            />
+            <Route
+              path="patents/add"
+              element={<PatentForm formReadOnly={false} />}
+            />
             <Route
               path="journalpapers/add"
-              element={<ResearchForm title="Add Journal Papers" />}
+              element={
+                <ResearchForm title="Add Journal Papers" formReadOnly={false} />
+              }
             />
             <Route
               path="conferencepapers/add"
               element={
                 <ResearchForm
                   title="Add Conference Proceedings"
+                  is_conference={true}
+                  formReadOnly={false}
+                />
+              }
+            />
+            <Route path="books/view" element={<BookForm />} />
+            <Route path="patents/view" element={<PatentForm />} />
+            <Route
+              path="journalpapers/view"
+              element={<ResearchForm title="Journal Paper" />}
+            />
+            <Route
+              path="conferencepapers/view"
+              element={
+                <ResearchForm
+                  title="Conference Proceeding"
                   is_conference={true}
                 />
               }

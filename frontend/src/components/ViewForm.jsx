@@ -11,6 +11,7 @@ import {
   Spacer,
 } from "@nextui-org/react";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 
 const flattenObject = (obj, delimiter = ".", prefix = "") =>
   Object.keys(obj).reduce((acc, k) => {
@@ -24,31 +25,59 @@ const flattenObject = (obj, delimiter = ".", prefix = "") =>
     return acc;
   }, {});
 
-export default function ViewFormTable({ type }) {
+export default function ViewFormTable({ type, url }) {
   const [data, setData] = React.useState([]);
-
   const [columns, setColumns] = React.useState([{ key: "" }]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [loadingText, setloadingText] = React.useState("Loading...");
+  const [btnsViewEditEnable, setbtnsViewEditEnable] = React.useState(true);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     setData([]);
     setColumns([{ key: "" }]);
     setIsLoading(true);
     setloadingText("Loading...");
+    let table_name = "";
+    let columns = "";
 
+    switch (type) {
+      case "journal":
+        table_name = "JournalPapers";
+        columns = "DOI,Title,Journal_Indexed,Publish_date";
+        break;
+
+      case "conference":
+        table_name = "ConferencePapers";
+        columns =
+          "DOI,Conference_Name,JournalPapers(Title,Journal_Indexed,Publish_date)";
+        break;
+
+      case "patents":
+        table_name = "Patents";
+        columns =
+          "FileApplicationNo,Status,Title,ApplicationDate,PublishedDate,GrantDate";
+        break;
+
+      case "books":
+        table_name = "Books";
+        break;
+
+      default:
+        return;
+    }
     try {
-      const response = await fetch(
-        // `https://pdeu-research-portal-api.vercel.app/select/${type}`,
-        `http://localhost:5000/select/${type}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: localStorage.getItem("userId") }),
-        }
-      );
+      const response = await fetch(`http://localhost:5000/select`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          table_name: table_name,
+          columns: columns,
+          where: ["Created_By", localStorage.getItem("userId")],
+        }),
+      });
 
       const jsonData = await response.json();
       if (!response.ok) throw new Error(jsonData.error);
@@ -71,13 +100,20 @@ export default function ViewFormTable({ type }) {
 
   return (
     <Table
-      aria-label="Example table with dynamic content"
-      selectionMode="single"
-      color="success"
+      aria-label="Table with dynamic content"
       defaultSelectedKeys={[]}
+      isHeaderSticky
     >
       <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.key}</TableColumn>}
+        {columns.map((column) => (
+          <TableColumn key={column.key}>{column.key} </TableColumn>
+        ))}
+        <TableColumn>
+          {Object.keys(data).length ? "View Record" : ""}
+        </TableColumn>
+        <TableColumn>
+          {Object.keys(data).length ? "Edit Record" : ""}
+        </TableColumn>
       </TableHeader>
       <TableBody
         items={data}
@@ -91,10 +127,40 @@ export default function ViewFormTable({ type }) {
         }
       >
         {(item) => (
-          <TableRow key={item.DOI}>
-            {(columnKey) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-            )}
+          <TableRow key={Object.keys(data)[0]}>
+            {columns.map((column) => (
+              <TableCell key={column.key}>
+                {getKeyValue(item, column.key)}
+              </TableCell>
+            ))}
+            <TableCell>
+              <Button
+                aria-label="View"
+                startContent={
+                  <span className="material-symbols-rounded">visibility</span>
+                }
+                disabled={btnsViewEditEnable}
+                color="primary"
+                size="sm"
+                onPress={() => navigate(`${url}?id=${item.DOI}`)}
+              >
+                View
+              </Button>
+            </TableCell>
+
+            <TableCell>
+              <Button
+                aria-label="Edit"
+                startContent={
+                  <span className="material-symbols-rounded">edit</span>
+                }
+                disabled={btnsViewEditEnable}
+                color="danger"
+                size="sm"
+              >
+                Edit
+              </Button>
+            </TableCell>
           </TableRow>
         )}
       </TableBody>

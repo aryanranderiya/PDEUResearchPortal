@@ -18,19 +18,12 @@ export default function Form1() {
     GrantDate: "",
     PI_PDEU: [],
     PI_Outside: [],
-    First_PI_PDEU: false,
-    Corresponding_PI_PDEU: false,
-    First_PI_Outside: false,
-    Corresponding_PI_Outside: false,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here
   };
-  React.useEffect(() => {
-    console.log(PIData);
-  }, [PIData]);
 
   return (
     <form onSubmit={handleSubmit}>
