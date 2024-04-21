@@ -94,20 +94,18 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log("authorData is: ", authorData);
     try {
-      const response = await fetch(`http://localhost:5000/insert/`, {
+      const response = await fetch(`http://localhost:5000/insert`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           type: postType,
-          formData: {
-            journalData: formData,
-            conferenceData: conferenceFormData,
-            authorData: authorData,
-          },
+          journalData: formData,
+          conferenceData: conferenceFormData,
+          authorData: authorData,
         }),
       });
 

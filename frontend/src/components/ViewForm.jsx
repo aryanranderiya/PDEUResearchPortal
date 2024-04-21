@@ -128,6 +128,9 @@ export default function ViewFormTable({ type, url }) {
       aria-label="Table with dynamic content"
       defaultSelectedKeys={[]}
       isHeaderSticky
+      isCompact
+      shadow="lg"
+      radius="lg"
     >
       <TableHeader columns={columns}>
         {columns.map((column) => (

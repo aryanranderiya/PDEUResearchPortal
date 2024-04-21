@@ -70,39 +70,39 @@ app.post("/select", cors(corsOptions), async (req, res) => {
 });
 
 // Select data based on the type
-app.post("/insert/", cors(corsOptions), async (req, res) => {
+app.post("/insert", cors(corsOptions), async (req, res) => {
   const type = req.body.type;
-  const formData = req.body;
+  const authorData = req.body.authorData;
+  const conferenceFormData = req.body.conferenceFormData;
+  const journalData = req.body.journalData;
+
   let message = "";
   let statusCode = 200;
 
   switch (type) {
     case "journalpapers":
-      [message, statusCode] = await insertintoTable(
-        "JournalPapers",
-        [formData.journalData],
-        res
-      );
+      [message, statusCode] = await insertintoTable("JournalPapers", [
+        journalData,
+      ]);
+      await insertAuthors(authorData);
       break;
 
     case "conferencepapers":
       const [conferenceMessage1, conferenceStatus1] = await insertintoTable(
         "JournalPapers",
-        [formData.journalData],
-        res
+        [journalData]
       );
 
       const [conferenceMessage2, conferenceStatus2] = await insertintoTable(
         "ConferencePapers",
-        [formData.conferenceData],
-        res
+        [conferenceFormData]
       );
 
       message = conferenceMessage1 + conferenceMessage2;
       if (conferenceStatus1 === 500 || conferenceStatus2 === 500)
         statusCode = 500;
 
-      await insertAuthors(formData.authorData);
+      await insertAuthors(authorData);
       break;
 
     case "patents":
@@ -114,11 +114,11 @@ app.post("/insert/", cors(corsOptions), async (req, res) => {
     default:
       return;
   }
-  await insertAuthors(formData.authorData);
+  // await insertAuthors(formData.authorData);
   res.status(statusCode).json({ message: message });
 });
 
-async function insertintoTable(table_name, form_data, res) {
+async function insertintoTable(table_name, form_data) {
   try {
     const { data, error } = await supabase
       .from(table_name)
@@ -136,13 +136,12 @@ async function insertintoTable(table_name, form_data, res) {
 }
 
 async function insertAuthors(authorFormData) {
-  const PDEUAuthors = Object.values(authorFormData.PDEUAuthors) || null;
-  const OutsideAuthors = Object.values(authorFormData.OutsideAuthors) || null;
+  console.log("authorFormData", authorFormData);
 
-  if (PDEUAuthors)
+  if (authorFormData.PDEUAuthors)
     supabase
       .from("Authors_inside_PDEU")
-      .insert(PDEUAuthors)
+      .insert(Object.values(authorFormData.PDEUAuthors))
       .select()
       .then((response) => {
         const { data, error } = response;
@@ -151,10 +150,10 @@ async function insertAuthors(authorFormData) {
       })
       .catch((error) => console.error("Error:", error));
 
-  if (OutsideAuthors)
+  if (authorFormData.OutsideAuthors)
     supabase
       .from("Authors_outside_PDEU")
-      .insert(OutsideAuthors)
+      .insert(Object.values(authorFormData.OutsideAuthors))
       .select()
       .then((response) => {
         const { data, error } = response;
@@ -167,6 +166,10 @@ async function insertAuthors(authorFormData) {
 app.post("/selectcount", async (req, res) => {
   try {
     const userId = req.body.userId;
+    const timePeriod = req.body.timePeriod || 9999999999999 * 1000;
+
+    console.log("timePeriod", timePeriod);
+
     const tables = [
       "JournalPapers",
       "ConferencePapers",
@@ -189,7 +192,8 @@ app.post("/selectcount", async (req, res) => {
     for (const table of tables) {
       let query = supabase
         .from(table)
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .gte("Created_Date", new Date(Date.now() - timePeriod).toISOString());
 
       if (designation.toLowerCase() === "faculty")
         query = query.eq("Created_By", userId);
@@ -198,6 +202,7 @@ app.post("/selectcount", async (req, res) => {
 
       if (error) counts[table] = 0;
       else counts[table] = count;
+      console.log("error: ", error);
     }
 
     console.log("Counts:", counts);
