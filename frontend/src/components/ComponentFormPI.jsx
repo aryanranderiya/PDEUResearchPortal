@@ -1,94 +1,100 @@
 import * as React from "react";
 import {
   Checkbox,
-  AutocompleteItem,
   Button,
-  Autocomplete,
   Input,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 
-export default function PDEUAuthors({
-  formDataDOI,
-  setauthorData,
-  authorData,
+export default function PatentPIs({
+  formDataFileApplicationNo,
+  PIData,
+  setPIData,
   formReadOnly,
 }) {
+  const [PIPDEUInputs, setPIPDEUInputs] = React.useState([[]]);
+  const [PIOtherInputs, setPIOtherInputs] = React.useState([[]]);
   const [users, setUsers] = React.useState([{ user: "none" }]);
 
-  const [AuthorPDEUInputs, setAuthorPDEUInputs] = React.useState([[]]);
-  const [AuthorOtherInputs, setAuthorOtherInputs] = React.useState([[]]);
+  const handlePIInputAddOther = () => setPIOtherInputs([...PIOtherInputs, []]);
+  const handlePIInputAddPDEU = () => setPIPDEUInputs([...PIPDEUInputs, []]);
 
-  const handleAuthorInputAddOther = () =>
-    setAuthorOtherInputs([...AuthorOtherInputs, []]);
-
-  const handleAuthorInputAddPDEU = () =>
-    setAuthorPDEUInputs([...AuthorPDEUInputs, []]);
-
-  const handleAuthorInputRemovePDEU = (index) => {
-    const list = [...AuthorPDEUInputs];
+  const handlePIInputRemovePDEU = (index) => {
+    const list = [...PIPDEUInputs];
     list.splice(index, 1);
-    setAuthorPDEUInputs(list);
+    setPIPDEUInputs(list);
   };
 
-  const handleAuthorInputRemoveOther = (index) => {
-    const list = [...AuthorOtherInputs];
+  const handlePIInputRemoveOther = (index) => {
+    const list = [...PIOtherInputs];
     list.splice(index, 1);
-    setAuthorOtherInputs(list);
+    setPIOtherInputs(list);
   };
 
   React.useEffect(() => {
-    if (formDataDOI) {
-      for (let category in authorData) {
-        for (let authorIndex in authorData[category]) {
-          authorData[category][authorIndex].DOI = formDataDOI;
+    if (formDataFileApplicationNo) {
+      for (let category in PIData) {
+        for (let authorIndex in PIData[category]) {
+          PIData[category][authorIndex].FileApplicationNo =
+            formDataFileApplicationNo;
         }
       }
     }
-  }, [authorData, formDataDOI]);
+  }, [PIData, formDataFileApplicationNo]);
 
-  const handleAuthorInputChangePDEU = (value, index) => {
-    const list = [...AuthorPDEUInputs];
+  const handlePIInputChangePDEU = (value, index) => {
+    const list = [...PIPDEUInputs];
     list[index] = value;
-    setAuthorPDEUInputs(list);
+    console.log("list", list);
+    setPIPDEUInputs(list);
 
     if (value !== "" && users[value] && users[value].id)
-      setauthorData((prevData) => ({
+      setPIData((prevData) => ({
         ...prevData,
-        PDEUAuthors: {
-          ...prevData.PDEUAuthors,
-          [index]: { DOI: formDataDOI, id: users[value].id },
+        PI_PDEU: {
+          ...prevData.PI_PDEU,
+          [index]: {
+            FileApplicationNo: formDataFileApplicationNo,
+            id: users[value].id,
+          },
         },
       }));
     else
-      setauthorData((prevData) => ({
+      setPIData((prevData) => ({
         ...prevData,
-        PDEUAuthors: {
-          ...prevData.PDEUAuthors,
-          [index]: { DOI: formDataDOI, id: null },
+        PI_PDEU: {
+          ...prevData.PI_PDEU,
+          [index]: { FileApplicationNo: formDataFileApplicationNo, id: null },
         },
       }));
   };
 
-  const handleAuthorInputChangeOther = (value, index) => {
-    const list = [...AuthorOtherInputs];
+  const handlePIInputChangeOther = (value, index) => {
+    const list = [...PIOtherInputs];
     list[index] = value;
-    setAuthorOtherInputs(list);
+    setPIOtherInputs(list);
 
-    if (value !== "")
-      setauthorData((prevData) => ({
+    if (value !== "" && users[value] && users[value].id)
+      setPIData((prevData) => ({
         ...prevData,
-
-        OutsideAuthors: {
-          ...prevData.OutsideAuthors,
-          [index]: { DOI: formDataDOI, Author_Name: value },
+        PI_Outside: {
+          ...prevData.PI_Outside,
+          [index]: {
+            FileApplicationNo: formDataFileApplicationNo,
+            PI_Name: value,
+          },
         },
       }));
     else
-      setauthorData((prevData) => ({
+      setPIData((prevData) => ({
         ...prevData,
-        OutsideAuthors: {
-          ...prevData.OutsideAuthors,
-          [index]: { DOI: formDataDOI, Author_Name: null },
+        PI_Outside: {
+          ...prevData.PI_Outside,
+          [index]: {
+            FileApplicationNo: formDataFileApplicationNo,
+            PI_Name: value,
+          },
         },
       }));
   };
@@ -113,18 +119,20 @@ export default function PDEUAuthors({
     fetchUsernames();
   }, []);
 
+  React.useEffect(() => {}, []);
+
   return (
     <>
-      {AuthorPDEUInputs.map((value, index) => (
+      {PIPDEUInputs.map((value, index) => (
         <div key={index} className="flex max-w-5xl gap-2 items-center">
           <Autocomplete
-            label="Author from PDEU"
+            label="Principal Investigator(s) from PDEU"
             className="max-w-5xl"
             size="sm"
             variant="faded"
             isRequired
-            onSelectionChange={(e) => handleAuthorInputChangePDEU(e, index)}
-            defaultSelectedKey={AuthorPDEUInputs[index]}
+            onSelectionChange={(e) => handlePIInputChangePDEU(e, index)}
+            defaultSelectedKey={PIPDEUInputs[index]}
             isDisabled={formReadOnly}
           >
             {users.map((user, index) => (
@@ -136,22 +144,22 @@ export default function PDEUAuthors({
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
 
-          {AuthorPDEUInputs.length !== users.length && (
+          {PIPDEUInputs.length !== users.length && (
             <Button
               color="primary"
               id="addAuthor"
-              onClick={handleAuthorInputAddPDEU}
+              onClick={handlePIInputAddPDEU}
               isDisabled={formReadOnly}
             >
               Add
             </Button>
           )}
-          {AuthorPDEUInputs.length !== 1 && (
+          {PIPDEUInputs.length !== 1 && (
             <Button
               isIconOnly
               color="danger"
               aria-label="Remove"
-              onClick={() => handleAuthorInputRemovePDEU(index)}
+              onClick={() => handlePIInputRemovePDEU(index)}
               isDisabled={formReadOnly}
             >
               <span className="material-symbols-rounded">close</span>
@@ -160,34 +168,35 @@ export default function PDEUAuthors({
         </div>
       ))}
 
-      {AuthorOtherInputs.map((value, index) => (
+      {PIOtherInputs.map((value, index) => (
         <div key={index} className="flex max-w-5xl gap-2 items-center">
           <Input
             size="sm"
             type="text"
-            label="Author outside of PDEU"
+            label="Principal Investigator outside of PDEU"
             variant="faded"
             className="max-w-5xl"
-            onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+            value={value}
+            onValueChange={(e) => handlePIInputChangeOther(e, index)}
             isDisabled={formReadOnly}
           />
           <Checkbox>First</Checkbox>
           <Checkbox>Corresponding</Checkbox>
           <Button
             color="primary"
-            id="addAuthor"
-            onClick={handleAuthorInputAddOther}
+            id="addPI"
+            onClick={handlePIInputAddOther}
             isDisabled={formReadOnly}
           >
             Add
           </Button>
 
-          {AuthorOtherInputs.length !== 1 && (
+          {PIOtherInputs.length !== 1 && (
             <Button
               isIconOnly
               color="danger"
               aria-label="Remove"
-              onClick={() => handleAuthorInputRemoveOther(index)}
+              onClick={() => handlePIInputRemoveOther(index)}
               isDisabled={formReadOnly}
             >
               <span className="material-symbols-rounded">close</span>

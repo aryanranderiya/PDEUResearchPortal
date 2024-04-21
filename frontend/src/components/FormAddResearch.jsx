@@ -37,6 +37,7 @@ export default function Form1({ is_conference = false }) {
   });
 
   const [authorData, setauthorData] = React.useState([]);
+  const [formReadOnly, setformReadOnly] = React.useState(false);
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
     DOI: "",
@@ -87,8 +88,6 @@ export default function Form1({ is_conference = false }) {
 
     onOpen();
   };
-
-  const [formReadOnly, setformReadOnly] = React.useState(false);
 
   return (
     <form onSubmit={handleSubmit}>
