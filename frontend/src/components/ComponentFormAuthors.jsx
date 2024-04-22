@@ -8,13 +8,12 @@ import {
 } from "@nextui-org/react";
 
 export default function PDEUAuthors({
+  users,
   formDataDOI,
   setauthorData,
   authorData,
   formReadOnly,
 }) {
-  const [users, setUsers] = React.useState([{ user: "none" }]);
-
   const [AuthorPDEUInputs, setAuthorPDEUInputs] = React.useState([[]]);
   const [AuthorOtherInputs, setAuthorOtherInputs] = React.useState([[]]);
 
@@ -51,7 +50,7 @@ export default function PDEUAuthors({
     list[index] = value;
     setAuthorPDEUInputs(list);
 
-    if (value !== "" && users[value] && users[value].id)
+    if (value !== "" && users[value] && users[value].id) {
       setauthorData((prevData) => ({
         ...prevData,
         PDEUAuthors: {
@@ -59,7 +58,7 @@ export default function PDEUAuthors({
           [index]: { DOI: formDataDOI, id: users[value].id },
         },
       }));
-    else
+    } else
       setauthorData((prevData) => ({
         ...prevData,
         PDEUAuthors: {
@@ -93,109 +92,172 @@ export default function PDEUAuthors({
       }));
   };
 
-  React.useEffect(() => {
-    const fetchUsernames = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/select`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: localStorage.getItem("userId"),
-            table_name: "Employee",
-            columns: "id,name",
-          }),
-        });
+  const [InsideAuthorsJson, setInsideAuthorsJson] = React.useState(null);
+  const [OutsideAuthorsJson, setOutsideAuthorsJson] = React.useState(null);
 
-        if (!response.ok) throw new Error(response.error);
-        else setUsers(await response.json());
-      } catch (error) {
-        console.error("Error posting data:", error.message);
-      }
-    };
+  React.useEffect(
+    () => {
+      const fetchRecordData = async (table_name, where, columns = "*") => {
+        try {
+          const response = await fetch(`http://localhost:5000/select`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              columns: columns,
+              table_name: table_name,
+              where: where,
+            }),
+          });
+          if (!response.ok) throw new Error(response.error);
+          return await response.json();
+        } catch (error) {
+          console.error("Error posting data:", error.message);
+        }
+      };
 
-    fetchUsernames();
-  }, []);
+      const fetchAuthorInsideOutsideData = async () => {
+        if (formReadOnly) {
+          setInsideAuthorsJson(
+            await fetchRecordData("Authors_inside_PDEU", [
+              "DOI",
+              new URLSearchParams(window.location.search).get("id"),
+            ])
+          );
 
-  return (
-    <>
-      {AuthorPDEUInputs.map((value, index) => (
-        <div key={index} className="flex max-w-5xl gap-2 items-center">
-          <Autocomplete
-            label="Author from PDEU"
-            className="max-w-5xl"
-            size="sm"
-            variant="faded"
-            isRequired
-            onSelectionChange={(e) => handleAuthorInputChangePDEU(e, index)}
-            defaultSelectedKey={AuthorPDEUInputs[index]}
-            isDisabled={formReadOnly}
-          >
-            {users.map((user, index) => (
-              <AutocompleteItem key={index} value={user.id || ""}>
-                {user.name}
-              </AutocompleteItem>
-            ))}
-          </Autocomplete>
+          setOutsideAuthorsJson(
+            await fetchRecordData("Authors_outside_PDEU", [
+              "DOI",
+              new URLSearchParams(window.location.search).get("id"),
+            ])
+          );
+        }
+      };
 
-          {AuthorPDEUInputs.length !== users.length && (
-            <Button
-              color="primary"
-              id="addAuthor"
-              onClick={handleAuthorInputAddPDEU}
-              isDisabled={formReadOnly}
-            >
-              Add
-            </Button>
-          )}
-          {AuthorPDEUInputs.length !== 1 && (
-            <Button
-              isIconOnly
-              color="danger"
-              aria-label="Remove"
-              onClick={() => handleAuthorInputRemovePDEU(index)}
-              isDisabled={formReadOnly}
-            >
-              <span className="material-symbols-rounded">close</span>
-            </Button>
-          )}
-        </div>
-      ))}
-
-      {AuthorOtherInputs.map((value, index) => (
-        <div key={index} className="flex max-w-5xl gap-2 items-center">
-          <Input
-            size="sm"
-            type="text"
-            label="Author outside of PDEU"
-            variant="faded"
-            className="max-w-5xl"
-            onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
-            isDisabled={formReadOnly}
-          />
-          <Button
-            color="primary"
-            id="addAuthor"
-            onClick={handleAuthorInputAddOther}
-            isDisabled={formReadOnly}
-          >
-            Add
-          </Button>
-
-          {AuthorOtherInputs.length !== 1 && (
-            <Button
-              isIconOnly
-              color="danger"
-              aria-label="Remove"
-              onClick={() => handleAuthorInputRemoveOther(index)}
-              isDisabled={formReadOnly}
-            >
-              <span className="material-symbols-rounded">close</span>
-            </Button>
-          )}
-        </div>
-      ))}
-    </>
+      fetchAuthorInsideOutsideData();
+    },
+    [formReadOnly],
+    []
   );
+
+  function AuthorAllInputs() {
+    if (formReadOnly !== true)
+      return (
+        <>
+          {AuthorPDEUInputs.map((value, index) => (
+            <div key={index} className="flex max-w-5xl gap-2 items-center">
+              <Autocomplete
+                label="Author from PDEU"
+                className="max-w-5xl"
+                size="sm"
+                variant="faded"
+                isRequired
+                onSelectionChange={(e) => handleAuthorInputChangePDEU(e, index)}
+                defaultSelectedKey={AuthorPDEUInputs[index]}
+                isDisabled={formReadOnly}
+              >
+                {users.map((user, index) => (
+                  <AutocompleteItem key={index} value={user.id || ""}>
+                    {user.name}
+                  </AutocompleteItem>
+                ))}
+              </Autocomplete>
+
+              {AuthorPDEUInputs.length !== users.length && (
+                <Button
+                  color="primary"
+                  id="addAuthor"
+                  onClick={handleAuthorInputAddPDEU}
+                  isDisabled={formReadOnly}
+                >
+                  Add
+                </Button>
+              )}
+              {AuthorPDEUInputs.length !== 1 && (
+                <Button
+                  isIconOnly
+                  color="danger"
+                  aria-label="Remove"
+                  onClick={() => handleAuthorInputRemovePDEU(index)}
+                  isDisabled={formReadOnly}
+                >
+                  <span className="material-symbols-rounded">close</span>
+                </Button>
+              )}
+            </div>
+          ))}
+
+          {AuthorOtherInputs.map((value, index) => (
+            <div key={index} className="flex max-w-5xl gap-2 items-center">
+              <Input
+                size="sm"
+                type="text"
+                label="Author outside of PDEU"
+                variant="faded"
+                className="max-w-5xl"
+                onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+                isDisabled={formReadOnly}
+              />
+              <Button
+                color="primary"
+                id="addAuthor"
+                onClick={handleAuthorInputAddOther}
+                isDisabled={formReadOnly}
+              >
+                Add
+              </Button>
+
+              {AuthorOtherInputs.length !== 1 && (
+                <Button
+                  isIconOnly
+                  color="danger"
+                  aria-label="Remove"
+                  onClick={() => handleAuthorInputRemoveOther(index)}
+                  isDisabled={formReadOnly}
+                >
+                  <span className="material-symbols-rounded">close</span>
+                </Button>
+              )}
+            </div>
+          ))}
+        </>
+      );
+    else
+      return (
+        <>
+          {InsideAuthorsJson !== null &&
+            Object.entries(InsideAuthorsJson).map((author, index) => (
+              <Input
+                size="sm"
+                type="text"
+                label={`Author ${index + 1} from PDEU`}
+                variant="faded"
+                className="max-w-5xl"
+                isRequired
+                value={
+                  users.find((user) => user.id === author[1].id)?.name || ""
+                }
+                isReadOnly={formReadOnly}
+              />
+            ))}
+
+          {OutsideAuthorsJson !== null &&
+            Object.entries(OutsideAuthorsJson).map((author, index) => (
+              <Input
+                size="sm"
+                type="text"
+                label={`Outside Author ${index + 1}`}
+                variant="faded"
+                className="max-w-5xl"
+                isRequired
+                value={author[1].Author_Name}
+                isReadOnly={formReadOnly}
+              />
+            ))}
+        </>
+      );
+  }
+
+  return <AuthorAllInputs />;
 }

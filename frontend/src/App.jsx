@@ -22,7 +22,10 @@ export default function App() {
 
   React.useEffect(() => {
     if (!isAuthenticated) navigate("/login");
-    else if (isAuthenticated && window.location.pathname === "/login")
+    else if (
+      (isAuthenticated && window.location.pathname === "/login") ||
+      window.location.pathname === "/"
+    )
       navigate("/home");
   }, [isAuthenticated]);
 

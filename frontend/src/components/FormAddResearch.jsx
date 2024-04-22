@@ -58,39 +58,78 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
 
   React.useEffect(
     () => {
-      const fetchRecordData = async () => {
-        console.log("formReadOnly", formReadOnly);
-        if (formReadOnly) {
-          try {
-            const response = await fetch(`http://localhost:5000/select`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                columns: "*",
-                table_name: "JournalPapers",
-                where: [
-                  "DOI",
-                  new URLSearchParams(window.location.search).get("id"),
-                ],
-              }),
-            });
-            if (!response.ok) throw new Error(response.error);
-            else console.log("Read Data successfully");
-            const responseJson = await response.json();
-            console.log(responseJson);
-            setformData(responseJson[0]);
-          } catch (error) {
-            console.error("Error posting data:", error.message);
-          }
+      const fetchRecordData = async (table_name, where, columns = "*") => {
+        try {
+          const response = await fetch(`http://localhost:5000/select`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              columns: columns,
+              table_name: table_name,
+              where: where,
+            }),
+          });
+          if (!response.ok) throw new Error(response.error);
+          return await response.json();
+        } catch (error) {
+          console.error("Error posting data:", error.message);
         }
       };
-      fetchRecordData();
+
+      if (formReadOnly) {
+        fetchRecordData("JournalPapers", [
+          "DOI",
+          new URLSearchParams(window.location.search).get("id"),
+        ]).then((response) => setformData(response[0]));
+
+        fetchRecordData("Authors_inside_PDEU", [
+          "DOI",
+          new URLSearchParams(window.location.search).get("id"),
+        ]).then((response) => {
+          const modifiedResponse = response.reduce((acc, item, index) => {
+            acc[index.toString()] = item;
+            return acc;
+          }, {});
+          setauthorData({ PDEUAuthors: modifiedResponse });
+        });
+
+        fetchRecordData("Authors_outside_PDEU", [
+          "DOI",
+          new URLSearchParams(window.location.search).get("id"),
+        ]).then((response) => console.log("Authors_outside_PDEU", response));
+      }
     },
     [formReadOnly],
     []
   );
+
+  const [users, setUsers] = React.useState([{ user: "none" }]);
+  React.useEffect(() => {
+    const fetchUsernames = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/select`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: localStorage.getItem("userId"),
+            table_name: "Employee",
+            columns: "id,name",
+          }),
+        });
+
+        if (!response.ok) throw new Error(response.error);
+        else setUsers(await response.json());
+      } catch (error) {
+        console.error("Error posting data:", error.message);
+      }
+    };
+
+    fetchUsernames();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -310,6 +349,7 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
         />
 
         <PDEUAuthors
+          users={users}
           formDataDOI={formData.DOI}
           setauthorData={setauthorData}
           authorData={authorData}
