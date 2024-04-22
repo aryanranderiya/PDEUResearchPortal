@@ -7,7 +7,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const corsOptions = {
-  origin: ["http://localhost:8162", "https://research-portal-pdeu.vercel.app"],
+  origin: [
+    "http://localhost:8162",
+    "https://research-portal-pdeu.vercel.app",
+    "https://research-pdeu.aryanranderiya.com/",
+  ],
   optionsSuccessStatus: 200,
   methods: ["GET", "POST"], // Specify the HTTP methods allowed
 }; /* This configuration allows requests from the specified origin and sets the optionsSuccessStatus to 200 to ensure preflight requests (OPTIONS) receive a successful response status.*/
