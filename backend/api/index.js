@@ -10,7 +10,7 @@ const corsOptions = {
   origin: [
     "http://localhost:8162",
     "https://research-portal-pdeu.vercel.app",
-    "https://research-pdeu.aryanranderiya.com/",
+    "https://research-pdeu.aryanranderiya.com",
   ],
   optionsSuccessStatus: 200,
   methods: ["GET", "POST"], // Specify the HTTP methods allowed
