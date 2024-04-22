@@ -5,9 +5,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  Button,
   Spinner,
-  getKeyValue,
   Spacer,
 } from "@nextui-org/react";
 import * as React from "react";
@@ -18,16 +16,19 @@ function ComponentTable({ title, description, timePeriod = null }) {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch("http://localhost:5000/selectcount", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: localStorage.getItem("userId"),
-          timePeriod: timePeriod,
-        }),
-      });
+      const response = await fetch(
+        "https://pdeu-research-portal-api.vercel.app/selectcount",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: localStorage.getItem("userId"),
+            timePeriod: timePeriod,
+          }),
+        }
+      );
 
       setanalyticsData(await response.json());
       setIsLoading(false);
@@ -41,11 +42,11 @@ function ComponentTable({ title, description, timePeriod = null }) {
   }, []);
 
   React.useEffect(() => {
-    console.log(analyticsData);
-    if (analyticsData)
-      Object.keys(analyticsData).map((key, index) =>
-        console.log(key, analyticsData[key], index)
-      );
+    // console.log(analyticsData);
+    // if (analyticsData)
+    //   Object.keys(analyticsData).map((key, index) =>
+    //     console.log(key, analyticsData[key], index)
+    //   );
   }, [analyticsData]);
 
   return (
@@ -61,7 +62,7 @@ function ComponentTable({ title, description, timePeriod = null }) {
         topContent={
           <>
             <div className="flex items-center gap-1">
-              <span class="material-symbols-rounded">trending_up</span>
+              <span className="material-symbols-rounded">trending_up</span>
               <span className="table_title">{title}</span>
             </div>
             <span className="table_description">

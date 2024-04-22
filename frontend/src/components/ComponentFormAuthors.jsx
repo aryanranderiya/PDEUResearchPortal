@@ -99,17 +99,20 @@ export default function PDEUAuthors({
     () => {
       const fetchRecordData = async (table_name, where, columns = "*") => {
         try {
-          const response = await fetch(`http://localhost:5000/select`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              columns: columns,
-              table_name: table_name,
-              where: where,
-            }),
-          });
+          const response = await fetch(
+            `https://pdeu-research-portal-api.vercel.app/select`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                columns: columns,
+                table_name: table_name,
+                where: where,
+              }),
+            }
+          );
           if (!response.ok) throw new Error(response.error);
           return await response.json();
         } catch (error) {

@@ -68,17 +68,20 @@ export default function ViewFormTable({ type, url }) {
         return;
     }
     try {
-      const response = await fetch(`http://localhost:5000/select`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          table_name: table_name,
-          columns: columns,
-          where: ["Created_By", localStorage.getItem("userId")],
-        }),
-      });
+      const response = await fetch(
+        `https://pdeu-research-portal-api.vercel.app/select`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            table_name: table_name,
+            columns: columns,
+            where: ["Created_By", localStorage.getItem("userId")],
+          }),
+        }
+      );
 
       const jsonData = await response.json();
       if (!response.ok) throw new Error(jsonData.error);
@@ -97,17 +100,20 @@ export default function ViewFormTable({ type, url }) {
 
   const fetchDesignation = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/select`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          table_name: "Employee",
-          columns: "designation",
-          where: ["id", localStorage.getItem("userId")],
-        }),
-      });
+      const response = await fetch(
+        `https://pdeu-research-portal-api.vercel.app/select`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            table_name: "Employee",
+            columns: "designation",
+            where: ["id", localStorage.getItem("userId")],
+          }),
+        }
+      );
 
       const designationResponseJson = await response.json();
       if (!response.ok) throw new Error(designationResponseJson.error);

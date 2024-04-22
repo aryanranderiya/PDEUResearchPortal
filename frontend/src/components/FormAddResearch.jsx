@@ -6,6 +6,7 @@ import {
   RadioGroup,
   Radio,
   useDisclosure,
+  Chip,
 } from "@nextui-org/react";
 import FormAddedModal from "./FormAddedModal";
 import PDEUAuthors from "./ComponentFormAuthors";
@@ -15,7 +16,6 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   const [successfullyUploaded, setsuccessfullyUploaded] = React.useState(true);
 
   const postType = is_conference ? "conferencepapers" : "journalpapers";
-  // const table_name = is_conference ? "ConferencePapers" : "JournalPapers";
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
   const levels = ["International", "National"];
@@ -49,28 +49,31 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   });
 
   React.useEffect(() => {
-    console.log({
-      journalData: formData,
-      conferenceData: conferenceFormData,
-      authorData: authorData,
-    });
+    // console.log({
+    //   journalData: formData,
+    //   conferenceData: conferenceFormData,
+    //   authorData: authorData,
+    // });
   }, [formData, conferenceFormData, authorData]);
 
   React.useEffect(
     () => {
       const fetchRecordData = async (table_name, where, columns = "*") => {
         try {
-          const response = await fetch(`http://localhost:5000/select`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              columns: columns,
-              table_name: table_name,
-              where: where,
-            }),
-          });
+          const response = await fetch(
+            `https://pdeu-research-portal-api.vercel.app/select`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                columns: columns,
+                table_name: table_name,
+                where: where,
+              }),
+            }
+          );
           if (!response.ok) throw new Error(response.error);
           return await response.json();
         } catch (error) {
@@ -84,21 +87,12 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
           new URLSearchParams(window.location.search).get("id"),
         ]).then((response) => setformData(response[0]));
 
-        fetchRecordData("Authors_inside_PDEU", [
-          "DOI",
-          new URLSearchParams(window.location.search).get("id"),
-        ]).then((response) => {
-          const modifiedResponse = response.reduce((acc, item, index) => {
-            acc[index.toString()] = item;
-            return acc;
-          }, {});
-          setauthorData({ PDEUAuthors: modifiedResponse });
-        });
-
-        fetchRecordData("Authors_outside_PDEU", [
-          "DOI",
-          new URLSearchParams(window.location.search).get("id"),
-        ]).then((response) => console.log("Authors_outside_PDEU", response));
+        if (is_conference) {
+          fetchRecordData("ConferencePapers", [
+            "DOI",
+            new URLSearchParams(window.location.search).get("id"),
+          ]).then((response) => setConferenceFormData(response[0]));
+        }
       }
     },
     [formReadOnly],
@@ -109,17 +103,20 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   React.useEffect(() => {
     const fetchUsernames = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/select`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: localStorage.getItem("userId"),
-            table_name: "Employee",
-            columns: "id,name",
-          }),
-        });
+        const response = await fetch(
+          `https://pdeu-research-portal-api.vercel.app/select`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: localStorage.getItem("userId"),
+              table_name: "Employee",
+              columns: "id,name",
+            }),
+          }
+        );
 
         if (!response.ok) throw new Error(response.error);
         else setUsers(await response.json());
@@ -133,20 +130,22 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("authorData is: ", authorData);
     try {
-      const response = await fetch(`http://localhost:5000/insert`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: postType,
-          journalData: formData,
-          conferenceData: conferenceFormData,
-          authorData: authorData,
-        }),
-      });
+      const response = await fetch(
+        `https://pdeu-research-portal-api.vercel.app/insert`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: postType,
+            journalData: formData,
+            conferenceData: conferenceFormData,
+            authorData: authorData,
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error(response.error);
       else {
@@ -173,6 +172,11 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
       />
 
       <div className="main_form">
+        {formReadOnly && (
+          <Chip color="danger" variant="flat">
+            Read Only
+          </Chip>
+        )}
         <Input
           isReadOnly={formReadOnly}
           size="sm"
@@ -301,16 +305,14 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             variant="faded"
             className="max-w-5xl"
             value={formData.Page_end || ""}
-            onValueChange={(value) =>
-              setformData({ ...formData, Page_end: value })
-            }
+            onChange={(value) => setformData({ ...formData, Page_end: value })}
             isReadOnly={formReadOnly}
           />
         </div>
 
-        <Input
+        {/* 
+        <DatePicker
           size="sm"
-          type="date"
           label="Paper Publish Date"
           variant="faded"
           className="max-w-5xl"
@@ -320,7 +322,9 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             setformData({ ...formData, Publish_date: value })
           }
           isReadOnly={formReadOnly}
-        />
+        /> */}
+
+        {/* <DatePicker label="Birth date" className="max-w-[284px]" /> */}
 
         <Input
           size="sm"
@@ -410,7 +414,7 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             <RadioGroup
               label="Conference Level"
               orientation="horizontal"
-              value={levels[conferenceFormData.Conference_Level]}
+              value={conferenceFormData.Conference_Level}
               onValueChange={(e) =>
                 setConferenceFormData({
                   ...conferenceFormData,
@@ -430,51 +434,53 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
           <></>
         )}
 
-        <div className="flex max-w-5xl gap-2 items-center justify-center">
-          <Button
-            color="primary"
-            size="md"
-            type="submit"
-            isDisabled={formReadOnly}
-          >
-            Submit
-          </Button>
-          <Button
-            color="default"
-            size="md"
-            variant="ghost"
-            isDisabled={formReadOnly}
-            onClick={() => {
-              setformData({
-                Title: "",
-                Abstract: "",
-                Journal_Name: "",
-                Quartile: "",
-                Journal_Indexed: "",
-                Publisher_Name: "",
-                Volume: "",
-                Issue: "",
-                Page_start: null,
-                Page_end: null,
-                Publish_date: "",
-                ISSN: "",
-                DOI: "",
-                Created_By: localStorage.getItem("userId"),
-              });
-              setConferenceFormData({
-                DOI: "",
-                Conference_Name: "",
-                Conference_Date: "",
-                Conference_City: "",
-                Conference_Level: "",
-                Created_By: localStorage.getItem("userId"),
-              });
-              setauthorData([]);
-            }}
-          >
-            Clear
-          </Button>
-        </div>
+        {!formReadOnly && (
+          <div className="flex max-w-5xl gap-2 items-center justify-center">
+            <Button
+              color="primary"
+              size="md"
+              type="submit"
+              isDisabled={formReadOnly}
+            >
+              Submit
+            </Button>
+            <Button
+              color="default"
+              size="md"
+              variant="ghost"
+              isDisabled={formReadOnly}
+              onClick={() => {
+                setformData({
+                  Title: "",
+                  Abstract: "",
+                  Journal_Name: "",
+                  Quartile: "",
+                  Journal_Indexed: "",
+                  Publisher_Name: "",
+                  Volume: "",
+                  Issue: "",
+                  Page_start: null,
+                  Page_end: null,
+                  Publish_date: "",
+                  ISSN: "",
+                  DOI: "",
+                  Created_By: localStorage.getItem("userId"),
+                });
+                setConferenceFormData({
+                  DOI: "",
+                  Conference_Name: "",
+                  Conference_Date: "",
+                  Conference_City: "",
+                  Conference_Level: "",
+                  Created_By: localStorage.getItem("userId"),
+                });
+                setauthorData([]);
+              }}
+            >
+              Clear
+            </Button>
+          </div>
+        )}
       </div>
     </form>
   );

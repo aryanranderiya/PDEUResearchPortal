@@ -101,12 +101,15 @@ export default function PatentPIs({
   React.useEffect(() => {
     const fetchUsernames = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/fetchusernames`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `https://pdeu-research-portal-api.vercel.app/fetchusernames`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) throw new Error(response.error);
         else setUsers(await response.json());

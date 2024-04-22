@@ -3,7 +3,7 @@ import CardComponent from "../components/ComponentCard";
 import Form1 from "../components/FormAddResearch";
 import Form2 from "../components/FormAddBook";
 import Form3 from "../components/FormAddPatent";
-import FormUserProfile from "../components/FormUserProfile";
+// import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
 import ComponentAnalyticsTable from "../components/ComponentAnalyticsTable";
 import { useNavigate } from "react-router-dom";
@@ -21,13 +21,19 @@ export function DefaultCards() {
   React.useEffect(() => {
     const fetchDataCount = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/selectcount`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: localStorage.getItem("userId") }),
-        });
+        const response = await fetch(
+          `https://pdeu-research-portal-api.vercel.app/selectcount`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: localStorage.getItem("userId"),
+              timePeriod: null,
+            }),
+          }
+        );
 
         if (!response.ok) throw new Error(response.error);
         setDataCount(await response.json());
@@ -46,7 +52,7 @@ export function DefaultCards() {
         imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
         page="./journalpapers"
         size="sm"
-        subheading={dataCount.JournalPapers}
+        subheading={dataCount.JournalPapers || 0}
       />
 
       <CardComponent
@@ -87,11 +93,6 @@ export function ResearchForm({
 }) {
   const type = is_conference ? "conferencepapers" : "journalpapers";
   const addorview = formReadOnly ? "view" : "add";
-
-  React.useEffect(() => {
-    console.log("addorview", addorview);
-  }, [title]);
-
   return (
     <div className="form_add">
       <Breadcrumbs>
@@ -195,7 +196,7 @@ export function ViewItems({ type }) {
           color="primary"
           onClick={() => navigate(`/home${addPageURL}`)}
           className="button_add_new"
-          startContent={<span class="material-symbols-rounded">add</span>}
+          startContent={<span className="material-symbols-rounded">add</span>}
           variant="shadow"
         >
           Add {shortname || title}

@@ -14,37 +14,37 @@ const viewItems = [
   {
     key: "/home",
     label: "Dashboard",
-    icon: <span class="material-symbols-rounded">home</span>,
+    icon: <span className="material-symbols-rounded">home</span>,
   },
   {
     key: "/home/analytics",
     label: "Analytics",
-    icon: <span class="material-symbols-rounded">monitoring</span>,
+    icon: <span className="material-symbols-rounded">monitoring</span>,
   },
   {
     key: "/home/journalpapers",
     label: "Journal Papers",
-    icon: <span class="material-symbols-rounded">description</span>,
+    icon: <span className="material-symbols-rounded">description</span>,
   },
   {
     key: "/home/conferencepapers",
     label: "Conference Papers",
-    icon: <span class="material-symbols-rounded">podium</span>,
+    icon: <span className="material-symbols-rounded">podium</span>,
   },
   {
     key: "/home/patents",
     label: "Patents",
-    icon: <span class="material-symbols-rounded">workspace_premium</span>,
+    icon: <span className="material-symbols-rounded">workspace_premium</span>,
   },
   {
     key: "/home/books",
     label: "Books",
-    icon: <span class="material-symbols-rounded">menu_book</span>,
+    icon: <span className="material-symbols-rounded">menu_book</span>,
   },
   {
     key: "/home/projects",
     label: "Projects",
-    icon: <span class="material-symbols-rounded">task</span>,
+    icon: <span className="material-symbols-rounded">task</span>,
   },
 ];
 
@@ -52,7 +52,7 @@ const viewItems = [
 //   // {
 //   //   key: "/home/userProfile",
 //   //   label: "Edit User Profile",
-//   //   icon: <span class="material-symbols-rounded">person_edit</span>,
+//   //   icon: <span className="material-symbols-rounded">person_edit</span>,
 //   // },
 // ];
 
@@ -106,7 +106,7 @@ export function ListBoxPagesComponentAdd() {
           title="Settings"
           startContent={
             <div className="flex">
-              <span class="material-symbols-rounded">settings</span>
+              <span className="material-symbols-rounded">settings</span>
             </div>
           }
         >
