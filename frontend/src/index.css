@@ -103,3 +103,9 @@ code {
 .faded_input {
   cursor: pointer;
 }
+
+.loginpage_switch {
+  position: fixed;
+  bottom: 20px;
+  right: 50px;
+}

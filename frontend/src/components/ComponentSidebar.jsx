@@ -70,7 +70,7 @@ export default function SideBar() {
         <Button
           color="danger"
           variant="ghost"
-          size="sm"
+          size="md"
           onClick={() => signOut()}
           className="w-full"
           startContent={

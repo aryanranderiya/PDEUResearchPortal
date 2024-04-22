@@ -7,6 +7,7 @@ import {
   Radio,
   useDisclosure,
   Chip,
+  Skeleton,
 } from "@nextui-org/react";
 import FormAddedModal from "./FormAddedModal";
 import PDEUAuthors from "./ComponentFormAuthors";
@@ -19,32 +20,32 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   const quartiles = ["Q1", "Q2", "Q3", "Q4"];
   const journal_indexed = ["Scopus", "Web of Science (WOS)"];
   const levels = ["International", "National"];
-
+  const defaultText = formReadOnly ? "Loading..." : "";
   const [formData, setformData] = React.useState({
-    Title: "",
-    Abstract: "",
-    Journal_Name: "",
-    Quartile: "",
-    Journal_Indexed: "",
-    Publisher_Name: "",
-    Volume: "",
-    Issue: "",
+    Title: defaultText,
+    Abstract: defaultText,
+    Journal_Name: defaultText,
+    Quartile: defaultText,
+    Journal_Indexed: defaultText,
+    Publisher_Name: defaultText,
+    Volume: defaultText,
+    Issue: defaultText,
     Page_start: null,
     Page_end: null,
-    Publish_date: "",
-    ISSN: "",
-    DOI: "",
+    Publish_date: defaultText,
+    ISSN: defaultText,
+    DOI: defaultText,
     Created_By: localStorage.getItem("userId"),
   });
 
   const [authorData, setauthorData] = React.useState([]);
 
   const [conferenceFormData, setConferenceFormData] = React.useState({
-    DOI: "",
-    Conference_Name: "",
-    Conference_Date: "",
-    Conference_City: "",
-    Conference_Level: "",
+    DOI: defaultText,
+    Conference_Name: defaultText,
+    Conference_Date: defaultText,
+    Conference_City: defaultText,
+    Conference_Level: defaultText,
     Created_By: localStorage.getItem("userId"),
   });
 
@@ -177,6 +178,7 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             Read Only
           </Chip>
         )}
+
         <Input
           isReadOnly={formReadOnly}
           size="sm"
