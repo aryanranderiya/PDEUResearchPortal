@@ -1,8 +1,8 @@
 import * as React from "react";
 import CardComponent from "../components/ComponentCard";
-import Form1 from "../components/FormAddResearch";
-import Form2 from "../components/FormAddBook";
-import Form3 from "../components/FormAddPatent";
+import Form1 from "../components/FormResearch";
+import Form2 from "../components/FormModal";
+import Form3 from "../components/FormPatent";
 // import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
 import ComponentAnalyticsTable from "../components/ComponentAnalyticsTable";

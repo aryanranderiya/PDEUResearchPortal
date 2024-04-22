@@ -109,3 +109,11 @@ code {
   bottom: 20px;
   right: 50px;
 }
+
+.skeleton {
+  border-radius: 10px;
+}
+
+.spinner {
+  margin-top: 5em;
+}

@@ -7,6 +7,7 @@ import {
   TableCell,
   Spinner,
   Spacer,
+  CircularProgress,
 } from "@nextui-org/react";
 import * as React from "react";
 
@@ -83,13 +84,14 @@ function ComponentTable({ title, description, timePeriod = null }) {
         </TableHeader>
         <TableBody
           isLoading={isLoading}
-          loadingContent={<Spinner size="lg" />}
-          emptyContent={
-            <>
-              <Spacer y={7} />
-              Loading...
-            </>
+          loadingContent={
+            <CircularProgress
+              size="lg"
+              className="spinner"
+              label="Loading..."
+            />
           }
+          emptyContent={<></>}
         >
           {analyticsData &&
             Object.keys(analyticsData).map((key, index) => (
