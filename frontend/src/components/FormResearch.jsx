@@ -32,7 +32,7 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
     Issue: defaultText,
     Page_start: null,
     Page_end: null,
-    Publish_date: defaultText,
+    Publish_date: null,
     ISSN: defaultText,
     DOI: defaultText,
     Created_By: localStorage.getItem("userId"),
@@ -50,11 +50,11 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   });
 
   React.useEffect(() => {
-    console.log({
-      journalData: formData,
-      conferenceData: conferenceFormData,
-      authorData: authorData,
-    });
+    // console.log({
+    //   journalData: formData,
+    //   conferenceData: conferenceFormData,
+    //   authorData: authorData,
+    // });
   }, [formData, conferenceFormData, authorData]);
 
   React.useEffect(
@@ -370,7 +370,6 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
           users={users}
           formDataDOI={formData.DOI}
           setauthorData={setauthorData}
-          authorData={authorData}
           formReadOnly={formReadOnly}
         />
 

@@ -1,24 +1,60 @@
 import * as React from "react";
-import { Input, Select, SelectItem, Button } from "@nextui-org/react";
+import { Input, Button, RadioGroup, Radio, Chip } from "@nextui-org/react";
 import PatentPIs from "./ComponentFormPI";
 
-export default function Form1() {
+export default function Form3({ formReadOnly }) {
   const statuses = ["Filed", "Unfiled"];
-  const categories = ["Process/Product", "Category 1", "Category2"];
+  const categories = ["Process/Product", "Category 1", "Category 2"];
   const [PIData, setPIData] = React.useState([]);
-  const [formReadOnly, setformReadOnly] = React.useState(false);
+  const defaultText = formReadOnly ? "Loading..." : "";
 
   const [formData, setformData] = React.useState({
-    Title: "",
-    FileApplicationNo: "",
-    Category: "",
-    Status: "",
-    ApplicationDate: "",
-    PublishedDate: "",
-    GrantDate: "",
+    Title: defaultText,
+    FileApplicationNo: defaultText,
+    Category: defaultText,
+    Status: defaultText,
+    ApplicationDate: null,
+    PublishedDate: null,
+    GrantDate: null,
     PI_PDEU: [],
     PI_Outside: [],
   });
+
+  React.useEffect(
+    () => {
+      const fetchRecordData = async () => {
+        try {
+          const response = await fetch(
+            `https://pdeu-research-portal-api.vercel.app/select`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                columns: "*",
+                table_name: "Patents",
+                where: [
+                  "FileApplicationNo",
+                  new URLSearchParams(window.location.search).get("id"),
+                ],
+              }),
+            }
+          );
+          if (!response.ok) throw new Error(response.error);
+          const responseJson = await response.json();
+          console.log(responseJson[0]);
+          setformData(responseJson[0]);
+        } catch (error) {
+          console.error("Error posting data:", error.message);
+        }
+      };
+
+      if (formReadOnly) fetchRecordData();
+    },
+    [formReadOnly],
+    []
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,6 +64,11 @@ export default function Form1() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="main_form">
+        {formReadOnly && (
+          <Chip color="danger" variant="flat">
+            Read Only
+          </Chip>
+        )}
         <Input
           size="sm"
           type="text"
@@ -37,6 +78,7 @@ export default function Form1() {
           isRequired
           value={formData.Title}
           onValueChange={(value) => setformData({ ...formData, Title: value })}
+          isReadOnly={formReadOnly}
         />
 
         <Input
@@ -50,39 +92,38 @@ export default function Form1() {
           onValueChange={(value) =>
             setformData({ ...formData, FileApplicationNo: value })
           }
+          isReadOnly={formReadOnly}
         />
 
-        <Select
+        <RadioGroup
           label="Category"
-          className="max-w-5xl"
-          size="sm"
-          isRequired
+          orientation="horizontal"
           value={formData.Category}
           onValueChange={(value) =>
             setformData({ ...formData, Category: value })
           }
+          isReadOnly={formReadOnly}
         >
-          {categories.map((category) => (
-            <SelectItem key={category} value={category}>
+          {categories.map((category, index) => (
+            <Radio key={index} value={category}>
               {category}
-            </SelectItem>
+            </Radio>
           ))}
-        </Select>
+        </RadioGroup>
 
-        <Select
+        <RadioGroup
           label="Status"
-          className="max-w-5xl"
-          size="sm"
-          isRequired
+          orientation="horizontal"
           value={formData.Status}
           onValueChange={(value) => setformData({ ...formData, Status: value })}
+          isReadOnly={formReadOnly}
         >
-          {statuses.map((status) => (
-            <SelectItem key={status} value={status}>
+          {statuses.map((status, index) => (
+            <Radio key={index} value={status}>
               {status}
-            </SelectItem>
+            </Radio>
           ))}
-        </Select>
+        </RadioGroup>
 
         <Input
           size="sm"
@@ -144,7 +185,17 @@ export default function Form1() {
             size="md"
             variant="ghost"
             isDisabled={formReadOnly}
-            onClick={() => {}}
+            onClick={() => {
+              setformData({
+                Title: defaultText,
+                FileApplicationNo: defaultText,
+                Category: defaultText,
+                Status: defaultText,
+                ApplicationDate: null,
+                PublishedDate: null,
+                GrantDate: null,
+              });
+            }}
           >
             Clear
           </Button>

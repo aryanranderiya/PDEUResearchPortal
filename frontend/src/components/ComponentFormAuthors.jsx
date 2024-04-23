@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Checkbox,
   AutocompleteItem,
   Button,
   Autocomplete,
@@ -11,7 +10,6 @@ export function PDEUAuthors({
   users,
   formDataDOI,
   setauthorData,
-  authorData,
   formReadOnly,
 }) {
   const [AuthorPDEUInputs, setAuthorPDEUInputs] = React.useState([[]]);
@@ -164,6 +162,7 @@ export function PDEUAuthors({
                   users.find((user) => user.id === author[1].id)?.name || ""
                 }
                 isReadOnly={formReadOnly}
+                key={"pdeu_author" + index}
               />
             ))}
 
@@ -178,6 +177,7 @@ export function PDEUAuthors({
                 isRequired
                 value={author[1].Author_Name}
                 isReadOnly={formReadOnly}
+                key={"outside_author" + index}
               />
             ))}
         </>
@@ -225,40 +225,41 @@ export function OtherAuthors({ formDataDOI, setauthorData, formReadOnly }) {
 
   return (
     <>
-      {AuthorOtherInputs.map((value, index) => (
-        <div key={index} className="flex max-w-5xl gap-2 items-center">
-          <Input
-            size="sm"
-            type="text"
-            label="Author outside of PDEU"
-            variant="faded"
-            className="max-w-5xl"
-            onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
-            isDisabled={formReadOnly}
-            value={value}
-          />
-          <Button
-            color="primary"
-            id="addAuthor"
-            onClick={handleAuthorInputAddOther}
-            isDisabled={formReadOnly}
-          >
-            Add
-          </Button>
-
-          {AuthorOtherInputs.length !== 1 && (
+      {!formReadOnly &&
+        AuthorOtherInputs.map((value, index) => (
+          <div key={index} className="flex max-w-5xl gap-2 items-center">
+            <Input
+              size="sm"
+              type="text"
+              label="Author outside of PDEU"
+              variant="faded"
+              className="max-w-5xl"
+              onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+              isDisabled={formReadOnly}
+              value={value}
+            />
             <Button
-              isIconOnly
-              color="danger"
-              aria-label="Remove"
-              onClick={() => handleAuthorInputRemoveOther(index)}
+              color="primary"
+              id="addAuthor"
+              onClick={handleAuthorInputAddOther}
               isDisabled={formReadOnly}
             >
-              <span className="material-symbols-rounded">close</span>
+              Add
             </Button>
-          )}
-        </div>
-      ))}
+
+            {AuthorOtherInputs.length !== 1 && (
+              <Button
+                isIconOnly
+                color="danger"
+                aria-label="Remove"
+                onClick={() => handleAuthorInputRemoveOther(index)}
+                isDisabled={formReadOnly}
+              >
+                <span className="material-symbols-rounded">close</span>
+              </Button>
+            )}
+          </div>
+        ))}
     </>
   );
 }

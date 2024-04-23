@@ -161,7 +161,7 @@ export default function ViewFormTable({ type, url }) {
         }
       >
         {(item) => (
-          <TableRow key={Object.keys(data)[0]}>
+          <TableRow key={Object.values(item)[0]}>
             {columns.map((column) => (
               <TableCell key={column.key}>
                 {getKeyValue(item, column.key)}
@@ -175,7 +175,7 @@ export default function ViewFormTable({ type, url }) {
                 }
                 color="primary"
                 size="sm"
-                onPress={() => navigate(`${url}?id=${item.DOI}`)}
+                onPress={() => navigate(`${url}?id=${Object.values(item)[0]}`)}
               >
                 View
               </Button>

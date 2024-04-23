@@ -1,7 +1,7 @@
 import * as React from "react";
 import CardComponent from "../components/ComponentCard";
 import Form1 from "../components/FormResearch";
-import Form2 from "../components/FormModal";
+import Form2 from "../components/FormBook";
 import Form3 from "../components/FormPatent";
 // import FormUserProfile from "../components/FormUserProfile";
 import ViewFormTable from "../components/ViewForm";
@@ -111,34 +111,46 @@ export function ResearchForm({
   );
 }
 
-export function BookForm() {
+export function BookForm({ formReadOnly = true }) {
+  const addorview = formReadOnly ? "view" : "add";
+
   return (
     <div className="form_add">
       <Breadcrumbs>
         <BreadcrumbItem href="/home">Home</BreadcrumbItem>
-        <BreadcrumbItem href={"/home/books"}>Books</BreadcrumbItem>
-        <BreadcrumbItem href={`/home/books/add`}>Add Books</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/books`}>Books</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/books/${addorview}`}>
+          {addorview.charAt(0).toUpperCase()}
+          {addorview.slice(1)}
+          &nbsp;Books
+        </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title">
         Add Research Based Books, Textbooks or Literary Books
       </h1>
-      <Form2 />
+      <Form2 formReadOnly={formReadOnly} />
     </div>
   );
 }
 
-export function PatentForm() {
+export function PatentForm({ formReadOnly = true }) {
+  const addorview = formReadOnly ? "view" : "add";
+
   return (
     <div className="form_add">
       <Breadcrumbs>
         <BreadcrumbItem href="/home">Home</BreadcrumbItem>
-        <BreadcrumbItem href={"/home/patents"}>Patents</BreadcrumbItem>
-        <BreadcrumbItem href={`/home/patents/add`}>Add Patents</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/patents`}>Patents</BreadcrumbItem>
+        <BreadcrumbItem href={`/home/patents/${addorview}`}>
+          {addorview.charAt(0).toUpperCase()}
+          {addorview.slice(1)}
+          &nbsp;Patents
+        </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title">
         Add Details for Patent Applied / Filed / Published
       </h1>
-      <Form3 />
+      <Form3 formReadOnly={formReadOnly} />
     </div>
   );
 }

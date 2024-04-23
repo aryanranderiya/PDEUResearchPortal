@@ -102,12 +102,17 @@ export default function PatentPIs({
     const fetchUsernames = async () => {
       try {
         const response = await fetch(
-          `https://pdeu-research-portal-api.vercel.app/fetchusernames`,
+          `https://pdeu-research-portal-api.vercel.app/select`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+              userId: localStorage.getItem("userId"),
+              table_name: "Employee",
+              columns: "id,name",
+            }),
           }
         );
 
