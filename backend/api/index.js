@@ -77,7 +77,7 @@ app.post("/select", cors(corsOptions), async (req, res) => {
 app.post("/insert", cors(corsOptions), async (req, res) => {
   const type = req.body.type;
   const authorData = req.body.authorData;
-  const conferenceFormData = req.body.conferenceFormData;
+  const conferenceData = req.body.conferenceData;
   const journalData = req.body.journalData;
 
   let message = "";
@@ -99,7 +99,7 @@ app.post("/insert", cors(corsOptions), async (req, res) => {
 
       const [conferenceMessage2, conferenceStatus2] = await insertintoTable(
         "ConferencePapers",
-        [conferenceFormData]
+        [conferenceData]
       );
 
       message = conferenceMessage1 + conferenceMessage2;

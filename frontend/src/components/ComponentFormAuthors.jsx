@@ -201,6 +201,7 @@ export default function PDEUAuthors({
                 className="max-w-5xl"
                 onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
                 isDisabled={formReadOnly}
+                value={value}
               />
               <Button
                 color="primary"

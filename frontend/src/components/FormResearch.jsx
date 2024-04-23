@@ -50,11 +50,11 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
   });
 
   React.useEffect(() => {
-    // console.log({
-    //   journalData: formData,
-    //   conferenceData: conferenceFormData,
-    //   authorData: authorData,
-    // });
+    console.log({
+      journalData: formData,
+      conferenceData: conferenceFormData,
+      authorData: authorData,
+    });
   }, [formData, conferenceFormData, authorData]);
 
   React.useEffect(
@@ -307,13 +307,15 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             variant="faded"
             className="max-w-5xl"
             value={formData.Page_end || ""}
-            onChange={(value) => setformData({ ...formData, Page_end: value })}
+            onValueChange={(value) =>
+              setformData({ ...formData, Page_end: value })
+            }
             isReadOnly={formReadOnly}
           />
         </div>
 
-        {/* 
-        <DatePicker
+        <Input
+          type="date"
           size="sm"
           label="Paper Publish Date"
           variant="faded"
@@ -324,7 +326,7 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
             setformData({ ...formData, Publish_date: value })
           }
           isReadOnly={formReadOnly}
-        /> */}
+        />
 
         {/* <DatePicker label="Birth date" className="max-w-[284px]" /> */}
 
