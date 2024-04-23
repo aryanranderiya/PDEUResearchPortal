@@ -7,7 +7,7 @@ import {
   Input,
 } from "@nextui-org/react";
 
-export default function PDEUAuthors({
+export function PDEUAuthors({
   users,
   formDataDOI,
   setauthorData,
@@ -15,10 +15,6 @@ export default function PDEUAuthors({
   formReadOnly,
 }) {
   const [AuthorPDEUInputs, setAuthorPDEUInputs] = React.useState([[]]);
-  const [AuthorOtherInputs, setAuthorOtherInputs] = React.useState([[]]);
-
-  const handleAuthorInputAddOther = () =>
-    setAuthorOtherInputs([...AuthorOtherInputs, []]);
 
   const handleAuthorInputAddPDEU = () =>
     setAuthorPDEUInputs([...AuthorPDEUInputs, []]);
@@ -28,22 +24,6 @@ export default function PDEUAuthors({
     list.splice(index, 1);
     setAuthorPDEUInputs(list);
   };
-
-  const handleAuthorInputRemoveOther = (index) => {
-    const list = [...AuthorOtherInputs];
-    list.splice(index, 1);
-    setAuthorOtherInputs(list);
-  };
-
-  React.useEffect(() => {
-    if (formDataDOI) {
-      for (let category in authorData) {
-        for (let authorIndex in authorData[category]) {
-          authorData[category][authorIndex].DOI = formDataDOI;
-        }
-      }
-    }
-  }, [authorData, formDataDOI]);
 
   const handleAuthorInputChangePDEU = (value, index) => {
     const list = [...AuthorPDEUInputs];
@@ -64,30 +44,6 @@ export default function PDEUAuthors({
         PDEUAuthors: {
           ...prevData.PDEUAuthors,
           [index]: { DOI: formDataDOI, id: null },
-        },
-      }));
-  };
-
-  const handleAuthorInputChangeOther = (value, index) => {
-    const list = [...AuthorOtherInputs];
-    list[index] = value;
-    setAuthorOtherInputs(list);
-
-    if (value !== "")
-      setauthorData((prevData) => ({
-        ...prevData,
-
-        OutsideAuthors: {
-          ...prevData.OutsideAuthors,
-          [index]: { DOI: formDataDOI, Author_Name: value },
-        },
-      }));
-    else
-      setauthorData((prevData) => ({
-        ...prevData,
-        OutsideAuthors: {
-          ...prevData.OutsideAuthors,
-          [index]: { DOI: formDataDOI, Author_Name: null },
         },
       }));
   };
@@ -190,41 +146,6 @@ export default function PDEUAuthors({
               )}
             </div>
           ))}
-
-          {AuthorOtherInputs.map((value, index) => (
-            <div key={index} className="flex max-w-5xl gap-2 items-center">
-              <Input
-                size="sm"
-                type="text"
-                label="Author outside of PDEU"
-                variant="faded"
-                className="max-w-5xl"
-                onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
-                isDisabled={formReadOnly}
-                value={value}
-              />
-              <Button
-                color="primary"
-                id="addAuthor"
-                onClick={handleAuthorInputAddOther}
-                isDisabled={formReadOnly}
-              >
-                Add
-              </Button>
-
-              {AuthorOtherInputs.length !== 1 && (
-                <Button
-                  isIconOnly
-                  color="danger"
-                  aria-label="Remove"
-                  onClick={() => handleAuthorInputRemoveOther(index)}
-                  isDisabled={formReadOnly}
-                >
-                  <span className="material-symbols-rounded">close</span>
-                </Button>
-              )}
-            </div>
-          ))}
         </>
       );
     else
@@ -264,4 +185,80 @@ export default function PDEUAuthors({
   }
 
   return <AuthorAllInputs />;
+}
+
+export function OtherAuthors({ formDataDOI, setauthorData, formReadOnly }) {
+  const [AuthorOtherInputs, setAuthorOtherInputs] = React.useState([[]]);
+
+  const handleAuthorInputAddOther = () =>
+    setAuthorOtherInputs([...AuthorOtherInputs, []]);
+
+  const handleAuthorInputRemoveOther = (index) => {
+    const list = [...AuthorOtherInputs];
+    list.splice(index, 1);
+    setAuthorOtherInputs(list);
+  };
+
+  const handleAuthorInputChangeOther = (value, index) => {
+    const list = [...AuthorOtherInputs];
+    list[index] = value;
+    setAuthorOtherInputs(list);
+
+    if (value !== "")
+      setauthorData((prevData) => ({
+        ...prevData,
+
+        OutsideAuthors: {
+          ...prevData.OutsideAuthors,
+          [index]: { DOI: formDataDOI, Author_Name: value },
+        },
+      }));
+    else
+      setauthorData((prevData) => ({
+        ...prevData,
+        OutsideAuthors: {
+          ...prevData.OutsideAuthors,
+          [index]: { DOI: formDataDOI, Author_Name: null },
+        },
+      }));
+  };
+
+  return (
+    <>
+      {AuthorOtherInputs.map((value, index) => (
+        <div key={index} className="flex max-w-5xl gap-2 items-center">
+          <Input
+            size="sm"
+            type="text"
+            label="Author outside of PDEU"
+            variant="faded"
+            className="max-w-5xl"
+            onValueChange={(e) => handleAuthorInputChangeOther(e, index)}
+            isDisabled={formReadOnly}
+            value={value}
+          />
+          <Button
+            color="primary"
+            id="addAuthor"
+            onClick={handleAuthorInputAddOther}
+            isDisabled={formReadOnly}
+          >
+            Add
+          </Button>
+
+          {AuthorOtherInputs.length !== 1 && (
+            <Button
+              isIconOnly
+              color="danger"
+              aria-label="Remove"
+              onClick={() => handleAuthorInputRemoveOther(index)}
+              isDisabled={formReadOnly}
+            >
+              <span className="material-symbols-rounded">close</span>
+            </Button>
+          )}
+        </div>
+      ))}
+    </>
+  );
 }

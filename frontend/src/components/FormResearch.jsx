@@ -10,7 +10,7 @@ import {
   Skeleton,
 } from "@nextui-org/react";
 import FormAddedModal from "./FormAddedModal";
-import PDEUAuthors from "./ComponentFormAuthors";
+import { PDEUAuthors, OtherAuthors } from "./ComponentFormAuthors";
 
 export default function Form1({ is_conference = false, formReadOnly = false }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -160,6 +160,16 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
 
     onOpen();
   };
+
+  React.useEffect(() => {
+    if (formData.DOI) {
+      for (let category in authorData) {
+        for (let authorIndex in authorData[category]) {
+          authorData[category][authorIndex].DOI = formData.DOI;
+        }
+      }
+    }
+  }, [authorData, formData.DOI]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -361,6 +371,12 @@ export default function Form1({ is_conference = false, formReadOnly = false }) {
           formDataDOI={formData.DOI}
           setauthorData={setauthorData}
           authorData={authorData}
+          formReadOnly={formReadOnly}
+        />
+
+        <OtherAuthors
+          formDataDOI={formData.DOI}
+          setauthorData={setauthorData}
           formReadOnly={formReadOnly}
         />
 
