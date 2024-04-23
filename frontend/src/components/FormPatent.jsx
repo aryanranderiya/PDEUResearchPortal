@@ -171,35 +171,37 @@ export default function Form3({ formReadOnly }) {
           formReadOnly={formReadOnly}
         />
 
-        <div className="flex max-w-5xl gap-2 items-center justify-center">
-          <Button
-            color="primary"
-            size="md"
-            type="submit"
-            isDisabled={formReadOnly}
-          >
-            Submit
-          </Button>
-          <Button
-            color="default"
-            size="md"
-            variant="ghost"
-            isDisabled={formReadOnly}
-            onClick={() => {
-              setformData({
-                Title: defaultText,
-                FileApplicationNo: defaultText,
-                Category: defaultText,
-                Status: defaultText,
-                ApplicationDate: null,
-                PublishedDate: null,
-                GrantDate: null,
-              });
-            }}
-          >
-            Clear
-          </Button>
-        </div>
+        {!formReadOnly && (
+          <div className="flex max-w-5xl gap-2 items-center justify-center">
+            <Button
+              color="primary"
+              size="md"
+              type="submit"
+              isDisabled={formReadOnly}
+            >
+              Submit
+            </Button>
+            <Button
+              color="default"
+              size="md"
+              variant="ghost"
+              isDisabled={formReadOnly}
+              onClick={() => {
+                setformData({
+                  Title: defaultText,
+                  FileApplicationNo: defaultText,
+                  Category: defaultText,
+                  Status: defaultText,
+                  ApplicationDate: null,
+                  PublishedDate: null,
+                  GrantDate: null,
+                });
+              }}
+            >
+              Clear
+            </Button>
+          </div>
+        )}
       </div>
     </form>
   );
