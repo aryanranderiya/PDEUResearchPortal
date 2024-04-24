@@ -19,38 +19,34 @@ export default function CardComponent({
   const navigate = useNavigate();
   const [isImageLoaded, setIsImageLoaded] = React.useState(false);
 
-  // const navigateToPage = () => {
-  //   ;
-  // };
-
   return (
     <Card
-      className="py-4"
+      className="py-4 card"
       isPressable
       onPress={() => navigate(page)}
       shadow="lg"
     >
-      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-        <p className="text-large uppercase font-bold">{heading}</p>
-        <small className="text-default-500">
-          {subheading} {heading}
-        </small>
+      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start w-full text-center">
+        <p className="text-large">
+          <b>{heading}</b>
+        </p>
+        <small className="text-default-500">{subheading}</small>
       </CardHeader>
       <CardBody className="overflow-visible py-2">
-        <Skeleton className="skeleton" isLoaded={isImageLoaded}>
+        <Skeleton className="skeleton" isLoaded={isImageLoaded} width={200}>
           <Image
             alt="Card background"
             className="object-cover rounded-xl"
             src={imagelink}
-            width={220}
             onLoad={() => setIsImageLoaded(true)}
+            width={200}
           />
         </Skeleton>
         <Image />
       </CardBody>
       <CardFooter className="flex justify-center">
         <Button color="primary" onClick={() => navigate(page)}>
-          View {heading}
+          View All {heading}
         </Button>
       </CardFooter>
     </Card>

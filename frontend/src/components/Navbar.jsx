@@ -1,4 +1,5 @@
-import { Button, User } from "@nextui-org/react";
+import * as React from "react";
+import { Button } from "@nextui-org/react";
 
 export default function Navbar({ sidebarClosed, setsidebarClosed }) {
   return (
@@ -19,27 +20,6 @@ export default function Navbar({ sidebarClosed, setsidebarClosed }) {
         isBordered
       />
       <span className="navbar_title">PDEU Faculty Research Portal</span>
-
-      <User
-        name={"Name"}
-        description={"Designation"}
-        avatarProps={{
-          isBordered: true,
-          showFallback: true,
-          src: "https://links.aryanranderiya.com/l/default_user",
-          size: "md",
-        }}
-        className="gap-4 navbar_user"
-      />
-      <Button
-        color="danger"
-        size="md"
-        // onClick={() => signOut()}
-        isIconOnly
-        variant="flat"
-      >
-        <span className="material-symbols-rounded">logout</span>
-      </Button>
     </div>
   );
 }

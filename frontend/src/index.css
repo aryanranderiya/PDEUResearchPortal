@@ -19,6 +19,13 @@ code {
 .title {
   font-size: 2em;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.title .material-symbols-rounded {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .table_title {
@@ -58,6 +65,13 @@ code {
   display: flex;
   gap: 1.3em;
   flex-direction: column;
+}
+
+.cards {
+  display: flex;
+  gap: 1.3em;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .author_listbox {
@@ -149,10 +163,32 @@ code {
 }
 
 .navbar_user {
-  margin-left: auto;
-  padding-right: 10px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.navbar_user div span:first-child {
+  font-weight: bold;
+  font-size: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 150px;
+}
+
+.navbar_user div span:nth-child(2) {
+  font-size: 0.9em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 150px;
 }
 
 .navbar_button {
   margin-right: 5px;
+}
+
+.card {
+  max-width: 250px;
 }

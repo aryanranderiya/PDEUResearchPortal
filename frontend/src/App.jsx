@@ -92,7 +92,9 @@ export default function App() {
               <Route path="patents/view" element={<PatentForm />} />
               <Route
                 path="journalpapers/view"
-                element={<ResearchForm title="Journal Paper" />}
+                element={
+                  <ResearchForm title="Journal Paper" icon="description" />
+                }
               />
               <Route
                 path="conferencepapers/view"
@@ -102,6 +104,7 @@ export default function App() {
                     is_conference={true}
                   />
                 }
+                icon="podium"
               />
 
               <Route path="analytics" element={<Analytics />} />

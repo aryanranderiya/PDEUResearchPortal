@@ -46,43 +46,60 @@ export function DefaultCards() {
   }, []);
 
   return (
-    <div className="w-full flex justify-center gap-4 flex-wrap px-7 items-center h-screen">
-      <CardComponent
-        heading={"Journal Papers"}
-        imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
-        page="./journalpapers"
-        size="sm"
-        subheading={dataCount.JournalPapers || 0}
-      />
+    <div className="form_add">
+      <h1 className="title">
+        <span class="material-symbols-rounded mr-2">home</span>Dashboard
+      </h1>
+      <div className="cards">
+        <CardComponent
+          heading={"Analytics"}
+          imagelink={"https://i.ibb.co/8NDDQdZ/Data-report-pana.png"}
+          page="./analytics"
+          size="sm"
+          subheading={"\u00A0"}
+        />
+        <CardComponent
+          heading={"Journal Papers"}
+          imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
+          page="./journalpapers"
+          size="sm"
+          subheading={(dataCount.JournalPapers || 0) + " Journal Papers"}
+        />
 
-      <CardComponent
-        heading={"Conference Papers"}
-        subheading={dataCount.ConferencePapers}
-        imagelink={"https://i.ibb.co/6WhQFpD/Seminar-pana.png"}
-        page="./conferencepapers"
-      />
+        <CardComponent
+          heading={"Conference Papers"}
+          imagelink={"https://i.ibb.co/6WhQFpD/Seminar-pana.png"}
+          page="./conferencepapers"
+          subheading={(dataCount.ConferencePapers || 0) + " Conference Papers"}
+        />
 
-      <CardComponent
-        heading={"Patents"}
-        subheading={dataCount.Patents}
-        imagelink={"https://i.ibb.co/KVxTyyD/Visionary-technology-rafiki.png"}
-        page="./patents"
-      />
+        <CardComponent
+          heading={"Patents"}
+          imagelink={"https://i.ibb.co/KVxTyyD/Visionary-technology-rafiki.png"}
+          page="./patents"
+          subheading={(dataCount.Patents || 0) + " Patents"}
+        />
 
-      <CardComponent
-        heading={"Books"}
-        imagelink={"https://i.ibb.co/QjTfXVY/Library-rafiki.png"}
-        page="./books"
-        subheading={dataCount.Books}
-      />
+        <CardComponent
+          heading={"Books"}
+          imagelink={"https://i.ibb.co/QjTfXVY/Library-rafiki.png"}
+          page="./books"
+          subheading={(dataCount.Books || 0) + " Books"}
+        />
 
-      <CardComponent
-        heading={"Projects"}
-        imagelink={"https://i.ibb.co/NVct2Fh/Online-tech-talks-amico.png"}
-        page="./projects"
-        subheading={dataCount.Projects}
-      />
+        <CardComponent
+          heading={"Projects"}
+          imagelink={"https://i.ibb.co/NVct2Fh/Online-tech-talks-amico.png"}
+          page="./projects"
+          subheading={(dataCount.Projects || 0) + " Projects"}
+        />
+      </div>
     </div>
+
+    // <div className="w-full h-screen flex justify-center flex-col items-center">
+
+    //   </div>
+    // </div>
   );
 }
 
@@ -90,6 +107,7 @@ export function ResearchForm({
   title,
   is_conference = false,
   formReadOnly = true,
+  icon,
 }) {
   const type = is_conference ? "conferencepapers" : "journalpapers";
   const addorview = formReadOnly ? "view" : "add";
@@ -105,7 +123,10 @@ export function ResearchForm({
           {addorview.slice(1)}
         </BreadcrumbItem>
       </Breadcrumbs>
-      <h1 className="title"> {title}</h1>
+      <h1 className="title">
+        <span class="material-symbols-rounded mr-2">podium</span>
+        {title}
+      </h1>
       <Form1 is_conference={is_conference} formReadOnly={formReadOnly} />
     </div>
   );
@@ -126,6 +147,7 @@ export function BookForm({ formReadOnly = true }) {
         </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title">
+        <span class="material-symbols-rounded mr-2">menu_book</span>
         Add Research Based Books, Textbooks or Literary Books
       </h1>
       <Form2 formReadOnly={formReadOnly} />
@@ -148,7 +170,10 @@ export function PatentForm({ formReadOnly = true }) {
         </BreadcrumbItem>
       </Breadcrumbs>
       <h1 className="title">
-        Add Details for Patent Applied / Filed / Published
+        <span class="material-symbols-rounded mr-2">menu_book</span>
+        {addorview.charAt(0).toUpperCase()}
+        {addorview.slice(1)}
+        &nbsp;Details for Patent Applied / Filed / Published
       </h1>
       <Form3 formReadOnly={formReadOnly} />
     </div>
@@ -160,12 +185,14 @@ export function ViewItems({ type }) {
   let shortname = null;
   let addPageURL = "home";
   let viewPageURL = "home";
+  let icon = "";
 
   switch (type) {
     case "journal":
       title = "Journal Papers";
       addPageURL = "/journalpapers/add";
       viewPageURL = "/journalpapers/view";
+      icon = <span className="material-symbols-rounded mr-2">description</span>;
       break;
 
     case "conference":
@@ -173,6 +200,7 @@ export function ViewItems({ type }) {
       shortname = "Conference Papers";
       addPageURL = "/conferencepapers/add";
       viewPageURL = "/conferencepapers/view";
+      icon = <span className="material-symbols-rounded mr-2">podium</span>;
       break;
 
     case "books":
@@ -180,12 +208,16 @@ export function ViewItems({ type }) {
       shortname = "Books";
       addPageURL = "/books/add";
       viewPageURL = "/books/view";
+      icon = <span className="material-symbols-rounded mr-2">menu_book</span>;
       break;
 
     case "patents":
       title = "Patents";
       addPageURL = "/patents/add";
       viewPageURL = "/patents/view";
+      icon = (
+        <span className="material-symbols-rounded mr-2">workspace_premium</span>
+      );
       break;
 
     default:
@@ -202,7 +234,10 @@ export function ViewItems({ type }) {
           {shortname || title}
         </BreadcrumbItem>
       </Breadcrumbs>
-      <h1 className="title">{title}</h1>
+      <h1 className="title">
+        {icon}
+        {title}
+      </h1>
       <div className="flex gap-2">
         <Button
           color="primary"
@@ -226,7 +261,10 @@ export function Analytics() {
         <BreadcrumbItem href="/home">Home</BreadcrumbItem>
         <BreadcrumbItem href={"/home/analytics"}>Analytics</BreadcrumbItem>
       </Breadcrumbs>
-      <h1 className="title">Research Analytics</h1>
+      <h1 className="title">
+        <span className="material-symbols-rounded mr-2">monitoring</span>
+        Research Analytics
+      </h1>
       <ComponentAnalyticsTable />
     </div>
   );
