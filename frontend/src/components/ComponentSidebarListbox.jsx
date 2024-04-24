@@ -73,7 +73,7 @@ export function ListBoxPagesComponentAdd() {
   const navigate = useNavigate();
 
   return (
-    <div className="sidebar_div">
+    <div className="px-6 py-2 ">
       <Listbox
         items={viewItems}
         aria-label="Dynamic Actions"
@@ -86,7 +86,7 @@ export function ListBoxPagesComponentAdd() {
         {viewItems.map((item) => (
           <ListboxItem
             key={item.key}
-            className={"px-5"}
+            className={"px-5 w-full"}
             startContent={item.icon}
           >
             {item.label}
@@ -112,7 +112,7 @@ export function ListBoxPagesComponentAdd() {
         >
           <Listbox aria-label="Dynamic Actions">
             <ListboxItem
-              className={"px-5"}
+              className={"px-5 "}
               onClick={() => setIsSelected(!isSelected)}
               startContent={
                 <Switch

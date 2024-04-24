@@ -1,10 +1,10 @@
 import * as React from "react";
 import { ListBoxPagesComponentAdd } from "./ComponentSidebarListbox";
-import { User, Button } from "@nextui-org/react";
+import { User, Button, Avatar } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 
-export default function SideBar() {
+export default function SideBar({ sidebarClosed }) {
   const navigate = useNavigate();
 
   const { isAuthenticated, setAuthenticated } = React.useContext(AuthContext);
@@ -49,8 +49,12 @@ export default function SideBar() {
   }, [isAuthenticated]);
 
   return (
-    <div className="border-small py-2 rounded-small border-default-200 dark:border-default-100 px-6 flex flex-col gap-6 justify-between sidebar">
-      <div className="flex justify-between items-center">
+    <div
+      className={`border-small border-default-200 dark:border-default-100 flex flex-col gap-6 justify-between sidebar h-full ${
+        sidebarClosed ? "sidebar_closed" : ""
+      }`}
+    >
+      <div className="flex justify-between items-center px-6 py-2">
         <User
           name={userAvatarData.name}
           description={userAvatarData.designation}
@@ -66,7 +70,7 @@ export default function SideBar() {
 
       <ListBoxPagesComponentAdd />
 
-      <div className="flex flex-col gap-4 justify-end items-end">
+      <div className="flex flex-col gap-4 justify-end items-end px-6 py-2">
         <Button
           color="danger"
           variant="ghost"

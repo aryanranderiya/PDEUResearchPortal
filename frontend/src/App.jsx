@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import SideBar from "./components/ComponentSidebar";
+import Navbar from "./components/Navbar";
 import AuthContext from "./contexts/AuthContext";
 import ThemeContext from "./contexts/ThemeContext";
 import Login from "./pages/Login";
@@ -29,71 +30,85 @@ export default function App() {
       navigate("/home");
   }, [isAuthenticated]);
 
+  const [sidebarClosed, setsidebarClosed] = React.useState(false);
+
   return (
     <NextUIProvider navigate={navigate}>
       <main
-        className={`${darkTheme} text-foreground bg-background h-screen w-screen flex overflow-hidden`}
+        className={`${darkTheme} text-foreground bg-background h-screen flex w-screen`}
       >
-        {isAuthenticated && <SideBar />}
-        <Routes>
-          <Route path="home">
-            <Route index element={<DefaultCards />} />
+        {isAuthenticated && <SideBar sidebarClosed={sidebarClosed} />}
 
-            <Route
-              path="journalpapers"
-              element={<ViewItems type="journal" />}
+        <div className="flex flex-col w-full gap-4 overflow-scroll">
+          {isAuthenticated && (
+            <Navbar
+              sidebarClosed={sidebarClosed}
+              setsidebarClosed={setsidebarClosed}
             />
-            <Route path="patents" element={<ViewItems type="patents" />} />
-            <Route path="books" element={<ViewItems type="books" />} />
-            <Route
-              path="conferencepapers"
-              element={<ViewItems type="conference" />}
-            />
+          )}
+          <Routes>
+            <Route path="home">
+              <Route index element={<DefaultCards />} />
 
-            <Route
-              path="books/add"
-              element={<BookForm formReadOnly={false} />}
-            />
-            <Route
-              path="patents/add"
-              element={<PatentForm formReadOnly={false} />}
-            />
-            <Route
-              path="journalpapers/add"
-              element={
-                <ResearchForm title="Add Journal Papers" formReadOnly={false} />
-              }
-            />
-            <Route
-              path="conferencepapers/add"
-              element={
-                <ResearchForm
-                  title="Add Conference Proceedings"
-                  is_conference={true}
-                  formReadOnly={false}
-                />
-              }
-            />
-            <Route path="books/view" element={<BookForm />} />
-            <Route path="patents/view" element={<PatentForm />} />
-            <Route
-              path="journalpapers/view"
-              element={<ResearchForm title="Journal Paper" />}
-            />
-            <Route
-              path="conferencepapers/view"
-              element={
-                <ResearchForm
-                  title="Conference Proceeding"
-                  is_conference={true}
-                />
-              }
-            />
+              <Route
+                path="journalpapers"
+                element={<ViewItems type="journal" />}
+              />
+              <Route path="patents" element={<ViewItems type="patents" />} />
+              <Route path="books" element={<ViewItems type="books" />} />
+              <Route
+                path="conferencepapers"
+                element={<ViewItems type="conference" />}
+              />
 
-            <Route path="analytics" element={<Analytics />} />
-          </Route>
-          <Route path="login" element={<Login />} />
-        </Routes>
+              <Route
+                path="books/add"
+                element={<BookForm formReadOnly={false} />}
+              />
+              <Route
+                path="patents/add"
+                element={<PatentForm formReadOnly={false} />}
+              />
+              <Route
+                path="journalpapers/add"
+                element={
+                  <ResearchForm
+                    title="Add Journal Papers"
+                    formReadOnly={false}
+                  />
+                }
+              />
+              <Route
+                path="conferencepapers/add"
+                element={
+                  <ResearchForm
+                    title="Add Conference Proceedings"
+                    is_conference={true}
+                    formReadOnly={false}
+                  />
+                }
+              />
+              <Route path="books/view" element={<BookForm />} />
+              <Route path="patents/view" element={<PatentForm />} />
+              <Route
+                path="journalpapers/view"
+                element={<ResearchForm title="Journal Paper" />}
+              />
+              <Route
+                path="conferencepapers/view"
+                element={
+                  <ResearchForm
+                    title="Conference Proceeding"
+                    is_conference={true}
+                  />
+                }
+              />
+
+              <Route path="analytics" element={<Analytics />} />
+            </Route>
+            <Route path="login" element={<Login />} />
+          </Routes>
+        </div>
       </main>
     </NextUIProvider>
   );

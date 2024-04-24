@@ -46,7 +46,7 @@ export function DefaultCards() {
   }, []);
 
   return (
-    <div className="self-center justify-self-center w-full flex flex-row justify-center gap-4 overflow-scroll h-auto flex-wrap px-7">
+    <div className="w-full flex justify-center gap-4 flex-wrap px-7 items-center h-screen">
       <CardComponent
         heading={"Journal Papers"}
         imagelink={"https://i.ibb.co/jDM9nFw/Research-paper-amico.png"}
